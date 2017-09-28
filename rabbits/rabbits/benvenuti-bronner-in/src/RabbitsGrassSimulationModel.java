@@ -28,6 +28,7 @@ import uchicago.src.sim.gui.ColorMap;
 import uchicago.src.sim.gui.Object2DDisplay;
 import uchicago.src.sim.gui.Value2DDisplay;
 import uchicago.src.sim.util.SimUtilities;
+import uchicago.src.reflector.RangePropertyDescriptor;
 
 public class RabbitsGrassSimulationModel extends SimModelImpl {
   // Default Values
@@ -35,7 +36,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
   private static final int WORLDXSIZE = 20;
   private static final int WORLDYSIZE = 20;
   private static final int GRASSGROWTH = 1000;
-	private static final int AGENT_REPRODUCTION_COST = 10;
+	private static final int AGENT_REPRODUCTION_COST = 30;
 	private static final int AGENT_REPRODUCTION_THRESHOLD = 50;
 	private static final int AGENT_ENERGY_AT_BIRTH = 20;
 
@@ -82,7 +83,24 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
   }
 
   public void setup(){
-    System.out.println("Running setup");
+    //Create the sliders for the parameters
+    RangePropertyDescriptor pdNumAgents = new RangePropertyDescriptor("NumAgents", 0, 1000, 250);
+    RangePropertyDescriptor pdWorldXSize = new RangePropertyDescriptor("WorldXSize", 1, 400, 100);
+   RangePropertyDescriptor pdWorldYSize = new RangePropertyDescriptor("WorldYSize", 1, 400, 100);
+   RangePropertyDescriptor pdGrassGrowth = new RangePropertyDescriptor("GrassGrowth", 0, 10000, 3000);
+   RangePropertyDescriptor pdAgentReproductionCost = new RangePropertyDescriptor("AgentReproductionCost", 0, 100, 25);
+   RangePropertyDescriptor pdAgentReproductionThreshold = new RangePropertyDescriptor("AgentReproductionThreshold", 0, 100, 25);
+   RangePropertyDescriptor pdAgentEnergyAtBirth = new RangePropertyDescriptor("AgentEnergyAtBirth",0,150,50);
+
+    descriptors.put("NumAgents", pdNumAgents);
+    descriptors.put("WorldXSize", pdWorldXSize);
+    descriptors.put("WorldYSize", pdWorldYSize);
+    descriptors.put("GrassGrowth", pdGrassGrowth);
+    descriptors.put("AgentReproductionCost", pdAgentReproductionCost);
+    descriptors.put("AgentReproductionThreshold", pdAgentReproductionThreshold);
+    descriptors.put("AgentEnergyAtBirth", pdAgentEnergyAtBirth);
+
+
     cdSpace = null;
     agentList = new ArrayList();
     schedule = new Schedule(1);
@@ -253,7 +271,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
   }
 
   public String[] getInitParam(){
-    String[] initParams = { "NumAgents", "WorldXSize", "WorldYSize", "grass Growth", "agentReproductionCost", "agentReproductionThreshold"};
+    String[] initParams = { "NumAgents", "WorldXSize", "WorldYSize", "GrassGrowth", "AgentReproductionCost", "AgentReproductionThreshold", "AgentEnergyAtBirth"};
     return initParams;
   }
 
@@ -281,28 +299,36 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
     worldYSize = wys;
   }
 
-  public int getgrassGrowth() {
+  public int getGrassGrowth() {
     return grassGrowth;
   }
 
-  public void setgrassGrowth(int i) {
+  public void setGrassGrowth(int i) {
     grassGrowth = i;
   }
 
-  public int getagentReproductionThreshold() {
+  public int getAgentReproductionThreshold() {
     return agentReproductionThreshold;
   }
 
-  public int getagentReproductionCost() {
+  public int getAgentReproductionCost() {
     return agentReproductionCost;
   }
 
-  public void setagentReproductionThreshold(int i) {
+  public void setAgentReproductionThreshold(int i) {
     agentReproductionThreshold = i;
   }
 
   public void setagentReproductionCost(int i) {
     agentReproductionCost = i;
+  }
+
+  public int getAgentEnergyAtBirth() {
+      return agentEnergyAtBirth;
+  }
+
+  public void setAgentEnergyAtBirth(int i){
+      agentEnergyAtBirth = i;
   }
 
   public static void main(String[] args) {
