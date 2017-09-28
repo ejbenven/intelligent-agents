@@ -68,6 +68,9 @@ public class RabbitsGrassSimulationAgent implements Drawable {
   public int getgrass(){
     return grass;
   }
+	public void givebirth(int cost){
+    grass -= cost;
+  }
 
 
   public void report(){
