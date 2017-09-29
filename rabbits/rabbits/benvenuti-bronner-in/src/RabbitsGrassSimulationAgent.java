@@ -49,7 +49,9 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 				break;
 			case 3: vX =0 ; vY = -1;
 				break;
+
 		}
+		//System.out.println("Speed Vx " + vX + "Vy" + vY);
   }
 
   public void setXY(int newX, int newY){
@@ -94,6 +96,7 @@ public class RabbitsGrassSimulationAgent implements Drawable {
   }
 
   public void step(){
+		setVxVy();
     int newX = x + vX;
     int newY = y + vY;
 
