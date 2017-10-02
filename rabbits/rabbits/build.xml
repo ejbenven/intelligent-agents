@@ -47,9 +47,10 @@
 
     <!--Creates the deployable jar file  -->
     <target name="jar" depends="compile">
-        <jar destfile="${dist.dir}\de.vogella.build.test.ant.jar" basedir="${build.dir}">
+        <jar destfile="${dist.dir}\bevenuti-bronner-in.jar" basedir="${build.dir}">
+	<zipgroupfileset dir="${lib.dir}" includes="*.jar"/>
             <manifest>
-                <attribute name="Main-Class" value="test.Main" />
+                <attribute name="Main-Class" value="MainRabbit" />
             </manifest>
         </jar>
     </target>
