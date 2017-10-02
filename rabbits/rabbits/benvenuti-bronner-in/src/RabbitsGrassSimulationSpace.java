@@ -1,18 +1,15 @@
 /**
  * Class that implements the simulation space of the rabbits grass simulation.
- * @author
+ * @author: benvenuti, bronner
  */
 
-//public class RabbitsGrassSimulationSpace {
 import uchicago.src.sim.space.Object2DGrid;
 
 
-//public class RabbitsGrassSimulationSpace {
 public class RabbitsGrassSimulationSpace {
 private Object2DGrid grassSpace;
 private Object2DGrid agentSpace;
 
-  //public RabbitsGrassSimulationSpace(int xSize, int ySize){
   public RabbitsGrassSimulationSpace(int xSize, int ySize){
     grassSpace = new Object2DGrid(xSize, ySize);
     agentSpace = new Object2DGrid(xSize, ySize);

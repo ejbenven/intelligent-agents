@@ -5,17 +5,15 @@ import uchicago.src.sim.gui.SimGraphics;
 /**
  * Class that implements the simulation agent for the rabbits grass simulation.
 
- * @benvenuti, bronner
+ * @author: benvenuti, bronner
  */
 
-//public class RabbitsGrassSimulationAgent implements Drawable {
 import java.awt.Color;
 
 import uchicago.src.sim.gui.Drawable;
 import uchicago.src.sim.gui.SimGraphics;
 import uchicago.src.sim.space.Object2DGrid;
 
-//public class RabbitsGrassSimulationAgent implements Drawable{
 public class RabbitsGrassSimulationAgent implements Drawable {
   private int x;
   private int y;
@@ -26,7 +24,6 @@ public class RabbitsGrassSimulationAgent implements Drawable {
   private int ID;
   private RabbitsGrassSimulationSpace cdSpace;
 
-  //public RabbitsGrassSimulationAgent(int agentReproductionCost, int agentReproductionThreshold){
 	public RabbitsGrassSimulationAgent(int agentReproductionCost, int agentReproductionThreshold, int agentEnergyAtBirth){
     x = -1;
     y = -1;
@@ -51,7 +48,6 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 				break;
 
 		}
-		//System.out.println("Speed Vx " + vX + "Vy" + vY);
   }
 
   public void setXY(int newX, int newY){
