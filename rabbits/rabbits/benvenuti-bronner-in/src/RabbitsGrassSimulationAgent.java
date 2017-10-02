@@ -5,7 +5,7 @@ import uchicago.src.sim.gui.SimGraphics;
 /**
  * Class that implements the simulation agent for the rabbits grass simulation.
 
- * @author
+ * @benvenuti, bronner
  */
 
 //public class RabbitsGrassSimulationAgent implements Drawable {
@@ -105,6 +105,8 @@ public class RabbitsGrassSimulationAgent implements Drawable {
     newY = (newY + grid.getSizeY()) % grid.getSizeY();
 
     if(tryMove(newX, newY)){
+        x = newX;
+        y = newY;
       grass += cdSpace.takegrassAt(x, y);
     }
     else{

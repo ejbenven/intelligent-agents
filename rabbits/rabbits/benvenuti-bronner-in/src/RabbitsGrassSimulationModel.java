@@ -35,7 +35,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
   private static final int NUMAGENTS = 100;
   private static final int WORLDXSIZE = 20;
   private static final int WORLDYSIZE = 20;
-  private static final int GRASSGROWTH = 1000;
+  private static final int GRASSGROWTH = 250;
 	private static final int AGENT_REPRODUCTION_COST = 30;
 	private static final int AGENT_REPRODUCTION_THRESHOLD = 50;
 	private static final int AGENT_ENERGY_AT_BIRTH = 20;
@@ -129,28 +129,29 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
     }
     amountOfgrassInSpace = null;
 
-		if (numberOfRabbits != null){
+    if (numberOfRabbits != null){
       numberOfRabbits.dispose();
     }
     numberOfRabbits = null;
 
-		/*
+    /*
     if (agentWealthDistribution != null){
       agentWealthDistribution.dispose();
     }
     agentWealthDistribution = null;
-		*/
+    */
+
     // Create Displays
     displaySurf = new DisplaySurface(this, "Carry Drop Model Window 1");
     amountOfgrassInSpace = new OpenSequenceGraph("Amount Of grass In Space",this);
-		numberOfRabbits = new OpenSequenceGraph("Number of rabbits",this);
+    numberOfRabbits = new OpenSequenceGraph("Number of rabbits",this);
     //agentWealthDistribution = new OpenHistogram("Agent Wealth", 8, 0);
 
     // Register Displays
-		registerDisplaySurface("Carry Drop Model Window 1", displaySurf);
+    registerDisplaySurface("Carry Drop Model Window 1", displaySurf);
     this.registerMediaProducer("Plot", amountOfgrassInSpace);
 
-		registerDisplaySurface("Carry Drop Model Window ", displaySurf);
+    registerDisplaySurface("Carry Drop Model Window ", displaySurf);
     this.registerMediaProducer("Plot", numberOfRabbits);
   }
 
@@ -161,7 +162,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 
     displaySurf.display();
     amountOfgrassInSpace.display();
-		numberOfRabbits.display();
+    numberOfRabbits.display();
     //agentWealthDistribution.display();
   }
 
@@ -184,13 +185,13 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 
     class RabbitsGrassSimulationStep extends BasicAction {
       public void execute() {
-				cdSpace.spreadgrass(grassGrowth);
+	cdSpace.spreadgrass(grassGrowth);
         SimUtilities.shuffle(agentList);
         for(int i =0; i < agentList.size(); i++){
           RabbitsGrassSimulationAgent cda = (RabbitsGrassSimulationAgent)agentList.get(i);
           cda.step();
         }
-				reapDeadAgents();
+	reapDeadAgents();
         int birthAgents = reproductionAgents();
         for(int i =0; i < birthAgents; i++){
           addNewAgent();
@@ -226,14 +227,14 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 
     schedule.scheduleActionAtInterval(10, new RabbitsGrassSimulationUpdateAgentWealth());
 		*/
-		class RabbitsGrassSimulationUpdateNbRabbits extends BasicAction {
+    class RabbitsGrassSimulationUpdateNbRabbits extends BasicAction {
       public void execute(){
         numberOfRabbits.step();
       }
     }
 
-		schedule.scheduleActionAtInterval(10, new RabbitsGrassSimulationUpdateNbRabbits());
-	}
+    schedule.scheduleActionAtInterval(10, new RabbitsGrassSimulationUpdateNbRabbits());
+  }
 
   public void buildDisplay(){
     System.out.println("Running BuildDisplay");
