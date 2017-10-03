@@ -47,9 +47,11 @@ When a rabbit reproduces, it has to pay a certain amount of energy and its child
 \end{enumerate}
 
 %Condition of death and energy depletion
-\paragraph{Energy management} Each rabbit, be it created at the start of the simulation or later by reproduction, starts with a set amount of energy, defined by the user(AgentEnergyAtBirth). At each step the rabbit will lose 1 energy. It will also gain energy if there is some grass on his tile because he will eat it, thus destroying the grass.
+\paragraph{Energy management} Each rabbit, be it created at the start of the simulation or later by reproduction, starts with a set amount of energy, defined by the user (AgentEnergyAtBirth). At each step the rabbit will lose 1 energy. It will also gain energy by consumming the grass present at its possition after its movement phase.%if there is some grass on his tile because he will eat it, thus destroying the grass.
 
-If and only if the rabbit's energy drops below 1, he dies. If it goes over the reproduction threshold, which can be set by the user(ReproductionThreshold), he immediately reproduces by paying a cost equal to tho one specified in the user-settable variable ReproductionCost. Paying this cost can kill him and even set its energy way below 0 (see section \ref{sec:experiment3}).
+If the energy of a rabbit goes over the reproduction threshold, which can be set by the user(AgentReproductionThreshold), he immediately reproduces by paying a cost equal to the one specified in the user-settable variable (AgentReproductionCost). Paying this cost can kill him and even set its energy way below 0 (see section \ref{sec:experiment3}).
+
+Finally, if and only if the rabbit's energy drops below 1, he dies. 
 
 %About the grass
 \paragraph{The grass} The grass growth can be set by the user with the variable GrassGrowth. If the variable is equal to 1000, for example, it means that 1000 units of grass, each containing 1 energy, will appear randomly independently of the rabbits's position. There can be multiple units of grass on one tile, thus increasing the energy value of the tile. When a rabbit steps on it, all the grass is consumed.
