@@ -4,6 +4,9 @@
 \usepackage{textcomp}
 \usepackage[top=0.8in, bottom=0.8in, left=0.8in, right=0.8in]{geometry}
 \usepackage{listings}
+\usepackage{adjustbox}
+\usepackage{subcaption}
+
 % Add other packages here %
 
 
@@ -63,6 +66,27 @@ If and only if the rabbit's energy drops below 1, he dies. If it goes over the r
 
 \subsubsection{Observations}
 % Elaborate on the observed results %
+\begin{figure}
+
+    \begin{adjustbox}{width=\textwidth,center}
+    \begin{tabular}{c c}
+         \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\textwidth]{experiment/1/Grass.png}
+        \caption{\label{img:grass1} }
+    \end{subfigure} & 
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\textwidth]{experiment/1/Rabbits.png}
+        \caption{\label{img:rabbits1} }
+    \end{subfigure}\\
+    \multicolumn{2}{c}{\begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\textwidth]{experiment/1/Space.png}
+        \caption{\label{img:space1}}
+    \end{subfigure}}
+   
+    \end{tabular}
+  \end{adjustbox}
+  \caption{}
+\end{figure}
 
 \subsection{Experiment 2}
 
