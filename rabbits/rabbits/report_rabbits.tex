@@ -4,7 +4,7 @@
 \usepackage{textcomp}
 \usepackage[top=0.8in, bottom=0.8in, left=0.8in, right=0.8in]{geometry}
 \usepackage{listings}
-\usepackage{adjustbox}
+\usepackage{graphicx}
 \usepackage{subcaption}
 
 % Add other packages here %
@@ -65,29 +65,47 @@ Finally, if and only if the rabbit's energy drops below 1, he dies.
 \subsection{Experiment 1}
 
 \subsubsection{Setting}
-
+The variables were set to the following values:
+\begin{lstlisting}
+  Energy at birth: 20
+  Reproduction cost: 30
+  Reproduction Threshold 50
+  Grass growth:1000
+  Num Agents: 100
+  World: 100x100
+\end{lstlisting}
 \subsubsection{Observations}
 % Elaborate on the observed results %
+We observe a rapid growth at the beginning of the simulation (Figures \ref{img:rabbits1} and \ref{img:grass1}), both for the number of rabbits and the quantity of grass on the world. Then both populations stabilize around 1000 rabbits and 15000 units of grass, respectively. We suppose that the intial surge is due to the fact that the grid was relatively empty at the beginning (only 100 rabbits and 1000 grass) so there was a growth spike before the agents had to compete for resources.
 \begin{figure}
-
-    \begin{adjustbox}{width=\textwidth,center}
-    \begin{tabular}{c c}
-         \begin{subfigure}[b]{\textwidth}
+    \begin{tabular}{c c c}
+         \begin{subfigure}[b]{0.3\textwidth}
         \includegraphics[width=\textwidth]{experiment/1/Grass.png}
-        \caption{\label{img:grass1} }
+        \caption{\label{img:grass1} Grass level for experiment 1}
     \end{subfigure} & 
-    \begin{subfigure}[b]{\textwidth}
+    \begin{subfigure}[b]{0.3\textwidth}
         \includegraphics[width=\textwidth]{experiment/1/Rabbits.png}
-        \caption{\label{img:rabbits1} }
+        \caption{\label{img:rabbits1} Rabbits level for experiment 1}
+    \end{subfigure} &
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{experiment/2/Grass.png}
+        \caption{\label{img:grass2} Grass level for experiment 2}
     \end{subfigure}\\
-    \multicolumn{2}{c}{\begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=\textwidth]{experiment/1/Space.png}
-        \caption{\label{img:space1}}
-    \end{subfigure}}
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{experiment/2/Rabbits.png}
+        \caption{\label{img:rabbits2} Rabbits level for experiment 2}
+    \end{subfigure} & 
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{experiment/3/Grass.png}
+        \caption{\label{img:grass3} Grass level for experiment 3}
+    \end{subfigure} &
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{experiment/3/Rabbits.png}
+        \caption{\label{img:rabbits3} Rabbits level for experiment 3}
+    \end{subfigure}
    
     \end{tabular}
-  \end{adjustbox}
-  \caption{}
+  \caption{Grass and rabbits level for the three experiments.}
 \end{figure}
 
 \subsection{Experiment 2}
