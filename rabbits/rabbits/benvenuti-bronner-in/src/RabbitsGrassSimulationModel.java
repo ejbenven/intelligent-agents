@@ -135,15 +135,15 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 
 
     // Create Displays
-    displaySurf = new DisplaySurface(this, "Carry Drop Model Window 1");
+    displaySurf = new DisplaySurface(this, "World");
     amountOfgrassInSpace = new OpenSequenceGraph("Amount Of grass In Space",this);
     numberOfRabbits = new OpenSequenceGraph("Number of rabbits",this);
 
     // Register Displays
-    registerDisplaySurface("Carry Drop Model Window 1", displaySurf);
+    registerDisplaySurface("World", displaySurf);
     this.registerMediaProducer("Plot", amountOfgrassInSpace);
 
-    registerDisplaySurface("Carry Drop Model Window ", displaySurf);
+    registerDisplaySurface("World", displaySurf);
     this.registerMediaProducer("Plot", numberOfRabbits);
 
   }
@@ -231,9 +231,9 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
     ColorMap map = new ColorMap();
 
     for(int i = 1; i<16; i++){
-      map.mapColor(i, new Color((int)(i * 8 + 127), 0, 0));
+      map.mapColor(i, new Color(0,(int)( i * 8 + 127), 0));
     }
-    map.mapColor(0, Color.white);
+    map.mapColor(0, Color.black);
 
     Value2DDisplay displaygrass =
         new Value2DDisplay(cdSpace.getCurrentgrassSpace(), map);

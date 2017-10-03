@@ -13,7 +13,7 @@
 
 % Put your group number and names in the author field %
 \title{\bf Excercise 1.\\ Implementing a first Application in RePast: A Rabbits Grass Simulation.}
-\author{Group 24: Benvenuti Eloi Jean, Timothée-Florian Sébastien Bronner}
+\author{Group 24: Benvenuti Eloi Jean, Timothée-Florian S\'ebastien Bronner}
 
 \begin{document}
 \lstset{language=java}
@@ -77,6 +77,44 @@ The variables were set to the following values:
 \subsubsection{Observations}
 % Elaborate on the observed results %
 We observe a rapid growth at the beginning of the simulation (Figures \ref{img:rabbits1} and \ref{img:grass1}), both for the number of rabbits and the quantity of grass on the world. Then both populations stabilize around 1000 rabbits and 15000 units of grass, respectively. We suppose that the intial surge is due to the fact that the grid was relatively empty at the beginning (only 100 rabbits and 1000 grass) so there was a growth spike before the agents had to compete for resources.
+
+
+\subsection{Experiment 2}
+
+\subsubsection{Setting}
+The variables were set to the following values:
+\begin{lstlisting}
+Energy at birth: 20
+Reproduction cost: 30
+Reproduction Threshold 50
+Grass growth:250
+Num Agents: 10
+World 20x20
+\end{lstlisting}
+
+\subsubsection{Observations}
+% Elaborate on the observed results %
+This experiment is similar to the previous one but with a much smaller world (20 by 20 instead of 50 by 50). We observe that both population follow the same pattern as previously (an overshoot followed by a stabilization around a certain value), but do so much more quickly than in the previous experiment (Figures \ref{img:rabbits2} and \ref{img:grass2}). This is due to the fact that the world is much more smaller so the peak of the overshoot is reached much more quickly.
+
+\subsection{Experiment 3}
+\label{sec:experiment3}
+
+\subsubsection{Setting}
+The variables were set to the following values:
+\begin{lstlisting}
+Energy at birth: 20
+Reproduction cost: 100
+Reproduction Threshold 50
+Grass growth:1000
+Num Agents: 100
+World 100x100
+\end{lstlisting}
+\subsubsection{Observations}
+% Elaborate on the observed results %
+In this experiment we wanted to see want happened if the agent could die if they reproduced (the reproduction cost is bigger than the reproduction threshold and the program allow the agent to pay more energy than they have to reproduce). In Figure \ref{img:rabbits3} and \ref{img:grass3} we see that the number of rabbits is way lower than what was observed on a similar world in experiment 1 while the quantity of grass, unsurprisingly, is higher.
+
+By looking at the visual representation of the world (Figure \ref{img:world3}) we see that the living rabbit are all grouped together (for reference, Figure \ref{img:world1} shows the visual representation of the world in experiment 1). We observe this because the rabbits living outside this pocket don't have to compete for food and will thus quickly reach the reproduction threshold and die. On the contrary, the rabbits living in the population pocket will have to compete for food, which means that they'll need more time to reach the reproduction threshold, resulting in them living longer.
+
 \begin{figure}
     \begin{tabular}{c c c}
          \begin{subfigure}[b]{0.3\textwidth}
@@ -88,39 +126,32 @@ We observe a rapid growth at the beginning of the simulation (Figures \ref{img:r
         \caption{\label{img:rabbits1} Rabbits level for experiment 1}
     \end{subfigure} &
     \begin{subfigure}[b]{0.3\textwidth}
-        \includegraphics[width=\textwidth]{experiment/2/Grass.png}
+        \includegraphics[width=\textwidth]{experiment/3/Grass.png}
         \caption{\label{img:grass2} Grass level for experiment 2}
     \end{subfigure}\\
     \begin{subfigure}[b]{0.3\textwidth}
-        \includegraphics[width=\textwidth]{experiment/2/Rabbits.png}
+        \includegraphics[width=\textwidth]{experiment/3/Rabbits.png}
         \caption{\label{img:rabbits2} Rabbits level for experiment 2}
     \end{subfigure} & 
     \begin{subfigure}[b]{0.3\textwidth}
-        \includegraphics[width=\textwidth]{experiment/3/Grass.png}
+        \includegraphics[width=\textwidth]{experiment/4/Grass.png}
         \caption{\label{img:grass3} Grass level for experiment 3}
     \end{subfigure} &
     \begin{subfigure}[b]{0.3\textwidth}
-        \includegraphics[width=\textwidth]{experiment/3/Rabbits.png}
+        \includegraphics[width=\textwidth]{experiment/4/Rabbits.png}
         \caption{\label{img:rabbits3} Rabbits level for experiment 3}
+    \end{subfigure}\\
+    \multicolumn{2}{c}{\begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{experiment/1/Space.png}
+        \caption{\label{img:world1} State of the world at equilibrium for experiment 1}
+    \end{subfigure}} & 
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{experiment/4/Space.png}
+        \caption{\label{img:world3} State of the world at equilibrium for experiment 3}
     \end{subfigure}
    
     \end{tabular}
   \caption{Grass and rabbits level for the three experiments.}
 \end{figure}
-
-\subsection{Experiment 2}
-
-\subsubsection{Setting}
-
-\subsubsection{Observations}
-% Elaborate on the observed results %
-
-\subsection{Experiment 3}
-\label{sec:experiment3}
-
-\subsubsection{Setting}
-
-\subsubsection{Observations}
-% Elaborate on the observed results %
 
 \end{document}
