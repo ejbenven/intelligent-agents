@@ -50,7 +50,7 @@
         <jar destfile="${dist.dir}\bevenuti-bronner-in.jar" basedir="${build.dir}">
 	<zipgroupfileset dir="${lib.dir}" includes="*.jar"/>
             <manifest>
-                <attribute name="Main-Class" value="MainRabbit" />
+                <attribute name="Main-Class" value="logist.LogistPlatform" />
             </manifest>
         </jar>
     </target>
