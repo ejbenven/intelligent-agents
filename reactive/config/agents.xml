@@ -8,6 +8,18 @@
 		<set class-path="bin/"/>
 		<set class-name="template.ReactiveTemplate"/>
 		<set discount-factor=".85"/>
-	</agent>
+        </agent>
+
+ 	<agent name="reactive-rla2">
+		<set class-path="bin/"/>
+		<set class-name="template.ReactiveTemplate"/>
+		<set discount-factor=".85"/>
+        </agent>
+
+        <agent name="reactive-rla3">
+		<set class-path="bin/"/>
+		<set class-name="template.ReactiveTemplate"/>
+		<set discount-factor=".85"/>
+        </agent>
 	
 </agents>
