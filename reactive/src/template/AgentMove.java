@@ -3,41 +3,41 @@ package template;
 
 import logist.topology.Topology.City;
 
-public class AgentMove{
+public class AgentMove {
 
-    //Stores the starting city, the destination city, and if a pickup has been 
+    //Stores the starting city, the destination city, and if a pickup has been
     //picked up.
     private City startCity;
     private City endCity;
     private boolean pickup;
 
-    public AgentMove(City startCity, City endCity, boolean pickup){
+    public AgentMove(City startCity, City endCity, boolean pickup) {
         this.startCity = startCity;
         this.endCity = endCity;
         this.pickup = pickup;
     }
 
-    public City getStartCity(){
+    public City getStartCity() {
         return startCity;
     }
 
-    public City getEndCity(){
+    public City getEndCity() {
         return endCity;
     }
 
-    public boolean getpickup(){
+    public boolean getpickup() {
         return pickup;
     }
 
-    public void setStartCity(City startCity){
+    public void setStartCity(City startCity) {
         this.startCity = startCity;
     }
 
-    public void setEndCity(City endCity){
+    public void setEndCity(City endCity) {
         this.endCity = endCity;
     }
 
-    public void setpickup (boolean pickup){
+    public void setpickup (boolean pickup) {
         this.pickup = pickup;
     }
 
@@ -45,7 +45,7 @@ public class AgentMove{
     //override their hashCode and equals methods
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((startCity == null) ? 0 : startCity.hashCode());
@@ -56,16 +56,16 @@ public class AgentMove{
     }
 
     @Override
-    public boolean equals(Object obj){
+    public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        
+
         if (obj == null)
             return false;
-        
+
         if (getClass() != obj.getClass())
             return false;
-        
+
         AgentMove other = (AgentMove) obj;
         if (startCity == null) {
             if (other.startCity != null) {
@@ -73,17 +73,17 @@ public class AgentMove{
             }
         } else if (!startCity.equals(other.startCity))
             return false;
-        
+
         if (endCity == null) {
             if (other.endCity != null) {
                 return false;
             }
         } else if (!endCity.equals(other.endCity))
             return false;
-       
+
         if (pickup != other.pickup)
             return false;
-                
+
         return true;
-        }
+    }
 }
