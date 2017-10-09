@@ -2,7 +2,7 @@
 <project name="rabbit" default="main" basedir=".">
     <!-- Sets variables which can later be used. -->
     <!-- The value of a property is accessed via ${} -->
-    <property name="src.dir" location="src" />
+    <property name="src.dir" location="src/template/" />
     <property name="build.dir" location="bin" />
     <property name="dist.dir" location="dist" />
     <property name="docs.dir" location="doc" />
