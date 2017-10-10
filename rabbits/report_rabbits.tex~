@@ -31,6 +31,8 @@ When a rabbit reproduces, it has to pay a certain amount of energy and its child
 
 \subsection{Implementation Remarks}
 % Provide important details about your implementation, such as handling of boundary conditions %
+\paragraph{Color code} Rabbits are drawn in white, grass in green and a void tile is black.
+
 \paragraph{The world is a torus} In order to make the world "loop around" we use the following piece of code.
 \begin{lstlisting}[frame=single]
   newX = (newX + grid.getSizeX())%grid.getSizeX();
