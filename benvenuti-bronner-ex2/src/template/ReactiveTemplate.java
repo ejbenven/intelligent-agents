@@ -133,7 +133,7 @@ public class ReactiveTemplate implements ReactiveBehavior {
 
                                 Q.put(pmove,gain+reward);
 
-                            } else if (!sCity.hasNeighbor(destCity)){
+                            } if (!sCity.hasNeighbor(destCity)){
                                 continue;
                             } else {
                                 move = new AgentMove(sCity,destCity,false);
