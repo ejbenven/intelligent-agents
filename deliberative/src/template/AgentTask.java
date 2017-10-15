@@ -73,3 +73,4 @@ public class AgentTask {
         return "Weight: " + Integer.toString(weight) + System.lineSeparator() +
                "to: " + destCity.toString();
     }
+}

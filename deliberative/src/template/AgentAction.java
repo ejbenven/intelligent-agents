@@ -16,7 +16,7 @@ public class AgentAction {
     private boolean idle;
     private City destCity;
 
-    public AgentMove(boolean pickup, boolean deliver, boolean move, boolean idle,
+    public AgentAction(boolean pickup, boolean deliver, boolean move, boolean idle,
                      City destCity) {
         this.pickup = pickup;
         this.deliver = deliver;
@@ -124,7 +124,7 @@ public class AgentAction {
             s = "Pickup package for " + destCity.toString();
         else if (deliver)
             s = "Deliver package";
-        else if (move)
+        else 
             s = "Move to " + destCity.toString();
 
         return s;

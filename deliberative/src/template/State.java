@@ -1,18 +1,24 @@
 package template;
 
 import logist.topology.Topology.City;
+import java.util.Set;
 
 public class State {
 
-    //Stores the current city, the destination city of the task(if any), and if
-    //there is a task in the city. If not, endCity = null.
+    //A state is defined by currentCity: the city in which the agent is in
+    //agentTasks: the set of tasks currently carried by the agent
+    //cityTasks: the set of tasks available in the city
+    //weight: the total weight of the tasks carried by the agent
     private City currentCity;
-    private List<AgentTask> tasksList;
+    private Set<AgentTask> agentTasks;
+    private Set<AgentTask> cityTasks;
     private int weight;
 
-    public State(City currentCity, List<AgentTask> tasksList, int weight) {
+    public State(City currentCity, Set<AgentTask> agentTasks, 
+            Set<AgentTask> cityTasks, int weight) {
         this.currentCity = currentCity;
-        this.taskslist = tasksList;
+        this.agentTasks = agentTasks;
+        this.cityTasks = cityTasks;
         this.weight = weight;
     }
 
@@ -20,8 +26,12 @@ public class State {
         return currentCity;
     }
 
-    public List<AgentTask> getTaskList() {
-        return tasksList;
+    public Set<AgentTask> getAgentTaskList() {
+        return agentTasks;
+    }
+
+    public Set<AgentTask> getCityTasksList() {
+        return cityTasks;
     }
 
     public int getWeight() {
@@ -32,34 +42,42 @@ public class State {
         this.currentCity = currentCity;
     }
 
-    public void setTasksList (List<AgentTask> tasksList) {
-        this.tasksList = tasksList;
+    public void setAgentTasksList (Set<AgentTask> agentTasks) {
+        this.agentTasks = agentTasks;
     }
 
-    //TODO
-    public void removeTask (AgentTask task) {
-
+    public void setCityTasksList (Set<AgentTask> cityTasks) {
+        this.cityTasks = cityTasks;
     }
 
-    //TODO
-    public void addTask (AgentTask task) {
+    public boolean removeAgentTask (AgentTask task) {
+        return agentTasks.remove(task);
+    }
 
+    public boolean addAgentTask (AgentTask task) {
+        return agentTasks.add(task);
+    }
+
+    public boolean removeCityTask (AgentTask task) {
+        return cityTasks.remove(task);
+    }
+
+    public boolean addCityTask (AgentTask task) {
+        return cityTasks.add(task);
     }
 
     public void setWeight (int weight) {
         this.weight = weight;
     }
 
-    //We use the State and Move classes as key in a hashmap so we need to
-    //override their hashCode and equals methods
-
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((currentCity == null) ? 0 : currentCity.hashCode());
-        result = prime * result + ((endCity == null) ? 0 : endCity.hashCode());
-        result = prime * result + (task ? 1231 : 1237);
+        result = prime * result + ((agentTasks == null) ? 0 : agentTasks.hashCode());
+        result = prime * result + ((cityTasks == null) ? 0 : cityTasks.hashCode());
+        result = prime * result + weight;
 
         return result;
     }
@@ -83,14 +101,21 @@ public class State {
         } else if (!currentCity.equals(other.currentCity))
             return false;
 
-        if (endCity == null) {
-            if (other.endCity != null) {
+        if (agentTasks == null) {
+            if (other.agentTasks != null) {
                 return false;
             }
-        } else if (!endCity.equals(other.endCity))
+        } else if (!agentTasks.equals(other.agentTasks))
             return false;
 
-        if (task != other.task)
+        if (cityTasks == null) {
+            if (other.cityTasks != null) {
+                return false;
+            }
+        } else if (!cityTasks.equals(other.cityTasks))
+            return false;
+
+        if (weight != other.weight)
             return false;
 
         return true;
@@ -99,6 +124,12 @@ public class State {
     //TODO
     @Override
     public String toString() {
+        return "State :" + System.lineSeparator() +
+            "In : " + currentCity.toString() + System.lineSeparator() +
+            "Carrying : " + agentTasks.toString() + System.lineSeparator() +
+            "Available : " + cityTasks.toString() + System.lineSeparator() +
+            "Total weight : " + Integer.toString(weight);
+
 
     }
 }
