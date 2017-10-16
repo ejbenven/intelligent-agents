@@ -8,16 +8,23 @@ public class AgentTask {
     //Encode the informations about a task:
     //weight: weight of the load
     //destCity: destination of the package
+    //id: id of the task
     private int weight;
     private City destCity;
+    private int id;
 
-    public AgentTask(int weight, City destCity) {
+    public AgentTask(int weight, City destCity, int id) {
         this.weight = weight;
         this.destCity = destCity;
+        this.id = id;
     }
 
     public int getWeight() {
         return weight;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public City getDestCity() {
@@ -30,6 +37,10 @@ public class AgentTask {
 
     public void setDestCity(City destCity) {
         this.destCity = destCity;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
 
