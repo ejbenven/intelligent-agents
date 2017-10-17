@@ -51,6 +51,7 @@ public class AgentTask {
         int result = 1;
         result = prime * result + ((destCity == null) ? 0 : destCity.hashCode());
         result = prime * result + weight;
+        result = prime * result + id;
         return result;
     }
 
@@ -76,12 +77,16 @@ public class AgentTask {
         if (weight != other.weight)
             return false;
 
+        if (id != other.id)
+            return false;
+
         return true;
     }
 
     @Override
     public String toString() {
         return "Weight: " + Integer.toString(weight) + System.lineSeparator() +
-               "to: " + destCity.toString();
+               "to: " + destCity.toString() + System.lineSeparator() +
+               "id: " + Integer.toString(id);
     }
 }
