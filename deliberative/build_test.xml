@@ -3,16 +3,21 @@
     <!-- Sets variables which can later be used. -->
     <!-- The value of a property is accessed via ${} -->
     <property name="src.dir" location="src/template/" />
+	<property name="testsrc.dir" location="src/tests/" />
     <property name="build.dir" location="bin" />
     <property name="dist.dir" location="dist" />
     <property name="docs.dir" location="doc" />
     <property name="lib.dir" location="../logist/" />
+	<property name="testlib.dir" location="../testlib/" />
 
     <!-- Create a classpath -->
     <path id="build.classpath">
         <fileset dir ="${lib.dir}">
             <include name ="**/*.jar" />
         </fileset>
+		<fileset dir ="${testlib.dir}">
+			<include name ="**/*.jar" />
+		</fileset>
     </path>
 
     <!-- Deletes the existing build, docs and dist directory-->
@@ -31,12 +36,20 @@
 
     <!-- Compiles the java code (including the usage of library for JUnit -->
     <target name="compile" depends="clean, makedir">
-        <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="build.classpath" />
+        <javac srcdir="${testsrc.dir}" destdir="${build.dir}" classpathref="build.classpath" />
 
     </target>
 
-    <target name="main" depends="compile">
-        <description>Main target</description>
-    </target>
-
+    <target name="test" depends="compile">
+		<junit printsummary="on" haltonfailure="yes" fork="true">
+			<classpath>
+				<path refid="build.classpath"/>
+				<pathelement location="${build.dir}"/>
+			</classpath>
+			<formatter type="brief" usefile="false" />
+			<batchtest>
+				<fileset dir="${testsrc.dir}" includes="**/*Test.java" />
+			</batchtest>
+		</junit>
+	</target>
 </project>
