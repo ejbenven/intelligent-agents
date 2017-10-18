@@ -10,6 +10,8 @@ public class AgentAction {
     //deliver: deliver the task for the city he's currently in
     //move: move to destCity
     //idle: do nothing
+    //
+    //TO DISCUSS: Shouldn't we just focus on the move to pickup and move to deliver?
     private boolean pickup;
     private boolean deliver;
     private boolean move;

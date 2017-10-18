@@ -14,12 +14,14 @@ public class AgentTask {
     private City destCity;
     private int id;
     private City homeCity;
+    private long reward;
 
-    public AgentTask(int weight, City destCity, int id, City homeCity) {
+    public AgentTask(int weight, City destCity, int id, City homeCity, long reward) {
         this.weight = weight;
         this.destCity = destCity;
         this.id = id;
         this.homeCity = homeCity;
+        this.reward = reward;
     }
 
     public int getWeight() {
@@ -38,6 +40,10 @@ public class AgentTask {
         return destCity;
     }
 
+    public long getReward() {
+        return reward;
+    }
+
     public void setWeight (int weight) {
         this.weight = weight;
     }
@@ -54,6 +60,9 @@ public class AgentTask {
         this.id = id;
     }
 
+    public void setReward(long reward) {
+        this.reward = reward;
+    }
 
     //Override of hashCode and equals so that we can use the class in a hashMap
     @Override
@@ -64,6 +73,7 @@ public class AgentTask {
         result = prime * result + ((homeCity == null) ? 0 : homeCity.hashCode());
         result = prime * result + weight;
         result = prime * result + id;
+        result = prime * result + Long.hashCode(reward);
         return result;
     }
 
@@ -99,6 +109,9 @@ public class AgentTask {
         if (id != other.id)
             return false;
 
+        if (reward != other.reward)
+            return false;
+
         return true;
     }
 
@@ -107,6 +120,7 @@ public class AgentTask {
         return "Weight: " + Integer.toString(weight) + System.lineSeparator() +
                "from: " + homeCity.toString() + System.lineSeparator() +
                "to: " + destCity.toString() + System.lineSeparator() +
-               "id: " + Integer.toString(id);
+               "id: " + Integer.toString(id) + System.lineSeparator() +
+               "reward: " + Long.toStrong(reward);
     }
 }

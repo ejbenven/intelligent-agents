@@ -148,7 +148,7 @@ public class State {
 
         if (weight != other.weight)
             return false;
-
+       
         if (cost != other.cost)
             return false;
 
@@ -158,11 +158,10 @@ public class State {
             }
         } else if (!agentActionList.equals(other.agentActionList))
             return false;
-
+        
         return true;
     }
 
-    //TODO
     @Override
     public String toString() {
         return "State: " + System.lineSeparator() +
