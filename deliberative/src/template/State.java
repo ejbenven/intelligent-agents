@@ -31,6 +31,21 @@ public class State {
         this.agentActionList = agentActionList;
     }
 
+    public ArrayList<State> get_subState() {
+        ArrayList<State> subState = new ArrayList<State>();
+    public ArrayList<State> get_possibleFutureStates() {
+        ArrayList<State> possibleFutureStates = new ArrayList<State>();
+
+        // get_neighboring cities
+        // get_possible_tasks (enough space in truck to pickup, possible to deliver)
+            // Move_to_neighboring city 1,2 3,..-
+            // pickup one of the tasks
+            // deliver one of the tasks 
+
+        return subState;
+        return possibleFutureStates;
+    }
+
     public City getCurrentCity() {
         return currentCity;
     }

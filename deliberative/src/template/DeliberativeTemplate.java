@@ -59,6 +59,8 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
         case BFS:
             // ...
             plan = naivePlan(vehicle, tasks);
+            plan = bfsPlan(vehicle, tasks);
+            //plan = naivePlan(vehicle, tasks);
             break;
         default:
             throw new AssertionError("Should not happen.");
@@ -86,6 +88,19 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
             // set current city
             current = task.deliveryCity;
         }
+        return plan;
+    }
+    private Plan bfsPlan(Vehicle vehicle, TaskSet tasks) {
+        City current = vehicle.getCurrentCity();
+        Plan plan = new Plan(current);
+        // while true
+        // futuresStates = new ArrayList<State>();
+        // for eash states 
+            // get posibleFutureState
+            // futuresStates.append(posibleFutureState)
+        
+
+
         return plan;
     }
 
