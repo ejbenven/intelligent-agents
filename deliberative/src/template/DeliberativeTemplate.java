@@ -89,6 +89,17 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
         return plan;
     }
 
+    private boolean stateCompare (State state1, State state2) {
+        if (!state1.getCurrentCity().equals(state2.getCurrentCity()))
+            return false;
+        else if (!state1.getAgentTaskList().equals(state2.getAgentTaskList()))
+            return false;
+        else if (state1.getCityTasksList().equals(state2.getCityTasksList()))
+            return false;
+        else
+            return true;
+    }
+
     @Override
     public void planCancelled(TaskSet carriedTasks) {
 
