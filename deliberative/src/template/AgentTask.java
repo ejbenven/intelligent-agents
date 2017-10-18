@@ -9,14 +9,17 @@ public class AgentTask {
     //weight: weight of the load
     //destCity: destination of the package
     //id: id of the task
+    //homeCity: city in which the task can be picked up
     private int weight;
     private City destCity;
     private int id;
+    private City homeCity;
 
-    public AgentTask(int weight, City destCity, int id) {
+    public AgentTask(int weight, City destCity, int id, City homeCity) {
         this.weight = weight;
         this.destCity = destCity;
         this.id = id;
+        this.homeCity = homeCity;
     }
 
     public int getWeight() {
@@ -27,6 +30,10 @@ public class AgentTask {
         return id;
     }
 
+    public City getHomeCity() {
+        return homeCity;
+    }
+  
     public City getDestCity() {
         return destCity;
     }
@@ -35,6 +42,10 @@ public class AgentTask {
         this.weight = weight;
     }
 
+    public void setHomeCity(City homeCity) {
+        this.homeCity = homeCity;
+    }
+  
     public void setDestCity(City destCity) {
         this.destCity = destCity;
     }
@@ -50,6 +61,7 @@ public class AgentTask {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((destCity == null) ? 0 : destCity.hashCode());
+        result = prime * result + ((homeCity == null) ? 0 : homeCity.hashCode());
         result = prime * result + weight;
         result = prime * result + id;
         return result;
@@ -74,6 +86,13 @@ public class AgentTask {
         } else if (!destCity.equals(other.destCity))
             return false;
 
+        if (homeCity == null) {
+            if (other.homeCity != null) {
+                return false;
+            }
+        } else if (!homeCity.equals(other.homeCity))
+            return false;
+
         if (weight != other.weight)
             return false;
 
@@ -86,6 +105,7 @@ public class AgentTask {
     @Override
     public String toString() {
         return "Weight: " + Integer.toString(weight) + System.lineSeparator() +
+               "from: " + homeCity.toString() + System.lineSeparator() +
                "to: " + destCity.toString() + System.lineSeparator() +
                "id: " + Integer.toString(id);
     }

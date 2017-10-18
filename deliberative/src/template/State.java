@@ -2,24 +2,33 @@ package template;
 
 import logist.topology.Topology.City;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class State {
 
     //A state is defined by currentCity: the city in which the agent is in
     //agentTasks: the set of tasks currently carried by the agent
-    //cityTasks: the set of tasks available in the city
+    //cityTasks: the set of tasks available in all the cities
     //weight: the total weight of the tasks carried by the agent
+    //cost: cost to reach the state
+    //agentActionList: list of all the action taken to reach this state.
     private City currentCity;
     private Set<AgentTask> agentTasks;
     private Set<AgentTask> cityTasks;
     private int weight;
+    private double cost;
+    private List<AgentAction> agentActionList;
 
     public State(City currentCity, Set<AgentTask> agentTasks, 
-            Set<AgentTask> cityTasks, int weight) {
+            Set<AgentTask> cityTasks, int weight, double cost,
+            List<AgentAction> agentActionList) {
         this.currentCity = currentCity;
         this.agentTasks = agentTasks;
         this.cityTasks = cityTasks;
         this.weight = weight;
+        this.cost = cost;
+        this.agentActionList = agentActionList;
     }
 
     public City getCurrentCity() {
@@ -38,6 +47,14 @@ public class State {
         return weight;
     }
 
+    public double getCost() {
+        return cost;
+    }
+
+    public List<AgentAction> getAgentActionList() {
+        return agentActionList;
+    }
+
     public void setCurrentCity (City currentCity) {
         this.currentCity = currentCity;
     }
@@ -48,6 +65,10 @@ public class State {
 
     public void setCityTasksList (Set<AgentTask> cityTasks) {
         this.cityTasks = cityTasks;
+    }
+
+    public void setAgentActionList (List<AgentAction> agentActionList) {
+        this.agentActionList = agentActionList;
     }
 
     public boolean removeAgentTask (AgentTask task) {
@@ -66,8 +87,16 @@ public class State {
         return cityTasks.add(task);
     }
 
+    public boolean addAgentAction (AgentAction action) {
+        return agentActionList.add(action);
+    }
+
     public void setWeight (int weight) {
         this.weight = weight;
+    }
+
+    public void setCost (double cost) {
+        this.cost = cost;
     }
 
     @Override
@@ -78,6 +107,8 @@ public class State {
         result = prime * result + ((agentTasks == null) ? 0 : agentTasks.hashCode());
         result = prime * result + ((cityTasks == null) ? 0 : cityTasks.hashCode());
         result = prime * result + weight;
+        result = prime * result + Double.hashCode(cost);
+        result = prime * result + ((agentActionList == null) ? 0 : agentActionList.hashCode());
 
         return result;
     }
@@ -118,17 +149,29 @@ public class State {
         if (weight != other.weight)
             return false;
 
+        if (cost != other.cost)
+            return false;
+
+        if (agentActionList == null) {
+            if (other.agentActionList != null) {
+                return false;
+            }
+        } else if (!agentActionList.equals(other.agentActionList))
+            return false;
+
         return true;
     }
 
     //TODO
     @Override
     public String toString() {
-        return "State :" + System.lineSeparator() +
-            "In : " + currentCity.toString() + System.lineSeparator() +
-            "Carrying : " + agentTasks.toString() + System.lineSeparator() +
-            "Available : " + cityTasks.toString() + System.lineSeparator() +
-            "Total weight : " + Integer.toString(weight);
+        return "State: " + System.lineSeparator() +
+            "In: " + currentCity.toString() + System.lineSeparator() +
+            "Carrying: " + agentTasks.toString() + System.lineSeparator() +
+            "Available: " + cityTasks.toString() + System.lineSeparator() +
+            "Total weight: " + Integer.toString(weight) + System.lineSeparator() +
+            "Action list: " + agentActionList.toString() + System.lineSeparator() +
+            "Cost: " + Double.toString(cost);
 
 
     }
