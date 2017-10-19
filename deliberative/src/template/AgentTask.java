@@ -121,6 +121,6 @@ public class AgentTask {
                "from: " + homeCity.toString() + System.lineSeparator() +
                "to: " + destCity.toString() + System.lineSeparator() +
                "id: " + Integer.toString(id) + System.lineSeparator() +
-               "reward: " + Long.toStrong(reward);
+               "reward: " + Long.toString(reward);
     }
 }

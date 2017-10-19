@@ -13,7 +13,9 @@ import logist.topology.Topology.City;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.PriorityQueue;
-
+import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * An optimal planner for one vehicle.
@@ -30,7 +32,6 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
     /* the properties of the agent */
     Agent agent;
     int capacity;
-    TaskSet carriedTasks;
 
     /* the planning class */
     Algorithm algorithm;
@@ -40,7 +41,6 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
         this.topology = topology;
         this.td = td;
         this.agent = agent;
-        this.carriedTask = new HashSet<AgentTask>();
 
         // initialize the planner
         int capacity = agent.vehicles().get(0).capacity();
@@ -73,15 +73,15 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
     }
     
     private Plan AStarPlan (Vehicle vehicle, TaskSet tasks) {
-        currentCity = vehicle.getCurrentCity();
+        City currentCity = vehicle.getCurrentCity();
         Plan plan = new Plan(currentCity);
         
-        carriedTasksts = vehicle.getCurrentTasks();
-        TaskSet cityTasksts = TaskSet.intersectComplement(tasks,carriedTasks);
+        TaskSet carriedTasksts = vehicle.getCurrentTasks();
+        TaskSet cityTasksts = TaskSet.intersectComplement(tasks,carriedTasksts);
         
-        double costPerKm = vehicle.getCostPerKm();
+        double costPerKm = vehicle.costPerKm();
         double minCost = Double.POSITIVE_INFINITY;
-        State endState;
+        State endState = null;
 
         //We initialise the starting state
         Set<AgentTask> carriedTasks = new HashSet<AgentTask>();
@@ -97,8 +97,9 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
                     task.id, task.pickupCity, task.reward);
              cityTasks.add(aTask);
         }
-           
-        State startState = State(currentCity, carriedTasks, cityTasks, 
+        
+        List<AgentAction> agentActionList = new ArrayList<AgentAction>();
+        State startState = new State(currentCity, carriedTasks, cityTasks, 
                 carriedTasksts.weightSum(), 0., agentActionList);
 
 
@@ -108,6 +109,8 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
 
         //Set of all the states that have already been visited
         HashSet<State> C = new HashSet<State>();
+        //We store the best cost for each state
+        HashMap<State,Double> stateBestCost = new HashMap<State,Double>();
         int it = 0;
         do {
             //Break if Q is empty (means that we looked at all the paths)
@@ -121,13 +124,14 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
 
             //We check that we didn't already evaluate this state and, if yes
             //if our new evaluation of current state has a lower cost
+            //TODO: we should check the hashmap instead
             if (C.contains(currState))
                 //TODO: find a way to hash so that the informations about the
                 //actions and the cost are not lost 
                 continue;
 
             //Check if current state is endState
-            if (currState.getCityTasksList().isEmpty()){
+            if (currState.getCityTasksList().isEmpty() && currState.getAgentTaskList().isEmpty()){
                 //check if this endState is better
                 if (currState.getCost() < minCost) {
                     minCost = currState.getCost();
@@ -137,11 +141,12 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
             }
 
             C.add(currState);
+            //TODO: add it to the hashmap
 
 
             //TODO: We loop over all the actions possible, ie all the pickup 
             //and deliver available in this current state
-            for (AgentTask task : currState.getAgentTasksList() ) {
+            for (AgentTask task : currState.getAgentTaskList() ) {
                 //Compute next state
 
                 //Enqueue it
@@ -154,11 +159,19 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
 
         }while(true);
         
-        plan = stateToPlan(endState);
+        plan = stateToPlan(endState, plan);
         return plan;
     }
 
+    //TODO
+    private Plan stateToPlan(State endState, Plan plan) {
 
+        for (AgentAction act : endState.getAgentActionList()) {
+            //Translate them for logist
+        }
+
+        return plan;
+    }
 
     private Plan naivePlan(Vehicle vehicle, TaskSet tasks) {
         City current = vehicle.getCurrentCity();
