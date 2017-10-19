@@ -146,10 +146,24 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
 
             //TODO: We loop over all the actions possible, ie all the pickup 
             //and deliver available in this current state
+            State nextState = null;
             for (AgentTask task : currState.getAgentTaskList() ) {
-                //Compute next state
+                //Compute next stata
+                nextState = currState.clone();
+                //Action of delivering the task
+                AgentAction aAction = new AgentAction(false, true, task.getDestCity(), task.getHomeCity());
+                //Cost of performing the actoin
+                nCost = currState.getCost() + currState.getCurrentCity().distanceTo(task.getDestCity()) * costPerKm;
+                //Remove the task since it's delivered
+                nextState.getAgentTaskList().remove(task);
+                //update cost
+                nextState.setCost(nCost);
+                //Add the action to the list
+                nextState.addAgentAction(aAction);
+                nextState.setCurrentCity(task.getDestCity());
 
                 //Enqueue it
+                Q.add(nextState);
             }
             for (AgentTask task : currState.getCityTasksList() ) {
                 //Compute next state
