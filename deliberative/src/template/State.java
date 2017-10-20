@@ -163,6 +163,13 @@ public class State {
     }
 
     @Override
+    public State clone() {
+        State state = new State(currentCity, agentTasks, cityTasks, weight, 
+                cost, agentActionList);
+        return state;
+    }
+
+    @Override
     public String toString() {
         return "State: " + System.lineSeparator() +
             "In: " + currentCity.toString() + System.lineSeparator() +

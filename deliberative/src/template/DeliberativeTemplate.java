@@ -105,12 +105,13 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
 
         //Create a priority queue that order the element according to costFun
         CostFun costFun = new CostFun(costPerKm);
-        PriorityQueue<State> Q = new PriorityQueue<State>(2000, costFun);
+        PriorityQueue<State> Q = new PriorityQueue<State>(20000, costFun);
 
         //Set of all the states that have already been visited
         HashSet<State> C = new HashSet<State>();
         //We store the best cost for each state
         HashMap<State,Double> stateBestCost = new HashMap<State,Double>();
+        State sbc = null;
         int it = 0;
         do {
             //Break if Q is empty (means that we looked at all the paths)
@@ -125,6 +126,9 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
             //We check that we didn't already evaluate this state and, if yes
             //if our new evaluation of current state has a lower cost
             //TODO: we should check the hashmap instead
+            sbc = currState.clone();
+            sbc.setAgentActionList(null);
+            sbc.setCost(0.);
             if (C.contains(currState))
                 //TODO: find a way to hash so that the informations about the
                 //actions and the cost are not lost 
@@ -153,7 +157,7 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
                 //Action of delivering the task
                 AgentAction aAction = new AgentAction(false, true, task.getDestCity(), task.getHomeCity());
                 //Cost of performing the actoin
-                nCost = currState.getCost() + currState.getCurrentCity().distanceTo(task.getDestCity()) * costPerKm;
+                double nCost = currState.getCost() + currState.getCurrentCity().distanceTo(task.getDestCity()) * costPerKm;
                 //Remove the task since it's delivered
                 nextState.getAgentTaskList().remove(task);
                 //update cost
