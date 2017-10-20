@@ -113,6 +113,7 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
         HashMap<State,Double> stateBestCost = new HashMap<State,Double>();
         State sbc = null;
         int it = 0;
+        double costMemory;
         do {
             //Break if Q is empty (means that we looked at all the paths)
             if (Q.isEmpty())
@@ -125,14 +126,22 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
 
             //We check that we didn't already evaluate this state and, if yes
             //if our new evaluation of current state has a lower cost
-            //TODO: we should check the hashmap instead
+            if (C.contains(currState))
+                continue;
+            else
+                C.add(currState);
+
             sbc = currState.clone();
             sbc.setAgentActionList(null);
+            costMemory = sbc.getCost();
             sbc.setCost(0.);
-            if (C.contains(currState))
-                //TODO: find a way to hash so that the informations about the
-                //actions and the cost are not lost 
-                continue;
+            if (stateBestCost.containsKey(sbc))
+                if (stateBestCost.get(sbc) < costMemory)
+                    continue;
+                else
+                    stateBestCost.replace(sbc,costMemory);
+            else
+                stateBestCost.put(sbc,costMemory);
 
             //Check if current state is endState
             if (currState.getCityTasksList().isEmpty() && currState.getAgentTaskList().isEmpty()){
@@ -144,22 +153,19 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
                 continue;
             }
 
-            C.add(currState);
-            //TODO: add it to the hashmap
-
-
-            //TODO: We loop over all the actions possible, ie all the pickup 
+            //We loop over all the actions possible, ie all the pickup 
             //and deliver available in this current state
             State nextState = null;
+            double nCost;
             for (AgentTask task : currState.getAgentTaskList() ) {
-                //Compute next stata
+                //Compute next state
                 nextState = currState.clone();
                 //Action of delivering the task
                 AgentAction aAction = new AgentAction(false, true, task.getDestCity(), task.getHomeCity());
                 //Cost of performing the actoin
-                double nCost = currState.getCost() + currState.getCurrentCity().distanceTo(task.getDestCity()) * costPerKm;
+                nCost = currState.getCost() + currState.getCurrentCity().distanceTo(task.getDestCity()) * costPerKm;
                 //Remove the task since it's delivered
-                nextState.getAgentTaskList().remove(task);
+                nextState.removeAgentTask(task);
                 //update cost
                 nextState.setCost(nCost);
                 //Add the action to the list
@@ -171,8 +177,21 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
             }
             for (AgentTask task : currState.getCityTasksList() ) {
                 //Compute next state
+                nextState = currState.clone();
+
+                AgentAction aAction = new AgentAction(true, false, task.getDestCity(), task.getHomeCity());
+
+                nCost = currState.getCost() + currState.getCurrentCity().distanceTo(task.getDestCity()) * costPerKm;
+
+                nextState.removeCityTask(task);
+                nextState.addAgentTask(task);
+
+                nextState.setCost(nCost);
+                nextState.addAgentAction(aAction);
+                nextState.setCurrentCity(task.getDestCity());
 
                 //Enqueue it
+                Q.add(nextState);
             }
 
         }while(true);
