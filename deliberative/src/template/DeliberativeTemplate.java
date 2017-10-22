@@ -60,7 +60,7 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
         switch (algorithm) {
         case ASTAR:
             // ...
-            plan = naivePlan(vehicle, tasks);
+            plan = AStarPlan(vehicle, tasks);
             break;
         case BFS:
             // ...
@@ -171,12 +171,16 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
                 //Add the action to the list
                 nextState.addAgentAction(aAction);
                 nextState.setCurrentCity(task.getDestCity());
+                nextState.setWeight(nextState.getWeight() - task.getWeight());
 
                 //Enqueue it
                 Q.add(nextState);
             }
             for (AgentTask task : currState.getCityTasksList() ) {
                 //Compute next state
+                if(vehicle.capacity() < currState.getWeight() + task.getWeight())
+                    continue;
+
                 nextState = currState.clone();
 
                 AgentAction aAction = new AgentAction(true, false, task.getDestCity(), task.getHomeCity());
@@ -189,6 +193,7 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
                 nextState.setCost(nCost);
                 nextState.addAgentAction(aAction);
                 nextState.setCurrentCity(task.getDestCity());
+                nextState.setWeight(nextState.getWeight() + task.getWeight());
 
                 //Enqueue it
                 Q.add(nextState);
@@ -196,15 +201,40 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
 
         }while(true);
         
-        plan = stateToPlan(endState, plan);
-        return plan;
+        plan = stateToPlan(vehiclue, endState, plan);
+        return naivePlan(vehicle, tasks);
     }
 
     //TODO
     private Plan stateToPlan(State endState, Plan plan) {
-
+        City currCity = vehicle.getCurrentCity();
         for (AgentAction act : endState.getAgentActionList()) {
             //Translate them for logist
+            if(act.getPickup()) {
+                if (currCity.equals(act.getHomeCity())) {
+                    //TODO
+                    plan.appendPickup(Task task);
+                } else {
+                    for (City city : currCity.pathTo(act.getHomeCity())){
+                        plan.appendMove(city);
+                    }
+                    //TODO
+                    plan.appendPickup(Task task);
+                    currCity = act.getHomeCity();
+                }
+            } else {
+                if (currCity.equals(act.getDestCity())) {
+                    //TODO
+                    plan.appendDelivery(Task task);
+                } else {
+                    for (City city : currCity.pathTo(act.getDestCity())){
+                        plan.appendMove(city);
+                    }
+                    //TODO
+                    plan.appendDelivery(Task task);
+                    currCity = act.getDestCity();
+                }
+            }
         }
 
         return plan;
