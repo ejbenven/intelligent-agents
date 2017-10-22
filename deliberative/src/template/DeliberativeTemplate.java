@@ -200,8 +200,8 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
 
         }while(true);
         System.out.println(it);
-        //plan = stateToPlan(vehicle, endState, plan);
-        return naivePlan(vehicle, tasks);
+        plan = stateToPlan(vehicle, endState, plan);
+        return plan;
     }
 
     private Plan stateToPlan(Vehicle vehicle, State endState, Plan plan) {
