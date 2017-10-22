@@ -76,7 +76,8 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
     private Plan BfsPlan (Vehicle vehicle, TaskSet tasks) {
         City currentCity = vehicle.getCurrentCity();
         Plan plan = new Plan(currentCity);
-        
+        long startTime = System.currentTimeMillis();
+
         TaskSet carriedTasksts = vehicle.getCurrentTasks();
         TaskSet cityTasksts = TaskSet.intersectComplement(tasks,carriedTasksts);
         
@@ -188,7 +189,9 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
             }
 
         }while(true);
-        System.out.println(it);
+
+        System.out.println("Time taken: " + Long.toString(System.currentTimeMillis() - startTime) + " seconds");
+        System.out.println("Computed plan in " + Integer.toString(it) + "iterations");
         plan = stateToPlan(vehicle, endState, plan);
         return plan;
     }
@@ -196,7 +199,8 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
     private Plan AStarPlan (Vehicle vehicle, TaskSet tasks) {
         City currentCity = vehicle.getCurrentCity();
         Plan plan = new Plan(currentCity);
-        
+        long startTime = System.currentTimeMillis();
+
         TaskSet carriedTasksts = vehicle.getCurrentTasks();
         TaskSet cityTasksts = TaskSet.intersectComplement(tasks,carriedTasksts);
         
@@ -320,7 +324,9 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
             }
 
         }while(true);
-        System.out.println(it);
+
+        System.out.println("Time taken: " + Long.toString(System.currentTimeMillis() - startTime) + " seconds");
+        System.out.println("Computed plan in " + Integer.toString(it) + "iterations");
         plan = stateToPlan(vehicle, endState, plan);
         return plan;
     }
