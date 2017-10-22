@@ -2,6 +2,7 @@
 package template;
 
 import logist.topology.Topology.City;
+import logist.task.Task;
 
 public class AgentAction {
 
@@ -13,12 +14,14 @@ public class AgentAction {
     private boolean deliver;
     private City destCity;
     private City homeCity;
+    private Task task;
 
-    public AgentAction(boolean pickup, boolean deliver, City destCity, City homeCity) {
+    public AgentAction(boolean pickup, boolean deliver, City destCity, City homeCity, Task task) {
         this.pickup = pickup;
         this.deliver = deliver;
         this.destCity = destCity;
         this.homeCity = homeCity;
+        this.task = task;
     }
 
     public boolean getPickup() {
@@ -37,6 +40,10 @@ public class AgentAction {
         return homeCity;
     }
 
+    public Task getTask() {
+        return task;
+    }
+
     public void setpickup (boolean pickup) {
         this.pickup = pickup;
     }
@@ -53,6 +60,10 @@ public class AgentAction {
         this.homeCity = homeCity;
     }
 
+    public void setTask (Task task) {
+        this.task = task;
+    }
+
     //Override of hashCode and equals so that we can use the class in a hashMap
     @Override
     public int hashCode() {
@@ -62,6 +73,7 @@ public class AgentAction {
         result = prime * result + ((homeCity == null) ? 0 : homeCity.hashCode());
         result = prime * result + (pickup ? 1231 : 1237);
         result = prime * result + (deliver ? 1231 : 1237);
+        result = prime * result + ((task == null) ? 0 : task.hashCode());
 
         return result;
     }
@@ -96,6 +108,13 @@ public class AgentAction {
             return false;
 
         if (deliver != other.deliver)
+            return false;
+
+        if (task == null) {
+            if (other.task != null) {
+                return false;
+            }
+        } else if (!task.equals(other.task))
             return false;
 
         return true;

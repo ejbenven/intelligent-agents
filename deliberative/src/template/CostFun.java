@@ -24,19 +24,19 @@ class CostFun implements Comparator<State> {
         int dist2 = 0;
 
 
-        for (AgentTask task : state1.getAgentTaskList() ) {
+        for (Task task : state1.getAgentTaskList() ) {
 
         }
         
-        for (AgentTask task : state1.getCityTasksList() ) {
+        for (Task task : state1.getCityTasksList() ) {
 
         }
 
-        for (AgentTask task : state2.getAgentTaskList() ) {
+        for (Task task : state2.getAgentTaskList() ) {
 
         }
 
-        for (AgentTask task : state2.getCityTasksList() ) {
+        for (Task task : state2.getCityTasksList() ) {
 
         }
 

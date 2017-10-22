@@ -84,18 +84,14 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
         State endState = null;
 
         //We initialise the starting state
-        Set<AgentTask> carriedTasks = new HashSet<AgentTask>();
+        Set<Task> carriedTasks = new HashSet<Task>();
         for (Task task : carriedTasksts ) {
-            AgentTask aTask = new AgentTask(task.weight, task.deliveryCity, 
-                    task.id, task.pickupCity, task.reward);
-            carriedTasks.add(aTask);
+            carriedTasks.add(task);
         }
 
-        Set<AgentTask> cityTasks = new HashSet<AgentTask>();
+        Set<Task> cityTasks = new HashSet<Task>();
         for (Task task : cityTasksts ) {
-             AgentTask aTask = new AgentTask(task.weight, task.deliveryCity, 
-                    task.id, task.pickupCity, task.reward);
-             cityTasks.add(aTask);
+             cityTasks.add(task);
         }
         
         List<AgentAction> agentActionList = new ArrayList<AgentAction>();
@@ -114,6 +110,7 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
         State sbc = null;
         int it = 0;
         double costMemory;
+        Q.add(startState);
         do {
             //Break if Q is empty (means that we looked at all the paths)
             if (Q.isEmpty())
@@ -157,83 +154,81 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
             //and deliver available in this current state
             State nextState = null;
             double nCost;
-            for (AgentTask task : currState.getAgentTaskList() ) {
+            //Set<Task> newCity = new HashSet<Task>();
+            //Set<Task> newAgent = new HashSet<Task>();
+            for (Task task : currState.getAgentTaskList() ) {
                 //Compute next state
                 nextState = currState.clone();
                 //Action of delivering the task
-                AgentAction aAction = new AgentAction(false, true, task.getDestCity(), task.getHomeCity());
+                AgentAction aAction = new AgentAction(false, true, task.deliveryCity, task.pickupCity, task);
                 //Cost of performing the actoin
-                nCost = currState.getCost() + currState.getCurrentCity().distanceTo(task.getDestCity()) * costPerKm;
+                nCost = currState.getCost() + currState.getCurrentCity().distanceTo(task.deliveryCity) * costPerKm;
                 //Remove the task since it's delivered
                 nextState.removeAgentTask(task);
                 //update cost
                 nextState.setCost(nCost);
                 //Add the action to the list
                 nextState.addAgentAction(aAction);
-                nextState.setCurrentCity(task.getDestCity());
-                nextState.setWeight(nextState.getWeight() - task.getWeight());
+                nextState.setCurrentCity(task.deliveryCity);
+                nextState.setWeight(nextState.getWeight() - task.weight);
 
                 //Enqueue it
                 Q.add(nextState);
             }
-            for (AgentTask task : currState.getCityTasksList() ) {
+            for (Task task : currState.getCityTasksList() ) {
                 //Compute next state
-                if(vehicle.capacity() < currState.getWeight() + task.getWeight())
+                if(vehicle.capacity() < currState.getWeight() + task.weight)
                     continue;
 
                 nextState = currState.clone();
 
-                AgentAction aAction = new AgentAction(true, false, task.getDestCity(), task.getHomeCity());
+                AgentAction aAction = new AgentAction(true, false, task.deliveryCity, task.pickupCity, task);
 
-                nCost = currState.getCost() + currState.getCurrentCity().distanceTo(task.getDestCity()) * costPerKm;
+                nCost = currState.getCost() + currState.getCurrentCity().distanceTo(task.pickupCity) * costPerKm;
 
                 nextState.removeCityTask(task);
                 nextState.addAgentTask(task);
 
                 nextState.setCost(nCost);
                 nextState.addAgentAction(aAction);
-                nextState.setCurrentCity(task.getDestCity());
-                nextState.setWeight(nextState.getWeight() + task.getWeight());
+                nextState.setCurrentCity(task.pickupCity);
+                nextState.setWeight(nextState.getWeight() + task.weight);
 
                 //Enqueue it
                 Q.add(nextState);
             }
 
         }while(true);
-        
-        plan = stateToPlan(vehiclue, endState, plan);
+        System.out.println(it);
+        //plan = stateToPlan(vehicle, endState, plan);
         return naivePlan(vehicle, tasks);
     }
 
-    //TODO
-    private Plan stateToPlan(State endState, Plan plan) {
+    private Plan stateToPlan(Vehicle vehicle, State endState, Plan plan) {
         City currCity = vehicle.getCurrentCity();
         for (AgentAction act : endState.getAgentActionList()) {
             //Translate them for logist
             if(act.getPickup()) {
                 if (currCity.equals(act.getHomeCity())) {
-                    //TODO
-                    plan.appendPickup(Task task);
+                    plan.appendPickup(act.getTask());
                 } else {
                     for (City city : currCity.pathTo(act.getHomeCity())){
                         plan.appendMove(city);
                     }
-                    //TODO
-                    plan.appendPickup(Task task);
+                    plan.appendPickup(act.getTask());
                     currCity = act.getHomeCity();
                 }
             } else {
                 if (currCity.equals(act.getDestCity())) {
-                    //TODO
-                    plan.appendDelivery(Task task);
+                    plan.appendDelivery(act.getTask());
                 } else {
                     for (City city : currCity.pathTo(act.getDestCity())){
                         plan.appendMove(city);
                     }
-                    //TODO
-                    plan.appendDelivery(Task task);
+                    plan.appendDelivery(act.getTask());
                     currCity = act.getDestCity();
                 }
+
             }
         }
 

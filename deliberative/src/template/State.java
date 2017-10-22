@@ -2,8 +2,10 @@ package template;
 
 import logist.topology.Topology.City;
 import java.util.Set;
+import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.List;
+import logist.task.Task;
 
 public class State {
 
@@ -14,14 +16,14 @@ public class State {
     //cost: cost to reach the state
     //agentActionList: list of all the action taken to reach this state.
     private City currentCity;
-    private Set<AgentTask> agentTasks;
-    private Set<AgentTask> cityTasks;
+    private Set<Task> agentTasks;
+    private Set<Task> cityTasks;
     private int weight;
     private double cost;
     private List<AgentAction> agentActionList;
 
-    public State(City currentCity, Set<AgentTask> agentTasks, 
-            Set<AgentTask> cityTasks, int weight, double cost,
+    public State(City currentCity, Set<Task> agentTasks, 
+            Set<Task> cityTasks, int weight, double cost,
             List<AgentAction> agentActionList) {
         this.currentCity = currentCity;
         this.agentTasks = agentTasks;
@@ -35,11 +37,11 @@ public class State {
         return currentCity;
     }
 
-    public Set<AgentTask> getAgentTaskList() {
+    public Set<Task> getAgentTaskList() {
         return agentTasks;
     }
 
-    public Set<AgentTask> getCityTasksList() {
+    public Set<Task> getCityTasksList() {
         return cityTasks;
     }
 
@@ -59,11 +61,11 @@ public class State {
         this.currentCity = currentCity;
     }
 
-    public void setAgentTasksList (Set<AgentTask> agentTasks) {
+    public void setAgentTasksList (Set<Task> agentTasks) {
         this.agentTasks = agentTasks;
     }
 
-    public void setCityTasksList (Set<AgentTask> cityTasks) {
+    public void setCityTasksList (Set<Task> cityTasks) {
         this.cityTasks = cityTasks;
     }
 
@@ -71,19 +73,19 @@ public class State {
         this.agentActionList = agentActionList;
     }
 
-    public boolean removeAgentTask (AgentTask task) {
+    public boolean removeAgentTask (Task task) {
         return agentTasks.remove(task);
     }
 
-    public boolean addAgentTask (AgentTask task) {
+    public boolean addAgentTask (Task task) {
         return agentTasks.add(task);
     }
 
-    public boolean removeCityTask (AgentTask task) {
+    public boolean removeCityTask (Task task) {
         return cityTasks.remove(task);
     }
 
-    public boolean addCityTask (AgentTask task) {
+    public boolean addCityTask (Task task) {
         return cityTasks.add(task);
     }
 
@@ -164,8 +166,22 @@ public class State {
 
     @Override
     public State clone() {
-        State state = new State(currentCity, agentTasks, cityTasks, weight, 
-                cost, agentActionList);
+        Set<Task> nAgentTasks = new HashSet<Task>();
+        Set<Task> nCityTasks = new HashSet<Task>();
+        List<AgentAction> nAgentActionList = new ArrayList<AgentAction>();
+
+        for (Task task : agentTasks) {
+            nAgentTasks.add(task);
+        }
+        for (Task task : cityTasks) {
+            nCityTasks.add(task);
+        }
+        for (AgentAction act : agentActionList) {
+            nAgentActionList.add(act);
+        }
+
+        State state = new State(currentCity, nAgentTasks, nCityTasks, weight, 
+                cost, nAgentActionList);
         return state;
     }
 
