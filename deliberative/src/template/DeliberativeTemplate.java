@@ -24,7 +24,7 @@ import java.util.LinkedList;
 @SuppressWarnings("unused")
 public class DeliberativeTemplate implements DeliberativeBehavior {
 
-    enum Algorithm { BFS, ASTAR }
+    enum Algorithm { BFS, ASTAR, NAIVE }
 
     /* Environment */
     Topology topology;
@@ -61,25 +61,32 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
         switch (algorithm) {
         case ASTAR:
             // ...
-            plan = AStarPlan(vehicle, tasks);
+            plan = AStarPlan (vehicle, tasks);//naivePlan(vehicle, tasks);
             break;
         case BFS:
+            // ...
             plan = BfsPlan(vehicle, tasks);
-            // plan = naivePlan(vehicle, tasks);
             break;
+        case NAIVE:
+            plan = naivePlan(vehicle, tasks);
+            break;
+
         default:
             throw new AssertionError("Should not happen.");
         }
         return plan;
     }
+    
     private Plan BfsPlan (Vehicle vehicle, TaskSet tasks) {
         City currentCity = vehicle.getCurrentCity();
         Plan plan = new Plan(currentCity);
-        
+        long startTime = System.currentTimeMillis();
+
         TaskSet carriedTasksts = vehicle.getCurrentTasks();
         TaskSet cityTasksts = TaskSet.intersectComplement(tasks,carriedTasksts);
         
-        
+        double costPerKm = vehicle.costPerKm();
+        double minCost = Double.POSITIVE_INFINITY;
         State endState = null;
 
         //We initialise the starting state
@@ -96,16 +103,19 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
         List<AgentAction> agentActionList = new ArrayList<AgentAction>();
         State startState = new State(currentCity, carriedTasks, cityTasks, 
                 carriedTasksts.weightSum(), 0., agentActionList);
-        // create a linkedList to go througt all states
+
+
+        //Create a priority queue that order the element according to costFun
         LinkedList<State> Q = new LinkedList<State>();
 
         //Set of all the states that have already been visited
         HashSet<State> C = new HashSet<State>();
-
-        State sbc = null;
+        //We store the best cost for each state
+        HashMap<State,Double> stateBestCost = new HashMap<State,Double>();
+        // State sbc = null;
         int it = 0;
-        Q.addFirst(startState);
-
+        State currState = null;
+        Q.add(startState);
         do {
             //Break if Q is empty (means that we looked at all the paths)
             if (Q.isEmpty())
@@ -114,8 +124,8 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
             it++;
 
             //Get first node in Q
-            State currState = Q.poll();
-            // System.out.println("Hello World");
+            currState = Q.poll();
+
             //We check that we didn't already evaluate this state and, if yes
             //if our new evaluation of current state has a lower cost
             if (C.contains(currState))
@@ -123,20 +133,21 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
             else
                 C.add(currState);
 
-            sbc = currState.clone();
-            // sbc.setAgentActionList(null);
-
-
+            
             //Check if current state is endState
             if (currState.getCityTasksList().isEmpty() && currState.getAgentTaskList().isEmpty()){
-                endState = currState;
+                //check if this endState is better
+                if (currState.getCost() < minCost) {
+                    minCost = currState.getCost();
+                    endState = currState;
+                }
                 continue;
             }
 
             //We loop over all the actions possible, ie all the pickup 
             //and deliver available in this current state
             State nextState = null;
-            // double nCost;
+            double nCost;
             //Set<Task> newCity = new HashSet<Task>();
             //Set<Task> newAgent = new HashSet<Task>();
             for (Task task : currState.getAgentTaskList() ) {
@@ -145,11 +156,11 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
                 //Action of delivering the task
                 AgentAction aAction = new AgentAction(false, true, task.deliveryCity, task.pickupCity, task);
                 //Cost of performing the actoin
-                // nCost = currState.getCost() + currState.getCurrentCity().distanceTo(task.deliveryCity) * costPerKm;
+                nCost = currState.getCost() + currState.getCurrentCity().distanceTo(task.deliveryCity) * costPerKm;
                 //Remove the task since it's delivered
                 nextState.removeAgentTask(task);
                 //update cost
-                // nextState.setCost(nCost);
+                nextState.setCost(nCost);
                 //Add the action to the list
                 nextState.addAgentAction(aAction);
                 nextState.setCurrentCity(task.deliveryCity);
@@ -167,12 +178,12 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
 
                 AgentAction aAction = new AgentAction(true, false, task.deliveryCity, task.pickupCity, task);
 
-                // nCost = currState.getCost() + currState.getCurrentCity().distanceTo(task.pickupCity) * costPerKm;
+                nCost = currState.getCost() + currState.getCurrentCity().distanceTo(task.pickupCity) * costPerKm;
 
                 nextState.removeCityTask(task);
                 nextState.addAgentTask(task);
 
-                // nextState.setCost(nCost);
+                nextState.setCost(nCost);
                 nextState.addAgentAction(aAction);
                 nextState.setCurrentCity(task.pickupCity);
                 nextState.setWeight(nextState.getWeight() + task.weight);
@@ -182,15 +193,19 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
             }
 
         }while(true);
-        System.out.println(it);
+
+        System.out.println("Time taken: " + Long.toString(System.currentTimeMillis() - startTime) + " milliseconds");
+        System.out.println("Computed plan in " + Integer.toString(it) + " iterations");
+        System.out.println("Cost = " + endState.getCost());
         plan = stateToPlan(vehicle, endState, plan);
         return plan;
-
     }
+
     private Plan AStarPlan (Vehicle vehicle, TaskSet tasks) {
         City currentCity = vehicle.getCurrentCity();
         Plan plan = new Plan(currentCity);
-        
+        long startTime = System.currentTimeMillis();
+
         TaskSet carriedTasksts = vehicle.getCurrentTasks();
         TaskSet cityTasksts = TaskSet.intersectComplement(tasks,carriedTasksts);
         
@@ -226,6 +241,7 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
         int it = 0;
         double costMemory;
         Q.add(startState);
+        State currState = null;
         do {
             //Break if Q is empty (means that we looked at all the paths)
             if (Q.isEmpty())
@@ -234,7 +250,7 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
             it++;
 
             //Get first node in Q
-            State currState = Q.poll();
+            currState = Q.poll();
 
             //We check that we didn't already evaluate this state and, if yes
             //if our new evaluation of current state has a lower cost
@@ -314,7 +330,12 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
             }
 
         }while(true);
-        System.out.println(it);
+
+        System.out.println("Time taken: " + Long.toString(System.currentTimeMillis() - startTime) + " milliseconds");
+        System.out.println("Computed plan in " + Integer.toString(it) + " iterations");
+        System.out.println("Cost = " + endState.getCost());
+
+
         plan = stateToPlan(vehicle, endState, plan);
         return plan;
     }
@@ -391,6 +412,7 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
             // This cannot happen for this simple agent, but typically
             // you will need to consider the carriedTasks when the next
             // plan is computed.
+            // With our implementation we don't need to.
         }
     }
 }
