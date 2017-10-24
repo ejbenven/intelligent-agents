@@ -55,31 +55,31 @@ We compare here the two algorithms BFS and A*.
 
 \subsubsection{Setting}
 % Describe the settings of your experiment: topology, task configuration, etc. %
-The two algorithms will be compared using the topology Switzerland, the politique of short distance. At first the number of task each algorithm is able to handle in less than one minute will be determinated (running on a I5 7600 with 16GB RAM).
+The two algorithms will be compared using the topology Switzerland, the politique of short distance. At first the number of tasks each algorithm is able to handle in less than one minute will be determinated (running on a I5 7600 with 16GB RAM).
 
-Then the algorithms will be tested with different starting state to see if one consistantly perform as least as well as the other and sometimes better. 10 tests with the highest possible number of tasks (5) will be performed. 
+Then the algorithms will be tested with different starting state to see if one consistently performs as least as well as the other and sometimes better. 10 tests with the highest possible number of tasks (5) will be performed. 
 \subsubsection{Observations}
 % Describe the experimental results and the conclusions you inferred from these results %
-The limite of tasks for which a plan can be made in less than a minute is the following:
+The limit of tasks for which a plan can be made in less than a minute is the following:
 \begin{itemize}
   \item BFS: 5 tasks
   \item A*: 7 tasks
 \end{itemize}
-It should be noted that after this limite the computation fail on both algorithms. For the BFS a OutOfMemory occurs and a time out for the A*.
+It should be noted that after this limit the computation fail on both algorithms. For the BFS an OutOfMemory occurs and a time out for the A*.
 
-Both algorithms arrive each time at the same cost, which seems to indicate that both find the optimal solution. Moreover, for the 10 tests they have always outperform the random algoritm. Therefore A* seems preferable to BFS as it will be able to be implemented for larger problems, for the same final result.
+Both algorithms arrive each time at the same cost, which seems to indicate that both find the optimal solution. Moreover, for the 10 tests they have always outperformed the random algorithm. Therefore A* seems preferable to BFS as it will be able to be implemented for larger problems, for the same final result.
 
 \subsection{Experiment 2: Multi-agent Experiments}
 % Observations in multi-agent experiments %
 The agents compute the plan with all the tasks that he can see, the task in the world and the tasks that they carry. Therefore, should another agent pick up a task, the whole plan must be recomputed.  
 \subsubsection{Setting}
 % Describe the settings of your experiment: topology, task configuration, etc. %
-The topology is again Switzerland with 5 tasks. Now, the comparision will be made on the graph of the reward per km, see Figures \ref{img:multipleAgent}. There is now 1 to 3 agents in the world. 
+The topology is again Switzerland with 5 tasks. Now, the comparison will be made on the graph of the reward per km, see Figures \ref{img:multipleAgent}. There is now 1 to 3 agents in the world. 
 
 \subsubsection{Observations}
 % Describe the experimental results and the conclusions you inferred from these results %
-Figures \ref{img:multipleAgent} show the result for 1, 2 or 3 agents in the world. This does not depend on the fact that the agent use BFS or A*, only of the starting position (for a given starting state).
-This figures show the inneficiency to have more than one agent. Firstly, the mean reward per Km for respectively 2 and 3 agents is about 60\% and 50\% of the reward for only one agent. Secondly, some agent will move without being able to pickup a task because another would have been first. They will only stop when no more task will be available.
+Figures \ref{img:multipleAgent} show the result for 1, 2 or 3 agents in the world. This does not depend on the fact that the agent uses BFS or A*, only of the starting position (for a given starting state).
+These Figures show the inefficiency to have more than one agent. Firstly, the mean reward per Km for respectively 2 and 3 agents is about 60\% and 50\% of the reward for only one agent. Secondly, some agent will move without being able to pick up a task because another would have been first. They will only stop when no more task will be available.
 \begin{figure}
   \begin{subfigure}[b]{0.3\textwidth}
     \includegraphics[width=\textwidth]{1agent.png}
@@ -96,7 +96,7 @@ This figures show the inneficiency to have more than one agent. Firstly, the mea
     \caption{3 agents, BFS, BFS, A*}
     \label{img:3agents}
   \end{subfigure}
-  \caption{Comportment of the agents depending on their number in the world.}
+  \caption{Behavior of the agents depending on their number in the world.}
   \label{img:multipleAgent}
 \end{figure}
 \end{document}
