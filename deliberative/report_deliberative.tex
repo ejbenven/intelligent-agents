@@ -1,0 +1,102 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage[top=0.8in, bottom=0.8in, left=0.8in, right=0.8in]{geometry}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{subcaption}
+
+
+% Add other packages here %
+
+
+% Put your group number and names in the author field %
+\title{\bf Excercise 3\\ Implementing a deliberative Agent}
+\author{Group \textnumero : Student 1, Student 2}
+
+
+% N.B.: The report should not be longer than 3 pages %
+
+
+\begin{document}
+\maketitle
+
+\section{Model Description}
+
+\subsection{Intermediate States}
+% Describe the state representation %
+
+\subsection{Goal State}
+% Describe the goal state %
+
+\subsection{Actions}
+% Describe the possible actions/transitions in your model %
+
+
+\section{Implementation}
+
+\subsection{BFS}
+% Details of the BFS implementation %
+
+\subsection{A*}
+% Details of the A* implementation %
+
+\subsection{Heuristic Function}
+% Details of the heuristic functions: main idea, optimality, admissibility %
+
+
+\section{Results}
+
+\subsection{Experiment 1: BFS and A* Comparison}
+% Compare the two algorithms in terms of: optimality, efficiency, limitations %
+% Report the number of tasks for which you can build a plan in less than one minute %
+We compare here the two algorithms BFS and A*. 
+
+\subsubsection{Setting}
+% Describe the settings of your experiment: topology, task configuration, etc. %
+The two algorithms will be compared using the topology Switzerland, the politique of short distance. At first the number of task each algorithm is able to handle in less than one minute will be determinated (running on a W540 laptop).
+
+Then the algorithms will be tested with different starting state to see if one consistantly perform as least as well as the other and sometimes better. 10 tests with the highest possible number of tasks (5) will be performed. 
+\subsubsection{Observations}
+% Describe the experimental results and the conclusions you inferred from these results %
+The limite of tasks for which a plan can be made in less than a minute is the following:
+\begin{itemize}
+  \item BFS: 5 tasks
+  \item A*: 7 tasks
+\end{itemize}
+It should be noted that after this limite the computation fail on both algorithms. For the BFS a OutOfMemory occurs and a time out for the A*.
+
+Both algorithms arrive each time at the same cost, which seems to indicate that both find the optimal solution. Moreover, for the 10 tests they have always outperform the random algoritm. Therefore A* seems preferable to BFS as it will be able to be implemented for larger problems, for the same final result.
+
+\subsection{Experiment 2: Multi-agent Experiments}
+% Observations in multi-agent experiments %
+The agents compute the plan with all the tasks that he can see, the task in the world and the tasks that they carry. Therefore, should another agent pick up a task, the whole plan must be recomputed.  
+\subsubsection{Setting}
+% Describe the settings of your experiment: topology, task configuration, etc. %
+The topology is again Switzerland with 5 tasks. Now, the comparision will be made on the graph of the reward per km, see Figures \ref{img:multipleAgent}. There is now 1 to 3 agents in the world. 
+
+\subsubsection{Observations}
+% Describe the experimental results and the conclusions you inferred from these results %
+Figures \ref{img:multipleAgent} show the result for 1, 2 or 3 agents in the world. This does not depend on the fact that the agent use BFS or A*, only of the starting position (for a given starting state).
+This figures show the inneficiency to have more than one agent. Firstly, the mean reward per Km for respectively 2 and 3 agents is about 60\% and 50\% of the reward for only one agent. Secondly, some agent will move without being able to pickup a task because another would have been first. They will only stop when no more task will be available.
+\begin{figure}
+  \begin{subfigure}[b]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{1agent.png}
+    \caption{Single agent}
+    \label{img:1agent}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{2agentsBFSASTAR.png}
+    \caption{2 agents}
+    \label{img:2agents}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{3agentsBBA.png}
+    \caption{3 agents}
+    \label{img:3agents}
+  \end{subfigure}
+  \caption{Comportment of the agents depending on their number in the world.}
+  \label{img:multipleAgent}
+\end{figure}
+\end{document}
