@@ -110,8 +110,7 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
 
         //Set of all the states that have already been visited
         HashSet<State> C = new HashSet<State>();
-        //We store the best cost for each state
-        HashMap<State,Double> stateBestCost = new HashMap<State,Double>();
+
         // State sbc = null;
         int it = 0;
         State currState = null;
