@@ -76,6 +76,41 @@ public class CentralizedTemplate implements CentralizedBehavior {
         return plans;
     }
 
+    private List<State> COP (List<Vehicle> vehicles, TaskSet ts) {
+        //Initialisation
+        List<State> states = new ArrayList<State>();        
+        List<Task> tasks = new ArrayList<Task>();
+        for (Task task : ts) {
+            tasks.add(task);
+            tasks.add(task);
+        }
+        
+        State state = new State(vehicles.get(0).getCurrentCity(), tasks, vehicles.get(0));
+        states.add(state);
+        for (Vehicle vehicle : vehicles.subList(1, vehicles.size())){
+            states.add(new State(vehicle.getCurrentCity(), new ArrayList<Task>(), vehicle));
+        }
+        
+        double bestCost = computeCost(states);
+
+       return states; 
+    }
+
+    private double computeCost (List<State> states){
+        double cost = 0;
+
+        for (State state : states)
+            cost += state.getCost();
+
+        return cost;
+    }
+
+    //TODO
+    private Plan stateToPlan(State state) {
+        Plan plan = new Plan(state.getCurrentCity());
+        return plan;
+    }
+
     private Plan naivePlan(Vehicle vehicle, TaskSet tasks) {
         City current = vehicle.getCurrentCity();
         Plan plan = new Plan(current);
