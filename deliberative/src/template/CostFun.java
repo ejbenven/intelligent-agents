@@ -44,7 +44,7 @@ class CostFun implements Comparator<State> {
 
         }
 
-        return Double.compare(state1.getCost() + dist1*costPerKm, state2.getCost() + dist2*costPerKm);
+        return Double.compare(state1.getCost() , state2.getCost()  );
     }
 
 }

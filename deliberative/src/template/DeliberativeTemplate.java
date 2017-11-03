@@ -276,6 +276,7 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
                 if (currState.getCost() < minCost) {
                     minCost = currState.getCost();
                     endState = currState;
+                    break;
                 }
                 continue;
             }
@@ -366,7 +367,7 @@ public class DeliberativeTemplate implements DeliberativeBehavior {
 
             }
         }
-
+        System.out.println(plan.totalDistance());
         return plan;
     }
 
