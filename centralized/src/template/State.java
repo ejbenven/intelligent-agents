@@ -47,17 +47,26 @@ public class State {
         //We check if the vehicle can carry the task
         if (task.weight  > vehicle.capacity())
             return false;
-
+        int cnt = 0;
         boolean ret = tasks.add(task);
+        if (ret)
+            cnt++;
         ret = tasks.add(task);
+        if (!ret && cnt == 1)
+            System.out.println("Adding Error");
         
         cost = computeCost();
         return ret;
     }
 
     public boolean removeTask (Task task) {
+        int cnt = 0;
         boolean ret = tasks.remove(task);
+        if (ret)
+            cnt++;
         ret = tasks.remove(task);
+        if(!ret && cnt==1)
+            System.out.println("Removing Error");
 
         cost = computeCost();
         return ret;
@@ -65,7 +74,7 @@ public class State {
 
     public boolean shuffle() {
 
-        if (tasks == null || tasks.size() < 4)
+        if (tasks.isEmpty() || tasks.size() < 4)
             return false;
 
         Random rand = new Random();
@@ -82,7 +91,9 @@ public class State {
         Task task1 = tasks.get(ind1);
         Task task2 = tasks.get(ind2);
 
+        tasks.remove(ind2);
         tasks.add(ind2, task1);
+        tasks.remove(ind1);
         tasks.add(ind1, task2);
         cost = computeCost();
 
