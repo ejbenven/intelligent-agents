@@ -92,6 +92,70 @@ public class CentralizedTemplate implements CentralizedBehavior {
         }
         
         double bestCost = computeCost(states);
+        double newCost;
+        Random rand = new Random();
+        int ind1;
+        int ind2;
+        State state1;
+        State state2;
+        Task task;
+        List<State> oldStates = new ArrayList<State>();
+
+        for(int i = 0; i < 1000; i++){
+            //We have 2 way of generating a new neighbourhood
+            oldStates.clear();
+            for (State state_ : states){
+                oldStates.add(state_);
+            }
+
+            if (rand.nextInt(2) == 0){
+                //Shuffle
+                while(true) {
+                    ind1 = rand.nextInt(states.size());
+                    state1 = states.get(ind1);
+                    if (state1.shuffle()){
+                        states.add(ind1, state1);
+                        break;
+                    }
+                }
+                
+            } else {
+                //transfer a task
+                while(true) {
+                    ind1 = rand.nextInt(states.size());
+                    ind2 = rand.nextInt(states.size());
+                    if(ind1 == ind2)
+                        continue;
+
+                    state1 = states.get(ind1);
+                    state2 = states.get(ind2);
+                    if(state1.getTasks() == null)
+                        continue;
+                    
+                    ind1 = rand.nextInt(state1.getTasks().size());
+                    task = state1.getTasks().get(ind1);
+
+                    if (state1.removeTask(task)){
+                        if (state2.addTask(task)){
+                            states.add(ind1,state1);
+                            states.add(ind2,state2);
+                            break;
+                        }
+                    }
+                }
+            }
+            newCost = computeCost(states);
+
+            //We take the new states only if it's a better one
+            if(newCost > bestCost){
+                states.clear();
+                for (State state_: oldStates){
+                    states.add(state_);
+                }
+            }
+                
+
+        }
 
        return states; 
     }

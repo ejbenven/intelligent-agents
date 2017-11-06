@@ -63,7 +63,11 @@ public class State {
         return ret;
     }
 
-    public void shuffle() {
+    public boolean shuffle() {
+
+        if (tasks == null || tasks.size() < 4)
+            return false;
+
         Random rand = new Random();
         int size = tasks.size();
         int ind1, ind2;
@@ -72,7 +76,7 @@ public class State {
             ind1 = rand.nextInt(size);
             do{
                 ind2 = rand.nextInt(size);
-            }while(ind1 == ind2);
+            }while(ind1 == ind2 || tasks.get(ind1).id == tasks.get(ind2).id);
         }while(tooHeavy(ind1, ind2));
 
         Task task1 = tasks.get(ind1);
@@ -81,6 +85,8 @@ public class State {
         tasks.add(ind2, task1);
         tasks.add(ind1, task2);
         cost = computeCost();
+
+        return true;
     }
 
     private boolean tooHeavy(int ind1, int ind2){
