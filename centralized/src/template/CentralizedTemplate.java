@@ -64,7 +64,7 @@ public class CentralizedTemplate implements CentralizedBehavior {
     public List<Plan> plan(List<Vehicle> vehicles, TaskSet tasks) {
         long time_start = System.currentTimeMillis();
         
-        List<State> states = COP(vehicles, tasks);
+        List<State> states = COP(vehicles, tasks, time_start);
         List<Plan> plans = new ArrayList<Plan>();
 
         for (State state : states)
@@ -77,8 +77,9 @@ public class CentralizedTemplate implements CentralizedBehavior {
         return plans;
     }
 
-    private List<State> COP (List<Vehicle> vehicles, TaskSet ts) {
+    private List<State> COP (List<Vehicle> vehicles, TaskSet ts, long time_start) {
         //Initialisation
+        long duration;
         List<State> states = new ArrayList<State>();        
         List<Task> tasks = new ArrayList<Task>();
         for (Task task : ts) {
@@ -104,22 +105,27 @@ public class CentralizedTemplate implements CentralizedBehavior {
         }
         
         
-        //List<State> oldStates = new ArrayList<State>();
+        List<State> bestStates = new ArrayList<State>();
+        for (State state : states)
+            bestStates.add(state);
+        double bestCost = computeCost(bestStates);
+        double newCost;
+        for(int i = 0; i < 1000000; i++){
+            duration = System.currentTimeMillis() - time_start;
+            if (duration >= 0.9*timeout_plan)
+                break;
 
-        for(int i = 0; i < 10000000; i++){
-            //We have 2 way of generating a new neighbourhood
-            //oldStates.clear();
-            //for (State state_ : states){
-            //    oldStates.add(state_);
-            //}
-            
             states = chooseNeighboors(states);
-            
-            //newCost = computeCost(states);
+            newCost = computeCost(states);
+            if (newCost < bestCost){
+                bestStates.clear();
+                for (State state : states)
+                    bestStates.add(state);
+            }
 
         }
-
-       return states; 
+        System.out.println(bestCost);
+        return bestStates; 
     }
 
     private List<State> chooseNeighboors(List<State> states)
@@ -214,14 +220,14 @@ public class CentralizedTemplate implements CentralizedBehavior {
                     return stateSwap;
             }
         } else if (p < draw && draw < 2* p){
+            return states;
+        } else {
             if (rand.nextDouble() < 0.3)
                 return states;
             else if (rand.nextDouble() < 0.5)
                 return stateShuffle;
             else
                 return stateSwap;
-        } else {
-            return states;
         }
 
     }

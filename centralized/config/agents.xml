@@ -7,7 +7,7 @@
 	<agent name="centralized-random">
 		<set class-path="bin/"/>
                 <set class-name="template.CentralizedTemplate"/>
-                <set p="0.3" />
+                <set p="0.5" />
 	</agent>
 	
 </agents>
