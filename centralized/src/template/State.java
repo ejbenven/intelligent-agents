@@ -109,7 +109,9 @@ public class State {
         Task task1 = tasks.get(ind1);
         Task task2 = tasks.get(ind2);
 
+        tmpTasks.remove(ind2);
         tmpTasks.add(ind2, task1);
+        tmpTasks.remove(ind1);
         tmpTasks.add(ind1, task2);
 
         Set<Task> carriedTasks = new HashSet<Task>();

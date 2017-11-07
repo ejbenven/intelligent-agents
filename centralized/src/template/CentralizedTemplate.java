@@ -159,38 +159,42 @@ public class CentralizedTemplate implements CentralizedBehavior {
         }
         
         //transfer a task
-        while(true) {
-            ind1 = rand.nextInt(states.size());
-            ind2 = rand.nextInt(states.size());
-            if(ind1 == ind2)
-                continue;
+        if (states.size() > 1){
+            while(true) {
+                ind1 = rand.nextInt(states.size());
+                ind2 = rand.nextInt(states.size());
+                if(ind1 == ind2)
+                    continue;
 
-            state1 = states.get(ind1);
-            state2 = states.get(ind2);
-            if(state1.getTasks().isEmpty())
-                continue;
-            
-            //If the vehicle carries few tasks, we will sometime go look for 
-            //another vehicle to remove tasks from
+                state1 = states.get(ind1);
+                state2 = states.get(ind2);
+                if(state1.getTasks().isEmpty())
+                    continue;
+                
+                //If the vehicle carries few tasks, we will sometime go look for 
+                //another vehicle to remove tasks from
 
-            if(state1.getTasks().size()<(nbTasks/states.size()) && rand.nextDouble() < 0.5 ){
-                continue;
-            }
-
-            indt = rand.nextInt(state1.getTasks().size());
-            task = state1.getTasks().get(indt);
-
-            if (state2.addTask(task)){
-                if (state1.removeTask(task)){
-                    stateSwap.remove(ind1);
-                    stateSwap.add(ind1,state1);
-                    stateSwap.remove(ind2);
-                    stateSwap.add(ind2,state2);
-                    break;
-                } else {
-                    System.out.println("Error: Added but not removed");
+                if(state1.getTasks().size()<(nbTasks/states.size()) && rand.nextDouble() < 0.5 ){
+                    continue;
                 }
-            } 
+
+                indt = rand.nextInt(state1.getTasks().size());
+                task = state1.getTasks().get(indt);
+
+                if (state2.addTask(task)){
+                    if (state1.removeTask(task)){
+                        stateSwap.remove(ind1);
+                        stateSwap.add(ind1,state1);
+                        stateSwap.remove(ind2);
+                        stateSwap.add(ind2,state2);
+                        break;
+                    } else {
+                        System.out.println("Error: Added but not removed");
+                    }
+                } 
+            }
+        } else {
+            stateSwap = stateShuffle;
         }
 
         shuffleCost = computeCost(stateShuffle);
@@ -227,7 +231,7 @@ public class CentralizedTemplate implements CentralizedBehavior {
                 else
                     return stateSwap;
             }
-        } else if (p < draw && draw < 2* p){
+        } else if (rand.nextDouble() < 0.5){
             return states;
         } else {
             if (rand.nextDouble() < 0.3)
