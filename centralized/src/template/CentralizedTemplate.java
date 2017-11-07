@@ -20,6 +20,7 @@ import logist.task.TaskDistribution;
 import logist.task.TaskSet;
 import logist.topology.Topology;
 import logist.topology.Topology.City;
+import java.lang.Math;
 
 /**
  * A very simple auction agent that assigns all tasks to its first vehicle and
@@ -36,6 +37,7 @@ public class CentralizedTemplate implements CentralizedBehavior {
     private long timeout_plan;
     private double p;
     private int nbTasks;
+
     
     @Override
     public void setup(Topology topology, TaskDistribution distribution,
@@ -49,7 +51,7 @@ public class CentralizedTemplate implements CentralizedBehavior {
         catch (Exception exc) {
             System.out.println("There was a problem loading the configuration file.");
         }
-        p = agent.readProperty("p",Double.class, 0.5);
+        p = agent.readProperty("p",Double.class, 0.3);
         // the setup method cannot last more than timeout_setup milliseconds
         timeout_setup = ls.get(LogistSettings.TimeoutKey.SETUP);
         // the plan method cannot execute more than timeout_plan milliseconds
@@ -72,7 +74,10 @@ public class CentralizedTemplate implements CentralizedBehavior {
 
         long time_end = System.currentTimeMillis();
         long duration = time_end - time_start;
+        double cost=  computeCost(states);
         System.out.println("The plan was generated in "+duration+" milliseconds.");
+        System.out.println("The cost is "+cost);
+
         
         return plans;
     }
@@ -124,7 +129,6 @@ public class CentralizedTemplate implements CentralizedBehavior {
             }
 
         }
-        System.out.println(bestCost);
         return bestStates; 
     }
 
@@ -168,6 +172,10 @@ public class CentralizedTemplate implements CentralizedBehavior {
             
             //If the vehicle carries few tasks, we will sometime go look for 
             //another vehicle to remove tasks from
+
+            if(state1.getTasks().size()<(nbTasks/states.size()) && rand.nextDouble() < 0.5 ){
+                continue;
+            }
 
             indt = rand.nextInt(state1.getTasks().size());
             task = state1.getTasks().get(indt);

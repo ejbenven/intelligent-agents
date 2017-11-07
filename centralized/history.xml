@@ -45,32 +45,218 @@
 			</tasks>
 			<events>
 				<event id="0" time="0" vehicle="Vehicle 1" move="Leeds"/>
-				<event id="1" time="0" vehicle="Vehicle 2" move="Birmingham"/>
+				<event id="1" time="0" vehicle="Vehicle 2" pickup="14"/>
 				<event id="2" time="0" vehicle="Vehicle 3" move="Portsmouth"/>
 				<event id="3" time="0" vehicle="Vehicle 4" move="London"/>
-				<event id="4" time="1094444396" vehicle="Vehicle 1" pickup="5"/>
-				<event id="5" time="1277777717" vehicle="Vehicle 2" move="Sheffield"/>
-				<event id="6" time="1277777717" vehicle="Vehicle 4" pickup="26"/>
-				<event id="7" time="1394444377" vehicle="Vehicle 1" move="Liverpool"/>
-				<event id="8" time="1577777699" vehicle="Vehicle 4" move="Birmingham"/>
-				<event id="9" time="1888888794" vehicle="Vehicle 3" move="London"/>
-				<event id="10" time="2199999886" vehicle="Vehicle 1" move="Manchester"/>
-				<event id="11" time="2279999882" vehicle="Vehicle 2" move="Leeds"/>
-				<event id="12" time="2585555420" vehicle="Vehicle 1" deliver="5"/>
-				<event id="13" time="2719999857" vehicle="Vehicle 3" pickup="21"/>
-				<event id="14" time="2738888743" vehicle="Vehicle 2" move="Newcastle"/>
-				<event id="15" time="2888888733" vehicle="Vehicle 4" move="Manchester"/>
-				<event id="16" time="3019999837" vehicle="Vehicle 3" move="Birmingham"/>
+				<event id="4" time="299999995" vehicle="Vehicle 2" move="Birmingham"/>
+				<event id="5" time="1094444392" vehicle="Vehicle 1" move="Liverpool"/>
+				<event id="6" time="1277777716" vehicle="Vehicle 4" pickup="26"/>
+				<event id="7" time="1577777696" vehicle="Vehicle 2" move="London"/>
+				<event id="8" time="1577777697" vehicle="Vehicle 4" pickup="12"/>
+				<event id="9" time="1877777685" vehicle="Vehicle 4" move="Birmingham"/>
+				<event id="10" time="1888888796" vehicle="Vehicle 3" move="London"/>
+				<event id="11" time="1899999906" vehicle="Vehicle 1" move="Manchester"/>
+				<event id="12" time="2285555461" vehicle="Vehicle 1" pickup="25"/>
+				<event id="13" time="2585555460" vehicle="Vehicle 1" pickup="15"/>
+				<event id="14" time="2719999906" vehicle="Vehicle 3" move="Birmingham"/>
+				<event id="15" time="2885555460" vehicle="Vehicle 1" move="Birmingham"/>
+				<event id="16" time="2888888795" vehicle="Vehicle 2" move="Norwich"/>
+				<event id="17" time="3188888796" vehicle="Vehicle 4" move="Cardiff"/>
+				<event id="18" time="3939999904" vehicle="Vehicle 1" move="London"/>
+				<event id="19" time="4031111015" vehicle="Vehicle 3" pickup="22"/>
+				<event id="20" time="4166666572" vehicle="Vehicle 2" pickup="27"/>
+				<event id="21" time="4331111015" vehicle="Vehicle 3" move="London"/>
+				<event id="22" time="4466666572" vehicle="Vehicle 2" move="London"/>
+				<event id="23" time="4466666573" vehicle="Vehicle 4" pickup="2"/>
+				<event id="24" time="4766666572" vehicle="Vehicle 4" pickup="0"/>
+				<event id="25" time="5066666572" vehicle="Vehicle 4" move="Birmingham"/>
+				<event id="26" time="5251111013" vehicle="Vehicle 1" move="Norwich"/>
+				<event id="27" time="5642222125" vehicle="Vehicle 3" pickup="6"/>
+				<event id="28" time="5744444349" vehicle="Vehicle 2" move="Birmingham"/>
+				<event id="29" time="5942222125" vehicle="Vehicle 3" move="Birmingham"/>
+				<event id="30" time="6344444348" vehicle="Vehicle 4" move="London"/>
+				<event id="31" time="6528888789" vehicle="Vehicle 1" pickup="4"/>
+				<event id="32" time="6828888789" vehicle="Vehicle 1" move="London"/>
+				<event id="33" time="7055555458" vehicle="Vehicle 2" move="Sheffield"/>
+				<event id="34" time="7253333235" vehicle="Vehicle 3" move="Sheffield"/>
+				<event id="35" time="7655555457" vehicle="Vehicle 4" move="Norwich"/>
+				<event id="36" time="8057777680" vehicle="Vehicle 2" move="Leeds"/>
+				<event id="37" time="8106666565" vehicle="Vehicle 1" move="Portsmouth"/>
+				<event id="38" time="8255555456" vehicle="Vehicle 3" move="Leeds"/>
+				<event id="39" time="8516666568" vehicle="Vehicle 2" deliver="27"/>
+				<event id="40" time="8714444344" vehicle="Vehicle 3" move="Newcastle"/>
+				<event id="41" time="8816666568" vehicle="Vehicle 2" move="Sheffield"/>
+				<event id="42" time="8933333234" vehicle="Vehicle 4" deliver="2"/>
+				<event id="43" time="8937777675" vehicle="Vehicle 1" move="Plymouth"/>
+				<event id="44" time="9233333233" vehicle="Vehicle 4" move="London"/>
+				<event id="45" time="9275555456" vehicle="Vehicle 2" deliver="14"/>
+				<event id="46" time="9575555456" vehicle="Vehicle 2" move="Leeds"/>
+				<event id="47" time="9808888787" vehicle="Vehicle 3" pickup="24"/>
+				<event id="48" time="10034444344" vehicle="Vehicle 2" move="Newcastle"/>
+				<event id="49" time="10108888786" vehicle="Vehicle 3" move="Leeds"/>
+				<event id="50" time="10511111010" vehicle="Vehicle 4" move="Birmingham"/>
+				<event id="51" time="10826666563" vehicle="Vehicle 1" pickup="17"/>
+				<event id="52" time="11126666563" vehicle="Vehicle 1" deliver="25"/>
+				<event id="53" time="11128888787" vehicle="Vehicle 2" pickup="16"/>
+				<event id="54" time="11203333230" vehicle="Vehicle 3" move="Liverpool"/>
+				<event id="55" time="11426666563" vehicle="Vehicle 1" move="Portsmouth"/>
+				<event id="56" time="11428888786" vehicle="Vehicle 2" move="Leeds"/>
+				<event id="57" time="11822222120" vehicle="Vehicle 4" move="Manchester"/>
+				<event id="58" time="12008888785" vehicle="Vehicle 3" move="Manchester"/>
+				<event id="59" time="12394444340" vehicle="Vehicle 3" pickup="3"/>
+				<event id="60" time="12523333230" vehicle="Vehicle 2" pickup="5"/>
+				<event id="61" time="12694444340" vehicle="Vehicle 3" move="Liverpool"/>
+				<event id="62" time="12823333229" vehicle="Vehicle 2" move="Sheffield"/>
+				<event id="63" time="12876666563" vehicle="Vehicle 4" move="Liverpool"/>
+				<event id="64" time="13079999895" vehicle="Vehicle 3" move="Leeds"/>
+				<event id="65" time="13262222118" vehicle="Vehicle 4" deliver="26"/>
+				<event id="66" time="13282222117" vehicle="Vehicle 2" move="Birmingham"/>
+				<event id="67" time="13315555451" vehicle="Vehicle 1" move="London"/>
+				<event id="68" time="13562222117" vehicle="Vehicle 4" move="Manchester"/>
+				<event id="69" time="13885555449" vehicle="Vehicle 3" move="Sheffield"/>
+				<event id="70" time="13947777672" vehicle="Vehicle 4" move="Birmingham"/>
+				<event id="71" time="14146666561" vehicle="Vehicle 1" move="Birmingham"/>
+				<event id="72" time="14284444338" vehicle="Vehicle 2" move="London"/>
+				<event id="73" time="14344444337" vehicle="Vehicle 3" deliver="6"/>
+				<event id="74" time="14644444337" vehicle="Vehicle 3" move="Birmingham"/>
+				<event id="75" time="15002222115" vehicle="Vehicle 4" move="London"/>
+				<event id="76" time="15457777672" vehicle="Vehicle 1" move="Sheffield"/>
+				<event id="77" time="15595555448" vehicle="Vehicle 2" pickup="21"/>
+				<event id="78" time="15646666558" vehicle="Vehicle 3" move="London"/>
+				<event id="79" time="15895555448" vehicle="Vehicle 2" move="Birmingham"/>
+				<event id="80" time="16313333225" vehicle="Vehicle 4" move="Portsmouth"/>
+				<event id="81" time="16459999893" vehicle="Vehicle 1" move="Leeds"/>
+				<event id="82" time="16918888781" vehicle="Vehicle 1" move="Newcastle"/>
+				<event id="83" time="16957777668" vehicle="Vehicle 3" move="Portsmouth"/>
+				<event id="84" time="17144444335" vehicle="Vehicle 4" deliver="0"/>
+				<event id="85" time="17206666557" vehicle="Vehicle 2" move="Manchester"/>
+				<event id="86" time="17444444335" vehicle="Vehicle 4" move="London"/>
+				<event id="87" time="17788888778" vehicle="Vehicle 3" pickup="20"/>
+				<event id="88" time="18013333224" vehicle="Vehicle 1" deliver="15"/>
+				<event id="89" time="18088888778" vehicle="Vehicle 3" move="London"/>
+				<event id="90" time="18261111000" vehicle="Vehicle 2" deliver="5"/>
+				<event id="91" time="18275555446" vehicle="Vehicle 4" move="Birmingham"/>
+				<event id="92" time="18313333224" vehicle="Vehicle 1" move="Leeds"/>
+				<event id="93" time="18561111000" vehicle="Vehicle 2" move="Birmingham"/>
+				<event id="94" time="18919999888" vehicle="Vehicle 3" move="Birmingham"/>
+				<event id="95" time="19407777667" vehicle="Vehicle 1" move="Sheffield"/>
+				<event id="96" time="19586666556" vehicle="Vehicle 4" move="Sheffield"/>
+				<event id="97" time="19615555444" vehicle="Vehicle 2" deliver="16"/>
+				<event id="98" time="19866666555" vehicle="Vehicle 1" deliver="4"/>
+				<event id="99" time="19915555443" vehicle="Vehicle 2" move="London"/>
+				<event id="100" time="20166666555" vehicle="Vehicle 1" move="Leeds"/>
+				<event id="101" time="20231110998" vehicle="Vehicle 3" move="Sheffield"/>
+				<event id="102" time="20588888777" vehicle="Vehicle 4" move="Leeds"/>
+				<event id="103" time="20625555443" vehicle="Vehicle 1" move="Liverpool"/>
+				<event id="104" time="21047777665" vehicle="Vehicle 4" move="Newcastle"/>
+				<event id="105" time="21226666553" vehicle="Vehicle 2" move="Norwich"/>
+				<event id="106" time="21233333219" vehicle="Vehicle 3" move="Leeds"/>
+				<event id="107" time="21431110998" vehicle="Vehicle 1" deliver="17"/>
+				<event id="108" time="21692222107" vehicle="Vehicle 3" move="Newcastle"/>
+				<event id="109" time="22142222108" vehicle="Vehicle 4" pickup="7"/>
+				<event id="110" time="22442222108" vehicle="Vehicle 4" pickup="11"/>
+				<event id="111" time="22504444329" vehicle="Vehicle 2" deliver="21"/>
+				<event id="112" time="22742222107" vehicle="Vehicle 4" move="Leeds"/>
+				<event id="113" time="22786666551" vehicle="Vehicle 3" pickup="9"/>
+				<event id="114" time="22804444328" vehicle="Vehicle 2" move="London"/>
+				<event id="115" time="23086666551" vehicle="Vehicle 3" move="Leeds"/>
+				<event id="116" time="23836666550" vehicle="Vehicle 4" move="Sheffield"/>
+				<event id="117" time="24082222105" vehicle="Vehicle 2" move="Birmingham"/>
+				<event id="118" time="24181110994" vehicle="Vehicle 3" move="Sheffield"/>
+				<event id="119" time="24295555438" vehicle="Vehicle 4" move="Birmingham"/>
+				<event id="120" time="24639999882" vehicle="Vehicle 3" move="Birmingham"/>
+				<event id="121" time="25297777659" vehicle="Vehicle 4" move="London"/>
+				<event id="122" time="25393333215" vehicle="Vehicle 2" pickup="23"/>
+				<event id="123" time="25642222103" vehicle="Vehicle 3" move="London"/>
+				<event id="124" time="25693333214" vehicle="Vehicle 2" move="London"/>
+				<event id="125" time="26608888768" vehicle="Vehicle 4" move="Portsmouth"/>
+				<event id="126" time="26953333212" vehicle="Vehicle 3" pickup="19"/>
+				<event id="127" time="27004444323" vehicle="Vehicle 2" deliver="23"/>
+				<event id="128" time="27253333212" vehicle="Vehicle 3" deliver="20"/>
+				<event id="129" time="27304444323" vehicle="Vehicle 2" move="Portsmouth"/>
+				<event id="130" time="27439999878" vehicle="Vehicle 4" move="Plymouth"/>
+				<event id="131" time="27553333212" vehicle="Vehicle 3" deliver="3"/>
+				<event id="132" time="27853333212" vehicle="Vehicle 3" move="Birmingham"/>
+				<event id="133" time="28135555434" vehicle="Vehicle 2" pickup="10"/>
+				<event id="134" time="28435555433" vehicle="Vehicle 2" move="London"/>
+				<event id="135" time="29164444321" vehicle="Vehicle 3" move="Manchester"/>
+				<event id="136" time="29266666544" vehicle="Vehicle 2" move="Birmingham"/>
+				<event id="137" time="29328888766" vehicle="Vehicle 4" pickup="28"/>
+				<event id="138" time="29628888766" vehicle="Vehicle 4" move="Portsmouth"/>
+				<event id="139" time="30218888765" vehicle="Vehicle 3" move="Liverpool"/>
+				<event id="140" time="30577777654" vehicle="Vehicle 2" move="Manchester"/>
+				<event id="141" time="30604444320" vehicle="Vehicle 3" deliver="24"/>
+				<event id="142" time="30904444320" vehicle="Vehicle 3" deliver="19"/>
+				<event id="143" time="31204444320" vehicle="Vehicle 3" move="Manchester"/>
+				<event id="144" time="31517777652" vehicle="Vehicle 4" move="London"/>
+				<event id="145" time="31589999875" vehicle="Vehicle 3" move="Birmingham"/>
+				<event id="146" time="31632222098" vehicle="Vehicle 2" deliver="10"/>
+				<event id="147" time="32348888762" vehicle="Vehicle 4" move="Birmingham"/>
+				<event id="148" time="32644444318" vehicle="Vehicle 3" move="London"/>
+				<event id="149" time="33659999871" vehicle="Vehicle 4" deliver="28"/>
+				<event id="150" time="33955555428" vehicle="Vehicle 3" move="Norwich"/>
+				<event id="151" time="33959999871" vehicle="Vehicle 4" move="Cardiff"/>
+				<event id="152" time="35233333204" vehicle="Vehicle 3" deliver="9"/>
+				<event id="153" time="35237777647" vehicle="Vehicle 4" pickup="8"/>
+				<event id="154" time="35533333204" vehicle="Vehicle 3" move="London"/>
+				<event id="155" time="35537777647" vehicle="Vehicle 4" move="Birmingham"/>
+				<event id="156" time="36811110980" vehicle="Vehicle 3" move="Birmingham"/>
+				<event id="157" time="36815555424" vehicle="Vehicle 4" move="Sheffield"/>
+				<event id="158" time="37817777646" vehicle="Vehicle 4" deliver="8"/>
+				<event id="159" time="38117777646" vehicle="Vehicle 4" move="Birmingham"/>
+				<event id="160" time="38122222090" vehicle="Vehicle 3" move="Manchester"/>
+				<event id="161" time="39119999867" vehicle="Vehicle 4" move="London"/>
+				<event id="162" time="39176666533" vehicle="Vehicle 3" move="Liverpool"/>
+				<event id="163" time="39562222088" vehicle="Vehicle 3" deliver="22"/>
+				<event id="164" time="39862222087" vehicle="Vehicle 3" move="Manchester"/>
+				<event id="165" time="40247777642" vehicle="Vehicle 3" pickup="18"/>
+				<event id="166" time="40431110977" vehicle="Vehicle 4" move="Norwich"/>
+				<event id="167" time="40547777642" vehicle="Vehicle 3" move="Liverpool"/>
+				<event id="168" time="40933333197" vehicle="Vehicle 3" deliver="18"/>
+				<event id="169" time="41708888754" vehicle="Vehicle 4" deliver="7"/>
+				<event id="170" time="42008888753" vehicle="Vehicle 4" move="London"/>
+				<event id="171" time="43286666530" vehicle="Vehicle 4" move="Birmingham"/>
+				<event id="172" time="44597777640" vehicle="Vehicle 4" move="Sheffield"/>
+				<event id="173" time="45599999861" vehicle="Vehicle 4" move="Leeds"/>
+				<event id="174" time="46058888749" vehicle="Vehicle 4" move="Newcastle"/>
+				<event id="175" time="47153333192" vehicle="Vehicle 4" pickup="29"/>
+				<event id="176" time="47453333192" vehicle="Vehicle 4" move="Leeds"/>
+				<event id="177" time="48547777635" vehicle="Vehicle 4" move="Sheffield"/>
+				<event id="178" time="49006666523" vehicle="Vehicle 4" move="Birmingham"/>
+				<event id="179" time="50008888744" vehicle="Vehicle 4" move="London"/>
+				<event id="180" time="51319999854" vehicle="Vehicle 4" move="Norwich"/>
+				<event id="181" time="52597777631" vehicle="Vehicle 4" deliver="29"/>
+				<event id="182" time="52897777631" vehicle="Vehicle 4" move="London"/>
+				<event id="183" time="54175555408" vehicle="Vehicle 4" move="Birmingham"/>
+				<event id="184" time="55486666518" vehicle="Vehicle 4" move="Manchester"/>
+				<event id="185" time="56541110961" vehicle="Vehicle 4" move="Liverpool"/>
+				<event id="186" time="56926666516" vehicle="Vehicle 4" deliver="12"/>
+				<event id="187" time="57226666516" vehicle="Vehicle 4" pickup="13"/>
+				<event id="188" time="57526666515" vehicle="Vehicle 4" move="Manchester"/>
+				<event id="189" time="57912222070" vehicle="Vehicle 4" move="Birmingham"/>
+				<event id="190" time="58966666513" vehicle="Vehicle 4" move="London"/>
+				<event id="191" time="60277777623" vehicle="Vehicle 4" move="Norwich"/>
+				<event id="192" time="61555555399" vehicle="Vehicle 4" deliver="11"/>
+				<event id="193" time="61855555399" vehicle="Vehicle 4" move="London"/>
+				<event id="194" time="63133333176" vehicle="Vehicle 4" move="Birmingham"/>
+				<event id="195" time="64444444286" vehicle="Vehicle 4" move="Sheffield"/>
+				<event id="196" time="65446666508" vehicle="Vehicle 4" move="Leeds"/>
+				<event id="197" time="65905555396" vehicle="Vehicle 4" deliver="13"/>
+				<event id="198" time="66205555396" vehicle="Vehicle 4" move="Sheffield"/>
+				<event id="199" time="66664444284" vehicle="Vehicle 4" move="Birmingham"/>
+				<event id="200" time="67666666505" vehicle="Vehicle 4" pickup="1"/>
+				<event id="201" time="67966666504" vehicle="Vehicle 4" move="Manchester"/>
+				<event id="202" time="69021110948" vehicle="Vehicle 4" deliver="1"/>
 			</events>
 		</round>
 	</rounds>
 	<statistics>
 		<stat rank="1" agent="centralized-random">
 			<total-tasks value="30"/>
-			<total-distance value="1241.4"/>
-			<total-cost value="6207"/>
-			<total-reward value="87021"/>
-			<total-profit value="80814"/>
+			<total-distance value="13159.6"/>
+			<total-cost value="65798"/>
+			<total-reward value="1803743"/>
+			<total-profit value="1737945"/>
 		</stat>
 	</statistics>
 </history>
