@@ -72,20 +72,71 @@ In each iteration of the loop, we generate 2 neighbours. We then compute their c
 \subsubsection{Setting}
 % Describe the settings of your experiment: topology, task configuration, number of tasks, number of vehicles, etc. %
 % and the parameters you are analyzing %
+The settings of this experiment are the following: topology is "england", the task configuration has a distribution constant with a policy of short distance. There are ten tasks and four vehicles, all of them with the same capacity and cost per kilometer. Two parameters will be tested the number p which is the probability of taking the result of "ChooseNeighbours" and nbStep, the number of times the "ChooseNeighbours" is called. Two metrics will be used the cost of the total transportation and the time taken for all tasks to be delivered. 
+
+The results are displayed in Table \ref{tab:1}.
+\begin{table}
+  \begin{center}
+    \begin{tabular}{ | l | l | l | l |}
+    \hline
+    p & nbStep & Mean Cost & Mean Time taken \\ \hline
+    0.3 & 10 & 24720 & 4060\\ \hline
+    0.3 & 100 & 24497 & 3310 \\ \hline
+    0.3 & 10000 & 26284 & 3300 \\ \hline
+    0.3 & 1000000 & 24207 & 3100 \\ \hline
+    0.4 & 1000000 & 24913 & 3110 \\\hline
+    0.5 & 1000000 & 26362 & 3890 \\\hline
+    1.0 & 1000000 & 24133 & 3680 \\\hline
+
+    
+    \end{tabular}
+    \caption{Results for different parameter values, the mean values have been obtained after 5 measurements}
+    \label{tab:1}
+\end{center}
+\end{table}
+
+    
+    
+
 
 \subsubsection{Observations}
 % Describe the experimental results and the conclusions you inferred from these results %
+At first we notice that the total cost does not change much. This cost only depends on the individual performance of the vehicles. And this algorithm is far from assuring an optimal solution.
+
+The time taken to deliver all the tasks varies much more. It is proportional to the number of task the vehicle with the most has to transport. Therefore, if the tasks are equally allocated along the vehicles the time should be minimized. 
+
 
 \subsection{Experiment 2: Different configurations}
 % Run simulations for different configurations of the environment (i.e. different tasks and number of vehicles) %
 
 \subsubsection{Setting}
 % Describe the settings of your experiment: topology, task configuration, number of tasks, number of vehicles, etc. %
+The two parameters p and nbStep are 0.3 and 1000000 which gave the best results previously. We now change the number of vehicles and the number of tasks in the world. The Table \ref{tab:2} shows the results.
+\begin{table}
+  \begin{center}
+    \begin{tabular}{ | l | l | l | l | }
+    \hline
+    Nb tasks & Nb vehicules  & Mean Time taken & Mean Cost \\ \hline
+    10 & 4 & 3300 & 24207 \\ \hline
+    10 & 2 & 4550 & 23182 \\ \hline
+    20 & 4 & 5690 & 45677 \\ \hline
+    20 & 2 & 8120 & 40430 \\ \hline
+
+    
+    \end{tabular}
+    \caption{Time taken to transport all the tasks in function of the number of tasks and the number of vehicles, the mean values have been obtained after 5 measurements}
+    \label{tab:2}
+\end{center}
+\end{table}
+
+
 
 \subsubsection{Observations}
 % Describe the experimental results and the conclusions you inferred from these results %
 % Reflect on the fairness of the optimal plans. Observe that optimality requires some vehicles to do more work than others. %
 % How does the complexity of your algorithm depend on the number of vehicles and various sizes of the task set? %
 
+The main result is the fact that the cost is smaller when the fleet of trucks is smaller. Also the time taken to transport all the tasks is not linear with the number of trucks. The time only increases by 40\% when the number of vehicles is divided by two.
 
+This seems to indicate that each vehicle of a smaller fleet will have a more optimized path.
 \end{document}
