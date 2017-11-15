@@ -42,6 +42,7 @@ public class AuctionTemplate implements AuctionBehavior {
 
         private double currentCost;
         private List<State> currentStates;
+        private Set<Task> ownedTasks;
 
 	@Override
 	public void setup(Topology topology, TaskDistribution distribution,
@@ -68,6 +69,7 @@ public class AuctionTemplate implements AuctionBehavior {
 
                 currentCost = 0;
                 currentStates = new ArrayList<State>();
+                ownedTasks = new HashSet<Task>();
 
 		long seed = -9019554669489983951L * currentCity.hashCode() * agent.id();
 		this.random = new Random(seed);
@@ -104,8 +106,8 @@ public class AuctionTemplate implements AuctionBehavior {
         @Override
         public List<Plan> plan(List<Vehicle> vehicles, TaskSet tasks) {
             long time_start = System.currentTimeMillis();
-            
-            List<State> states = COP(vehicles, tasks, time_start);
+            Set<Task> tasks_ = tasksetToTasklist(tasks);
+            List<State> states = COP(vehicles, tasks_, time_start);
             List<Plan> plans = new ArrayList<Plan>();
 
             for (State state : states)
@@ -121,7 +123,7 @@ public class AuctionTemplate implements AuctionBehavior {
             return plans;
         }
 
-        private List<State> COP (List<Vehicle> vehicles, TaskSet ts, long time_start) {
+        private List<State> COP (List<Vehicle> vehicles, Set<Task> ts, long time_start) {
             //Initialisation
             long duration;
             List<State> states = new ArrayList<State>();        
@@ -282,6 +284,15 @@ public class AuctionTemplate implements AuctionBehavior {
                 cost += state.getCost();
 
             return cost;
+        }
+
+        private Set<Task> tasksetToTasklist (TaskSet ts){
+            Set<Task> tasksList = new HashSet<Task>();
+            for (Task task : ts){
+                tasksList.add(task);
+            }
+
+            return tasksList;
         }
 
         private Plan stateToPlan(State state) {
