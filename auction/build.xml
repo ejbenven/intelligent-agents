@@ -35,7 +35,13 @@
 
     </target>
 
-    <target name="main" depends="compile">
+    <target name="build-jar" depends="compile">
+        <jar destfile="${dist.dir}\auction-main-24.jar" basedir="${build.dir}"
+            includes="template/*.class">
+        </jar>
+    </target>
+
+    <target name="main" depends="build-jar">
         <description>Main target</description>
     </target>
 
