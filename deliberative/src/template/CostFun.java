@@ -21,30 +21,39 @@ class CostFun implements Comparator<State> {
 
     @Override
     public int compare (State state1, State state2) {
-        int dist1 = 0;
-        int dist2 = 0;
+        double dist1 = 0;
+        double dist2 = 0;
+        double d;
         City curr1 = state1.getCurrentCity();
         City curr2 = state2.getCurrentCity();
 
 
         for (Task task : state1.getAgentTaskList() ) {
-            dist1 += curr1.distanceTo(task.deliveryCity);
+            d = curr1.distanceTo(task.deliveryCity);
+            if (d > dist1)
+                dist1 = d;
         }
         
         for (Task task : state1.getCityTasksList() ) {
-            dist1 += curr1.distanceTo(task.pickupCity);
+            d = curr1.distanceTo(task.pickupCity);
+            if (d > dist1)
+                dist1 = d;
         }
 
         for (Task task : state2.getAgentTaskList() ) {
-            dist2 += curr2.distanceTo(task.deliveryCity);
+            d = curr2.distanceTo(task.deliveryCity);
+            if (d>dist2)
+                dist2 = d;
         }
 
         for (Task task : state2.getCityTasksList() ) {
-            dist2 += curr2.distanceTo(task.pickupCity);
+            d = curr2.distanceTo(task.pickupCity);
+            if (d>dist2)
+                dist2 = d;
 
         }
 
-        return Double.compare(state1.getCost() , state2.getCost()  );
+        return Double.compare(state1.getCost() + dist1*costPerKm , state2.getCost() + dist2*costPerKm );
     }
 
 }
