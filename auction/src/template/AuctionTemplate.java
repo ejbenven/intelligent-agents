@@ -4,7 +4,11 @@ package template;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.HashSet;
 
+import logist.LogistSettings;
+import logist.config.Parsers;
 import logist.Measures;
 import logist.behavior.AuctionBehavior;
 import logist.agent.Agent;
@@ -31,6 +35,14 @@ public class AuctionTemplate implements AuctionBehavior {
 	private Vehicle vehicle;
 	private City currentCity;
 
+        private long timeout_setup;
+        private long timeout_plan;
+        private long timeout_bid;
+        private double p;
+
+        private double currentCost;
+        private List<State> currentStates;
+
 	@Override
 	public void setup(Topology topology, TaskDistribution distribution,
 			Agent agent) {
@@ -40,11 +52,28 @@ public class AuctionTemplate implements AuctionBehavior {
 		this.agent = agent;
 		this.vehicle = agent.vehicles().get(0);
 		this.currentCity = vehicle.homeCity();
+                
+                p = agent.readProperty("p", Double.class, 0.3);
+                // the plan method cannot execute more than timeout_plan milliseconds
+                LogistSettings ls = null;
+                try {
+                    ls = Parsers.parseSettings("config/settings_default.xml");
+                }
+                catch (Exception exc) {
+                    System.out.println("There was a problem loading the configuration file.");
+                }
+                timeout_setup = ls.get(LogistSettings.TimeoutKey.SETUP);
+                timeout_plan = ls.get(LogistSettings.TimeoutKey.PLAN);
+                timeout_bid = ls.get(LogistSettings.TimeoutKey.BID);
+
+                currentCost = 0;
+                currentStates = new ArrayList<State>();
 
 		long seed = -9019554669489983951L * currentCity.hashCode() * agent.id();
 		this.random = new Random(seed);
 	}
 
+        //TODO
 	@Override
 	public void auctionResult(Task previous, int winner, Long[] bids) {
 		if (winner == agent.id()) {
@@ -52,6 +81,7 @@ public class AuctionTemplate implements AuctionBehavior {
 		}
 	}
 	
+        //TODO
 	@Override
 	public Long askPrice(Task task) {
 
@@ -70,41 +100,219 @@ public class AuctionTemplate implements AuctionBehavior {
 		return (long) Math.round(bid);
 	}
 
-	@Override
-	public List<Plan> plan(List<Vehicle> vehicles, TaskSet tasks) {
-		
-//		System.out.println("Agent " + agent.id() + " has tasks " + tasks);
+    
+        @Override
+        public List<Plan> plan(List<Vehicle> vehicles, TaskSet tasks) {
+            long time_start = System.currentTimeMillis();
+            
+            List<State> states = COP(vehicles, tasks, time_start);
+            List<Plan> plans = new ArrayList<Plan>();
 
-		Plan planVehicle1 = naivePlan(vehicle, tasks);
+            for (State state : states)
+                plans.add(stateToPlan(state));
 
-		List<Plan> plans = new ArrayList<Plan>();
-		plans.add(planVehicle1);
-		while (plans.size() < vehicles.size())
-			plans.add(Plan.EMPTY);
+            long time_end = System.currentTimeMillis();
+            long duration = time_end - time_start;
+            double cost=  computeCost(states);
+            System.out.println("The plan was generated in "+duration+" milliseconds.");
+            System.out.println("The cost is "+cost);
 
-		return plans;
-	}
+            
+            return plans;
+        }
 
-	private Plan naivePlan(Vehicle vehicle, TaskSet tasks) {
-		City current = vehicle.getCurrentCity();
-		Plan plan = new Plan(current);
+        private List<State> COP (List<Vehicle> vehicles, TaskSet ts, long time_start) {
+            //Initialisation
+            long duration;
+            List<State> states = new ArrayList<State>();        
+            List<Task> tasks = new ArrayList<Task>();
+            for (Task task : ts) {
+                tasks.add(task);
+                tasks.add(task);
+            }
+            //Find biggest truck
+            int ind = 0;
+            int bestCapa = 0;
+            for (Vehicle vehicle : vehicles){
+                if (vehicle.capacity()>bestCapa){
+                    bestCapa = vehicle.capacity();
+                    ind = vehicles.indexOf(vehicle);
+                }
+            }
 
-		for (Task task : tasks) {
-			// move: current city => pickup location
-			for (City city : current.pathTo(task.pickupCity))
-				plan.appendMove(city);
+            for (Vehicle vehicle : vehicles){
+                if(vehicles.indexOf(vehicle) != ind)
+                    states.add(new State(vehicle.getCurrentCity(), new ArrayList<Task>(), vehicle));
+                else
+                    states.add(new State(vehicle.getCurrentCity(), tasks, vehicle));
+            }
+            
+            
+            List<State> bestStates = new ArrayList<State>();
+            for (State state : states)
+                bestStates.add(state);
+            double bestCost = computeCost(bestStates);
+            double newCost;
+            for(int i = 0; i < 1000000; i++){
+                duration = System.currentTimeMillis() - time_start;
+                if (duration >= 0.9*timeout_plan)
+                    break;
 
-			plan.appendPickup(task);
+                states = chooseNeighboors(states);
+                newCost = computeCost(states);
+                if (newCost < bestCost){
+                    bestStates.clear();
+                    for (State state : states)
+                        bestStates.add(state);
+                }
 
-			// move: pickup location => delivery location
-			for (City city : task.path())
-				plan.appendMove(city);
+            }
+            return bestStates; 
+        }
 
-			plan.appendDelivery(task);
+        private List<State> chooseNeighboors(List<State> states)
+        {
+            List<State> stateShuffle = new ArrayList<State>();
+            List<State> stateSwap = new ArrayList<State>();
+            int ind1, ind2, indt;
+            State state1, state2;
+            Task task;
+            double oldCost, shuffleCost, swapCost;
+            Random rand = new Random();
 
-			// set current city
-			current = task.deliveryCity;
-		}
-		return plan;
-	}
+            for (State state : states){
+                stateShuffle.add(state);
+                stateSwap.add(state);
+            }
+
+            //Shuffle
+            while(true) {
+                ind1 = rand.nextInt(states.size());
+                state1 = states.get(ind1);
+                if (state1.shuffle()){
+                    stateShuffle.remove(ind1);
+                    stateShuffle.add(ind1, state1);
+                    break;
+                }
+            }
+            
+            //transfer a task
+            if (states.size() > 1){
+                while(true) {
+                    ind1 = rand.nextInt(states.size());
+                    ind2 = rand.nextInt(states.size());
+                    if(ind1 == ind2)
+                        continue;
+
+                    state1 = states.get(ind1);
+                    state2 = states.get(ind2);
+                    if(state1.getTasks().isEmpty())
+                        continue;
+                    
+                    indt = rand.nextInt(state1.getTasks().size());
+                    task = state1.getTasks().get(indt);
+
+                    if (state2.addTask(task)){
+                        if (state1.removeTask(task)){
+                            stateSwap.remove(ind1);
+                            stateSwap.add(ind1,state1);
+                            stateSwap.remove(ind2);
+                            stateSwap.add(ind2,state2);
+                            break;
+                        } else {
+                            System.out.println("Error: Added but not removed");
+                        }
+                    } 
+                }
+            } else {
+                stateSwap = stateShuffle;
+            }
+
+            shuffleCost = computeCost(stateShuffle);
+            swapCost = computeCost(stateSwap);
+            oldCost = computeCost(states);
+            double draw = rand.nextDouble();
+            if (draw < p){
+                if (shuffleCost < swapCost && shuffleCost < oldCost)
+                    return stateShuffle;
+                else if (swapCost < shuffleCost && swapCost < oldCost)
+                    return stateSwap;
+                else if (oldCost < shuffleCost && oldCost < swapCost)
+                    return states;
+                else if (oldCost == shuffleCost && oldCost != swapCost) {
+                    if (rand.nextDouble() < 0.5)
+                        return states;
+                    else
+                        return stateShuffle;
+                } else if (oldCost == swapCost && oldCost != shuffleCost) {
+                    if (rand.nextDouble() < 0.5)
+                        return states;
+                    else
+                        return stateSwap;
+                } else if (swapCost == shuffleCost && swapCost != oldCost) {
+                    if (rand.nextDouble() < 0.5)
+                        return stateSwap;
+                    else
+                        return stateShuffle;
+                } else {
+                    if (rand.nextDouble() < 0.3)
+                        return states;
+                    else if (rand.nextDouble() <0.5)
+                        return stateShuffle;
+                    else
+                        return stateSwap;
+                }
+            } else if (rand.nextDouble() < 0.5){
+                return states;
+            } else {
+                if (rand.nextDouble() < 0.3)
+                    return states;
+                else if (rand.nextDouble() < 0.5)
+                    return stateShuffle;
+                else
+                    return stateSwap;
+            }
+
+        }
+
+        private double computeCost (List<State> states){
+            double cost = 0;
+
+            for (State state : states)
+                cost += state.getCost();
+
+            return cost;
+        }
+
+        private Plan stateToPlan(State state) {
+            Plan plan = new Plan(state.getCurrentCity());
+            City currentCity = state.getCurrentCity();
+            City destCity;
+            boolean pickup;
+            Set<Task> pickedTasks = new HashSet<Task>();
+
+            for (Task task : state.getTasks()){
+                if (pickedTasks.add(task)){
+                    destCity = task.pickupCity;
+                    pickup = true;
+                } else {
+                    destCity = task.deliveryCity;
+                    pickup = false;
+                }
+
+                for (City city : currentCity.pathTo(destCity))
+                    plan.appendMove(city);
+
+                if (pickup)
+                    plan.appendPickup(task);
+                else
+                    plan.appendDelivery(task);
+
+                currentCity = destCity;
+            }
+                
+            return plan;
+        }
+
+	
 }
