@@ -84,6 +84,11 @@ public class CentralizedTemplate implements CentralizedBehavior {
 
     private List<State> COP (List<Vehicle> vehicles, TaskSet ts, long time_start) {
         //Initialisation
+        double bestCost = 1000000000;
+        double newCost;
+        List<State> bestStates = new ArrayList<State>();
+        
+
         long duration;
         List<State> states = new ArrayList<State>();        
         List<Task> tasks = new ArrayList<Task>();
@@ -102,33 +107,61 @@ public class CentralizedTemplate implements CentralizedBehavior {
             }
         }
 
+
         for (Vehicle vehicle : vehicles){
             if(vehicles.indexOf(vehicle) != ind)
                 states.add(new State(vehicle.getCurrentCity(), new ArrayList<Task>(), vehicle));
             else
                 states.add(new State(vehicle.getCurrentCity(), tasks, vehicle));
-        }
+            }
         
-        
-        List<State> bestStates = new ArrayList<State>();
         for (State state : states)
             bestStates.add(state);
-        double bestCost = computeCost(bestStates);
-        double newCost;
-        for(int i = 0; i < 1000000; i++){
-            duration = System.currentTimeMillis() - time_start;
-            if (duration >= 0.9*timeout_plan)
-                break;
+        bestCost = computeCost(bestStates);
 
-            states = chooseNeighboors(states);
-            newCost = computeCost(states);
-            if (newCost < bestCost){
-                bestStates.clear();
-                for (State state : states)
-                    bestStates.add(state);
+            for(int i = 0; i < 10000; i++){
+                duration = System.currentTimeMillis() - time_start;
+                if (duration >= 0.9*timeout_plan)
+                    break;
+
+                states = chooseNeighboors(states);
+                newCost = computeCost(states);
+                if (newCost < bestCost){
+                    bestStates.clear();
+                    for (State state : states)
+                        bestStates.add(state);
+                }
+
             }
-
+        for(int j=0; j<100; j++){
+          states = new ArrayList<State>(); 
+        tasks = new ArrayList<Task>();
+        for (Task task : ts) {
+            tasks.add(task);
+            tasks.add(task);
         }
+        for (Vehicle vehicle : vehicles){
+            if(vehicles.indexOf(vehicle) != ind)
+                states.add(new State(vehicle.getCurrentCity(), new ArrayList<Task>(), vehicle));
+            else
+                states.add(new State(vehicle.getCurrentCity(), tasks, vehicle));
+            }
+            for(int i = 0; i < 10000; i++){
+                duration = System.currentTimeMillis() - time_start;
+                if (duration >= 0.9*timeout_plan)
+                    break;
+
+                states = chooseNeighboors(states);
+                newCost = computeCost(states);
+                if (newCost < bestCost){
+                    bestStates.clear();
+                    for (State state : states)
+                        bestStates.add(state);
+                }
+
+            }  
+        }
+        
         return bestStates; 
     }
 
@@ -174,9 +207,9 @@ public class CentralizedTemplate implements CentralizedBehavior {
                 //If the vehicle carries few tasks, we will sometime go look for 
                 //another vehicle to remove tasks from
 
-                if(state1.getTasks().size()<(nbTasks/states.size()) && rand.nextDouble() < 0.5 ){
-                    continue;
-                }
+               // if(state1.getTasks().size()<(nbTasks/states.size()) && rand.nextDouble() < 0.5 ){
+               //     continue;
+                //}
 
                 indt = rand.nextInt(state1.getTasks().size());
                 task = state1.getTasks().get(indt);

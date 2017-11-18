@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.HashSet;
+import java.lang.Math;
 
 import logist.LogistSettings;
 import logist.config.Parsers;
@@ -85,22 +86,88 @@ public class AuctionTemplate implements AuctionBehavior {
 	
         //TODO
 	@Override
-	public Long askPrice(Task task) {
+    public Long askPrice(Task task) {
+
+        if (vehicle.capacity() < task.weight)
+            return null;
+        List<State> states = null;
+        double currentBestCost = 0;//computeCost(bestStates);
+        double bestCost = 0;//computeCost(bestStates);
+
+
+        long distanceTask = task.pickupCity.distanceUnitsTo(task.deliveryCity);
+        long distanceSum = distanceTask
+                + currentCity.distanceUnitsTo(task.pickupCity);
+        double marginalCost = Measures.unitsToKM(distanceSum
+                * vehicle.costPerKm());
+
+        double ratio = 1.0 + (random.nextDouble() * 0.05 * task.id);
+        double bid = ratio * marginalCost;
+
+        return (long) Math.round(bid);
+    }
+	public Long askPrice2(Task task, Set<Task> existingTasks, List<Vehicle> vehicles) {
 
 		if (vehicle.capacity() < task.weight)
 			return null;
+        List<State> states = null;
+        double currentBestCost = 0;//computeCost(bestStates);
+        double newBestCost = 0;//computeCost(bestStates);
+        double price = 0;
+        if(existingTasks.isEmpty()){
+            existingTasks.add(task);
+            existingTasks.add(task);
+            states = COP (vehicles, existingTasks, System.currentTimeMillis());
+            price = computeCost(states) - currentCost;
+        }
+        else{
+            states = COP (vehicles, existingTasks, System.currentTimeMillis());
+            currentBestCost = computeCost(states);
+            existingTasks.add(task);
+            existingTasks.add(task);
+            states = COP (vehicles, existingTasks, System.currentTimeMillis());
+            newBestCost = computeCost(states);
+            price = newBestCost- currentCost;
+        }
 
-		long distanceTask = task.pickupCity.distanceUnitsTo(task.deliveryCity);
-		long distanceSum = distanceTask
-				+ currentCity.distanceUnitsTo(task.pickupCity);
-		double marginalCost = Measures.unitsToKM(distanceSum
-				* vehicle.costPerKm());
-
-		double ratio = 1.0 + (random.nextDouble() * 0.05 * task.id);
-		double bid = ratio * marginalCost;
-
-		return (long) Math.round(bid);
+		return price;
 	}
+
+    public Task concatTwoTasks(TaskSet ts) {
+        List<Task> tasks = new ArrayList<Task>();
+            for (Task task : ts) {
+                tasks.add(task);
+                tasks.add(task);
+                
+            }
+        Task task1 = tasks.get(0);
+        Task task2 = tasks.get(1);
+        double max_weight = Math.max(task1.weight, task2.weight);
+        Task newTask = task1;
+        if (task1.pickupCity == task2.deliveryCity){
+            //newTask.pickupCity = task1.pickupCity;
+            return null;
+        }
+
+        return null;//tasks.get(0);
+    }
+    // public Long askPrice(Task newTask, TaskSet tasks) {
+
+    //     if (vehicle.capacity() < newTask.weight)
+    //         return null;
+
+
+    //     long distanceTask = newTask.pickupCity.distanceUnitsTo(newTask.deliveryCity);
+    //     long distanceSum = distanceTask
+    //             + currentCity.distanceUnitsTo(newTask.pickupCity);
+    //     double marginalCost = Measures.unitsToKM(distanceSum
+    //             * vehicle.costPerKm());
+
+    //     double ratio = 1.0 + (random.nextDouble() * 0.05 * newTask.id);
+    //     double bid = ratio * marginalCost;
+
+    //     return (long) Math.round(bid);
+    // }
 
     
         @Override
@@ -155,7 +222,7 @@ public class AuctionTemplate implements AuctionBehavior {
                 bestStates.add(state);
             double bestCost = computeCost(bestStates);
             double newCost;
-            for(int i = 0; i < 1000000; i++){
+            for(int i = 0; i < 10000; i++){
                 duration = System.currentTimeMillis() - time_start;
                 if (duration >= 0.9*timeout_plan)
                     break;
