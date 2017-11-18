@@ -58,7 +58,7 @@ public class AuctionTemplate implements AuctionBehavior {
                 // the plan method cannot execute more than timeout_plan milliseconds
                 LogistSettings ls = null;
                 try {
-                    ls = Parsers.parseSettings("config/settings_default.xml");
+                    ls = Parsers.parseSettings("config/settings_auction.xml");
                 }
                 catch (Exception exc) {
                     System.out.println("There was a problem loading the configuration file.");
@@ -78,28 +78,31 @@ public class AuctionTemplate implements AuctionBehavior {
         //TODO
 	@Override
 	public void auctionResult(Task previous, int winner, Long[] bids) {
-		if (winner == agent.id()) {
-			currentCity = previous.deliveryCity;
-		}
+	    if (winner == agent.id()) {
+                long t = System.currentTimeMillis();
+	        ownedTasks.add(previous);
+                currentStates = COP(agent.vehicles(), ownedTasks,t);
+                currentCost = computeCost(currentStates);
+	    }
 	}
 	
         //TODO
 	@Override
 	public Long askPrice(Task task) {
+            double newCost, bid;
+            long t = System.currentTimeMillis();
+            Set<Task> newTasks = new HashSet<Task>();
+            List<State> newStates = new ArrayList<State>();
 
-		if (vehicle.capacity() < task.weight)
-			return null;
+            for (Task task_ : ownedTasks)
+                newTasks.add(task_);
+            newTasks.add(task);
+            newStates = COP(agent.vehicles(), newTasks, t);
 
-		long distanceTask = task.pickupCity.distanceUnitsTo(task.deliveryCity);
-		long distanceSum = distanceTask
-				+ currentCity.distanceUnitsTo(task.pickupCity);
-		double marginalCost = Measures.unitsToKM(distanceSum
-				* vehicle.costPerKm());
+            newCost = computeCost(newStates);
+            bid = (1. + random.nextDouble()) * currentCost*newCost;
 
-		double ratio = 1.0 + (random.nextDouble() * 0.05 * task.id);
-		double bid = ratio * marginalCost;
-
-		return (long) Math.round(bid);
+	    return (long) Math.round(bid);
 	}
 
     
@@ -126,7 +129,9 @@ public class AuctionTemplate implements AuctionBehavior {
         private List<State> COP (List<Vehicle> vehicles, Set<Task> ts, long time_start) {
             //Initialisation
             long duration;
-            List<State> states = new ArrayList<State>();        
+            List<State> states = new ArrayList<State>();  
+            if (ts.isEmpty())
+                return states;
             List<Task> tasks = new ArrayList<Task>();
             for (Task task : ts) {
                 tasks.add(task);
@@ -155,7 +160,7 @@ public class AuctionTemplate implements AuctionBehavior {
                 bestStates.add(state);
             double bestCost = computeCost(bestStates);
             double newCost;
-            for(int i = 0; i < 1000000; i++){
+            for(int i = 0; i < 10000; i++){
                 duration = System.currentTimeMillis() - time_start;
                 if (duration >= 0.9*timeout_plan)
                     break;
@@ -279,7 +284,8 @@ public class AuctionTemplate implements AuctionBehavior {
 
         private double computeCost (List<State> states){
             double cost = 0;
-
+            if (states.isEmpty())
+                return cost;
             for (State state : states)
                 cost += state.getCost();
 
