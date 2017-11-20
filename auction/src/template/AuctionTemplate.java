@@ -32,8 +32,6 @@ public class AuctionTemplate implements AuctionBehavior {
 	private TaskDistribution distribution;
 	private Agent agent;
 	private Random random;
-	private Vehicle vehicle;
-	private City currentCity;
 
         private long timeout_setup;
         private long timeout_plan;
@@ -42,6 +40,7 @@ public class AuctionTemplate implements AuctionBehavior {
 
         private double currentCost;
         private List<State> currentStates;
+        private List<State> newStates;
         private Set<Task> ownedTasks;
 
 	@Override
@@ -51,10 +50,8 @@ public class AuctionTemplate implements AuctionBehavior {
 		this.topology = topology;
 		this.distribution = distribution;
 		this.agent = agent;
-		this.vehicle = agent.vehicles().get(0);
-		this.currentCity = vehicle.homeCity();
                 
-                p = agent.readProperty("p", Double.class, 0.3);
+                p = 0.3;
                 // the plan method cannot execute more than timeout_plan milliseconds
                 LogistSettings ls = null;
                 try {
@@ -66,12 +63,13 @@ public class AuctionTemplate implements AuctionBehavior {
                 timeout_setup = ls.get(LogistSettings.TimeoutKey.SETUP);
                 timeout_plan = ls.get(LogistSettings.TimeoutKey.PLAN);
                 timeout_bid = ls.get(LogistSettings.TimeoutKey.BID);
-
+                
                 currentCost = 0;
                 currentStates = new ArrayList<State>();
+                newStates = new ArrayList<State>();
                 ownedTasks = new HashSet<Task>();
-
-		long seed = -9019554669489983951L * currentCity.hashCode() * agent.id();
+                System.out.println("Hi Oro.");
+		long seed = 123456;
 		this.random = new Random(seed);
 	}
 
@@ -79,11 +77,13 @@ public class AuctionTemplate implements AuctionBehavior {
 	@Override
 	public void auctionResult(Task previous, int winner, Long[] bids) {
 	    if (winner == agent.id()) {
-                long t = System.currentTimeMillis();
 	        ownedTasks.add(previous);
-                currentStates = COP(agent.vehicles(), ownedTasks,t);
+                currentStates.clear();
+                for (State state : newStates)
+                    currentStates.add(state);
                 currentCost = computeCost(currentStates);
 	    }
+            newStates.clear();
 	}
 	
         //TODO
@@ -92,7 +92,6 @@ public class AuctionTemplate implements AuctionBehavior {
             double newCost, bid;
             long t = System.currentTimeMillis();
             Set<Task> newTasks = new HashSet<Task>();
-            List<State> newStates = new ArrayList<State>();
 
             for (Task task_ : ownedTasks)
                 newTasks.add(task_);
@@ -100,7 +99,9 @@ public class AuctionTemplate implements AuctionBehavior {
             newStates = COP(agent.vehicles(), newTasks, t);
 
             newCost = computeCost(newStates);
-            bid = (1. + random.nextDouble()) * currentCost*newCost;
+            if (newCost <= currentCost)
+                newCost = currentCost + 100;
+            bid = (1. + random.nextDouble()) * (newCost-currentCost);
 
 	    return (long) Math.round(bid);
 	}
@@ -130,8 +131,6 @@ public class AuctionTemplate implements AuctionBehavior {
             //Initialisation
             long duration;
             List<State> states = new ArrayList<State>();  
-            if (ts.isEmpty())
-                return states;
             List<Task> tasks = new ArrayList<Task>();
             for (Task task : ts) {
                 tasks.add(task);
@@ -186,23 +185,30 @@ public class AuctionTemplate implements AuctionBehavior {
             Task task;
             double oldCost, shuffleCost, swapCost;
             Random rand = new Random();
-
+            int total_tasks = 0;
             for (State state : states){
+                if (total_tasks < state.getTasks().size())
+                    total_tasks = state.getTasks().size();
+
                 stateShuffle.add(state);
                 stateSwap.add(state);
             }
 
             //Shuffle
-            while(true) {
-                ind1 = rand.nextInt(states.size());
-                state1 = states.get(ind1);
-                if (state1.shuffle()){
-                    stateShuffle.remove(ind1);
-                    stateShuffle.add(ind1, state1);
-                    break;
+            if (total_tasks >= 4){
+                while(true) {
+                    ind1 = rand.nextInt(states.size());
+                    state1 = states.get(ind1);
+                    if (state1.shuffle()){
+                        stateShuffle.remove(ind1);
+                        stateShuffle.add(ind1, state1);
+                        break;
+                    }
                 }
+            } else {
+                stateShuffle = states;
             }
-            
+
             //transfer a task
             if (states.size() > 1){
                 while(true) {
