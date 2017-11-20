@@ -42,6 +42,7 @@ public class AuctionTemplate implements AuctionBehavior {
         private List<State> currentStates;
         private List<State> newStates;
         private Set<Task> ownedTasks;
+        private double greed;
         
         //We keep track of our oponents moves
         private List<Long> oppBids;
@@ -49,7 +50,10 @@ public class AuctionTemplate implements AuctionBehavior {
         private double oppCurrCost;
         private double oppNewCost;
         private long oppMinBid;
+        private long oppExpBid;
         private long oppTotBid;
+
+        private long error;
 
 	@Override
 	public void setup(Topology topology, TaskDistribution distribution,
@@ -60,7 +64,7 @@ public class AuctionTemplate implements AuctionBehavior {
 		this.agent = agent;
                 
                 p = 0.3;
-                // the plan method cannot execute more than timeout_plan milliseconds
+                greed = agent.readProperty("greed",Double.class,0.5);
                 LogistSettings ls = null;
                 try {
                     ls = Parsers.parseSettings("config/settings_auction.xml");
@@ -79,15 +83,17 @@ public class AuctionTemplate implements AuctionBehavior {
 
                 oppCurrCost = 0;
                 oppTotBid = 0;
+                oppExpBid = 0;
                 oppMinBid = Long.MAX_VALUE;
                 oppBids = new ArrayList<Long>();
                 oppTasks = new HashSet<Task>();
+
+                error = 0;
 
 		long seed = 123456;
 		this.random = new Random(seed);
 	}
 
-        //TODO
 	@Override
 	public void auctionResult(Task previous, int winner, Long[] bids) {
 	    long oBid = bids[1-agent.id()];
@@ -95,6 +101,10 @@ public class AuctionTemplate implements AuctionBehavior {
             oppTotBid += oBid;
             if (oppMinBid > oBid)
                 oppMinBid = oBid;
+            if (oppBids.isEmpty())
+                error = oppExpBid - oBid;
+            else 
+                error = (error*oppBids.size() + oppExpBid - oBid)/(oppBids.size()+1);
             
             if (winner == agent.id()) {
 	        ownedTasks.add(previous);
@@ -109,7 +119,6 @@ public class AuctionTemplate implements AuctionBehavior {
             newStates.clear();
 	}
 	
-        //TODO
 	@Override
 	public Long askPrice(Task task) {
             double newCost, bid;
@@ -134,11 +143,22 @@ public class AuctionTemplate implements AuctionBehavior {
             double ourMargin = newCost-currentCost;
             double oppMargin = oppNewCost - oppCurrCost;
 
+            //realBid = greed*(oppRealMargin - realSpread)
+            //= greed*(oppRealMargin - (ourMargin - oppRealMargin))
+            //= greed*(2*oppRealMargin - ourMargin)
+            //= greed(2*oppMargin - ourMargin) - error
+            //--> oppRealMargin = 1/2 * (2*oppMargin - error/greed)
+            //oppRealMargin = oppMargin - error/(2*greed)
+            oppMargin = oppMargin - error/(2*greed);
+
             double spread = ourMargin - oppMargin;
+            /*
             if (spread < 0)
                 spread = 0;
+            */
 
-            bid = 0.5*(ourMargin + spread);
+            bid = greed*(ourMargin + spread);
+            oppExpBid = (long) Math.round(greed*(oppMargin - spread)); 
 
 	    return (long) Math.round(bid);
 	}
