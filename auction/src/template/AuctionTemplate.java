@@ -42,6 +42,14 @@ public class AuctionTemplate implements AuctionBehavior {
         private List<State> currentStates;
         private List<State> newStates;
         private Set<Task> ownedTasks;
+        
+        //We keep track of our oponents moves
+        private List<Long> oppBids;
+        private Set<Task> oppTasks;
+        private double oppCurrCost;
+        private double oppNewCost;
+        private long oppMinBid;
+        private long oppTotBid;
 
 	@Override
 	public void setup(Topology topology, TaskDistribution distribution,
@@ -68,7 +76,13 @@ public class AuctionTemplate implements AuctionBehavior {
                 currentStates = new ArrayList<State>();
                 newStates = new ArrayList<State>();
                 ownedTasks = new HashSet<Task>();
-                System.out.println("Hi Oro.");
+
+                oppCurrCost = 0;
+                oppTotBid = 0;
+                oppMinBid = Long.MAX_VALUE;
+                oppBids = new ArrayList<Long>();
+                oppTasks = new HashSet<Task>();
+
 		long seed = 123456;
 		this.random = new Random(seed);
 	}
@@ -76,13 +90,22 @@ public class AuctionTemplate implements AuctionBehavior {
         //TODO
 	@Override
 	public void auctionResult(Task previous, int winner, Long[] bids) {
-	    if (winner == agent.id()) {
+	    long oBid = bids[1-agent.id()];
+            oppBids.add(oBid);
+            oppTotBid += oBid;
+            if (oppMinBid > oBid)
+                oppMinBid = oBid;
+            
+            if (winner == agent.id()) {
 	        ownedTasks.add(previous);
                 currentStates.clear();
                 for (State state : newStates)
                     currentStates.add(state);
                 currentCost = computeCost(currentStates);
-	    }
+	    } else {
+                oppTasks.add(previous);
+                oppCurrCost = oppNewCost;
+            }
             newStates.clear();
 	}
 	
@@ -99,9 +122,23 @@ public class AuctionTemplate implements AuctionBehavior {
             newStates = COP(agent.vehicles(), newTasks, t);
 
             newCost = computeCost(newStates);
-            if (newCost <= currentCost)
-                newCost = currentCost + 100;
-            bid = (1. + random.nextDouble()) * (newCost-currentCost);
+
+            newTasks.clear();
+            for (Task task_ : oppTasks)
+                newTasks.add(task_);
+            newTasks.add(task);
+
+            t = System.currentTimeMillis();
+            oppNewCost = computeCost(COP(agent.vehicles(), newTasks,t));
+            
+            double ourMargin = newCost-currentCost;
+            double oppMargin = oppNewCost - oppCurrCost;
+
+            double spread = ourMargin - oppMargin;
+            if (spread < 0)
+                spread = 0;
+
+            bid = 0.5*(ourMargin + spread);
 
 	    return (long) Math.round(bid);
 	}
@@ -159,9 +196,9 @@ public class AuctionTemplate implements AuctionBehavior {
                 bestStates.add(state);
             double bestCost = computeCost(bestStates);
             double newCost;
-            for(int i = 0; i < 10000; i++){
+            for(int i = 0; i < 100000; i++){
                 duration = System.currentTimeMillis() - time_start;
-                if (duration >= 0.9*timeout_plan)
+                if (duration >= 0.45*timeout_plan)
                     break;
 
                 states = chooseNeighboors(states);
