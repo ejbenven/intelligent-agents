@@ -173,6 +173,11 @@ public class AuctionTemplate implements AuctionBehavior {
             List<State> states = COP(vehicles, tasks_, time_start);
             List<Plan> plans = new ArrayList<Plan>();
 
+            if (computeCost(states) > computeCost(currentStates)){
+                states.clear();
+                for (State state: currentStates)
+                    states.add(state);
+            }
             for (State state : states)
                 plans.add(stateToPlan(state));
 
@@ -229,7 +234,7 @@ public class AuctionTemplate implements AuctionBehavior {
             double bestCostOverall = bestCost;
 
             double newCost;
-            for (int i = 0; i<10; i++){
+            for (int i = 0; i<100; i++){
                 while(temperature > 1){
                     duration = System.currentTimeMillis() - time_start;
                     if (duration >= 0.45*timeout_plan)
