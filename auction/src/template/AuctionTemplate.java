@@ -43,6 +43,7 @@ public class AuctionTemplate implements AuctionBehavior {
         private List<State> newStates;
         private Set<Task> ownedTasks;
         private double greed;
+        private boolean careful;
         
         //We keep track of our oponents moves
         private List<Long> oppBids;
@@ -65,6 +66,7 @@ public class AuctionTemplate implements AuctionBehavior {
                 
                 p = 0.3;
                 greed = agent.readProperty("greed",Double.class,0.5);
+                careful = agent.readProperty("careful",Boolean.class,true);
                 LogistSettings ls = null;
                 try {
                     ls = Parsers.parseSettings("config/settings_auction.xml");
@@ -143,22 +145,22 @@ public class AuctionTemplate implements AuctionBehavior {
             double ourMargin = newCost-currentCost;
             double oppMargin = oppNewCost - oppCurrCost;
 
-            //realBid = greed*(oppRealMargin - realSpread)
-            //= greed*(oppRealMargin - (ourMargin - oppRealMargin))
-            //= greed*(2*oppRealMargin - ourMargin)
-            //= greed(2*oppMargin - ourMargin) - error
-            //--> oppRealMargin = 1/2 * (2*oppMargin - error/greed)
-            //oppRealMargin = oppMargin - error/(2*greed)
-            oppMargin = oppMargin - error/(2*greed);
+            //realBid = oppRealMargin - greed*realSpread
+            //= oppRealMargin - greed*(ourMargin - oppRealMargin)
+            //= (1+greed)*oppRealMargin - greed*ourMargin = oppMargin - greed*(ourMargin - oppMargin) - error
+            //(1+greed)*oppRealMargin = (1+greed)oppMargin - error
+            //oppRealMargin = oppMargin - 1/(1+greed) * error
+            oppMargin = oppMargin - error/(1+greed);
 
             double spread = ourMargin - oppMargin;
-            /*
-            if (spread < 0)
-                spread = 0;
-            */
 
-            bid = greed*(ourMargin + spread);
-            oppExpBid = (long) Math.round(greed*(oppMargin - spread)); 
+            bid = ourMargin + greed*spread;
+            oppExpBid = (long) Math.round(greed*(oppMargin - spread));
+            if (oppExpBid < oppMargin)
+                oppExpBid = (long) Math.round(oppMargin);
+
+            if (bid < ourMargin)
+                bid = ourMargin;
 
 	    return (long) Math.round(bid);
 	}

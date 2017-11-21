@@ -6,10 +6,55 @@
 	<!--  - generated on  : Mon Nov 20 00:02:57 CET 2017 -->
 	<agent name="YourName">
             <set class-path="bin"/>
-		<set class-name="template.AuctionTemplate"/>
+            <set class-name="template.AuctionTemplate"/>
+            <set greed="0.9" />
 	</agent>
 	<agent name="YourName2">
             <set class-path="bin"/>
-		<set class-name="template.AuctionTemplate"/>
-	</agent>
+            <set class-name="template.AuctionTemplate"/>
+            <set greed="0.8" />
+        </agent>
+
+        <agent name="YourName3">
+            <set class-path="bin"/>
+            <set class-name="template.AuctionTemplate"/>
+            <set greed="0.7" />
+        </agent>
+
+        <agent name="YourName4">
+            <set class-path="bin"/>
+            <set class-name="template.AuctionTemplate"/>
+            <set greed="0.6" />
+        </agent>
+
+        <agent name="YourName5">
+            <set class-path="bin"/>
+            <set class-name="template.AuctionTemplate"/>
+            <set greed="0.5" />
+        </agent>
+
+        <agent name="YourName6">
+            <set class-path="bin"/>
+            <set class-name="template.AuctionTemplate"/>
+            <set greed="0.4" />
+        </agent>
+
+        <agent name="YourName7">
+            <set class-path="bin"/>
+            <set class-name="template.AuctionTemplate"/>
+            <set greed="0.3" />
+        </agent>
+
+        <agent name="YourName8">
+            <set class-path="bin"/>
+            <set class-name="template.AuctionTemplate"/>
+            <set greed="0.2" />
+        </agent>
+
+        <agent name="YourName9">
+            <set class-path="bin"/>
+            <set class-name="template.AuctionTemplate"/>
+            <set greed="0.1" />
+        </agent>
+
 </agents>
