@@ -37,6 +37,7 @@ public class AuctionTemplate implements AuctionBehavior {
         private long timeout_plan;
         private long timeout_bid;
         private double p;
+	private double temperature;
 
         private double currentCost;
         private List<State> currentStates;
@@ -63,7 +64,8 @@ public class AuctionTemplate implements AuctionBehavior {
 		this.distribution = distribution;
 		this.agent = agent;
                 
-                p = 0.3;
+                temperature = agent.readProperty("temperature",Double.class,1000000.);
+        	p = agent.readProperty("p",Double.class, 0.0001);
                 greed = agent.readProperty("greed",Double.class,0.5);
                 LogistSettings ls = null;
                 try {
@@ -75,6 +77,8 @@ public class AuctionTemplate implements AuctionBehavior {
                 timeout_setup = ls.get(LogistSettings.TimeoutKey.SETUP);
                 timeout_plan = ls.get(LogistSettings.TimeoutKey.PLAN);
                 timeout_bid = ls.get(LogistSettings.TimeoutKey.BID);
+                if (timeout_bid < timeout_plan)
+                    timeout_plan = timeout_bid;
                 
                 currentCost = 0;
                 currentStates = new ArrayList<State>();
@@ -186,6 +190,12 @@ public class AuctionTemplate implements AuctionBehavior {
             //Initialisation
             long duration;
             List<State> states = new ArrayList<State>();  
+            if (ts.isEmpty()){
+                for (Vehicle vehicle : vehicles) {
+                    states.add(new State(vehicle.getCurrentCity(), new ArrayList<Task>(), vehicle));
+                }
+                return states;
+            }
             List<Task> tasks = new ArrayList<Task>();
             for (Task task : ts) {
                 tasks.add(task);
@@ -213,57 +223,61 @@ public class AuctionTemplate implements AuctionBehavior {
             for (State state : states)
                 bestStates.add(state);
             double bestCost = computeCost(bestStates);
+            List<State> bestStatesOverall = new ArrayList<State>();
+            for (State state : states)
+                bestStatesOverall.add(state);
+            double bestCostOverall = bestCost;
+
             double newCost;
-            for(int i = 0; i < 100000; i++){
+            for (int i = 0; i<10; i++){
+                while(temperature > 1){
+                    duration = System.currentTimeMillis() - time_start;
+                    if (duration >= 0.45*timeout_plan)
+                        break;
+
+                    states = chooseNeighboors(states);
+                    temperature *= (1-p);
+                    newCost = computeCost(states);
+                    if (newCost < bestCost){
+                        bestStates.clear();
+                        for (State state : states)
+                            bestStates.add(state);
+                        bestCost = newCost;
+                    }
+                }
+                if (bestCost < bestCostOverall){
+                    bestCostOverall = bestCost;
+                    bestStatesOverall.clear();
+                    for (State state: bestStates)
+                        bestStatesOverall.add(state);
+                }
                 duration = System.currentTimeMillis() - time_start;
                 if (duration >= 0.45*timeout_plan)
                     break;
 
-                states = chooseNeighboors(states);
-                newCost = computeCost(states);
-                if (newCost < bestCost){
-                    bestStates.clear();
-                    for (State state : states)
-                        bestStates.add(state);
-                }
+                states.clear();
+                for (State state: bestStates)
+                    states.add(state);
 
             }
-            return bestStates; 
+
+            return bestStatesOverall; 
         }
 
         private List<State> chooseNeighboors(List<State> states)
         {
-            List<State> stateShuffle = new ArrayList<State>();
             List<State> stateSwap = new ArrayList<State>();
             int ind1, ind2, indt;
             State state1, state2;
             Task task;
             double oldCost, shuffleCost, swapCost;
             Random rand = new Random();
-            int total_tasks = 0;
-            for (State state : states){
-                if (total_tasks < state.getTasks().size())
-                    total_tasks = state.getTasks().size();
 
-                stateShuffle.add(state);
+            for (State state : states){
                 stateSwap.add(state);
             }
 
-            //Shuffle
-            if (total_tasks >= 4){
-                while(true) {
-                    ind1 = rand.nextInt(states.size());
-                    state1 = states.get(ind1);
-                    if (state1.shuffle()){
-                        stateShuffle.remove(ind1);
-                        stateShuffle.add(ind1, state1);
-                        break;
-                    }
-                }
-            } else {
-                stateShuffle = states;
-            }
-
+            
             //transfer a task
             if (states.size() > 1){
                 while(true) {
@@ -282,6 +296,8 @@ public class AuctionTemplate implements AuctionBehavior {
 
                     if (state2.addTask(task)){
                         if (state1.removeTask(task)){
+                            state1.reOrderAnnealing();
+                            state2.reOrderAnnealing();
                             stateSwap.remove(ind1);
                             stateSwap.add(ind1,state1);
                             stateSwap.remove(ind2);
@@ -293,54 +309,23 @@ public class AuctionTemplate implements AuctionBehavior {
                     } 
                 }
             } else {
-                stateSwap = stateShuffle;
+                return states;
             }
 
-            shuffleCost = computeCost(stateShuffle);
             swapCost = computeCost(stateSwap);
             oldCost = computeCost(states);
-            double draw = rand.nextDouble();
-            if (draw < p){
-                if (shuffleCost < swapCost && shuffleCost < oldCost)
-                    return stateShuffle;
-                else if (swapCost < shuffleCost && swapCost < oldCost)
-                    return stateSwap;
-                else if (oldCost < shuffleCost && oldCost < swapCost)
-                    return states;
-                else if (oldCost == shuffleCost && oldCost != swapCost) {
-                    if (rand.nextDouble() < 0.5)
-                        return states;
-                    else
-                        return stateShuffle;
-                } else if (oldCost == swapCost && oldCost != shuffleCost) {
-                    if (rand.nextDouble() < 0.5)
-                        return states;
-                    else
-                        return stateSwap;
-                } else if (swapCost == shuffleCost && swapCost != oldCost) {
-                    if (rand.nextDouble() < 0.5)
-                        return stateSwap;
-                    else
-                        return stateShuffle;
-                } else {
-                    if (rand.nextDouble() < 0.3)
-                        return states;
-                    else if (rand.nextDouble() <0.5)
-                        return stateShuffle;
-                    else
-                        return stateSwap;
-                }
-            } else if (rand.nextDouble() < 0.5){
+            
+            if (acceptanceProbability(oldCost,swapCost) > rand.nextDouble())
+                return stateSwap;
+            else
                 return states;
-            } else {
-                if (rand.nextDouble() < 0.3)
-                    return states;
-                else if (rand.nextDouble() < 0.5)
-                    return stateShuffle;
-                else
-                    return stateSwap;
-            }
+        }
 
+	private double acceptanceProbability(double oldCost, double newCost){
+            if (newCost < oldCost)
+                return 1.0;
+            else
+                return Math.exp((oldCost-newCost) / temperature);
         }
 
         private double computeCost (List<State> states){

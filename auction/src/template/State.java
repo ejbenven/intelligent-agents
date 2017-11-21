@@ -130,6 +130,121 @@ public class State {
         return false;
     }
 
+    public void reOrder() {
+        City cCity = currentCity;
+        Task cTask = null;
+        double sCost = Double.POSITIVE_INFINITY;
+        double tmpCost;
+        int carriedWeight = 0;
+
+        List<Task> tmpTasks = new ArrayList<Task>();
+        for (Task task : tasks)
+            tmpTasks.add(task);
+
+        Set<Task> carriedTasks = new HashSet<Task>();
+        tasks.clear();
+        while(!tmpTasks.isEmpty()){
+            sCost = Double.POSITIVE_INFINITY;
+            for (Task task : tmpTasks){
+                if(carriedTasks.contains(task))
+                    tmpCost = cCity.distanceTo(task.deliveryCity)*vehicle.costPerKm();
+                else if (carriedWeight + task.weight < vehicle.capacity())
+                    tmpCost = cCity.distanceTo(task.pickupCity)*vehicle.costPerKm();
+                else
+                    continue;
+                if (tmpCost < sCost){
+                    sCost = tmpCost;
+                    cTask = task;
+                }
+            }
+            tasks.add(cTask);
+            if(carriedTasks.add(cTask)){
+                cCity = cTask.pickupCity;
+                carriedWeight += cTask.weight;
+            }
+            else{
+                cCity = cTask.deliveryCity;
+                carriedWeight -= cTask.weight;
+            }
+            tmpTasks.remove(cTask);
+        }
+        cost = computeCost();
+    }
+
+
+    public void reOrderAnnealing(){
+        //We initialize with the greedy algorithm
+        reOrder();
+        double t = 100000.;
+        double p = 0.001;
+
+        if (tasks.isEmpty() || tasks.size() < 4)
+            return;
+
+        List<Task> bestTasks = new ArrayList<Task>();
+        for (Task task : tasks)
+            bestTasks.add(task);
+        double bestCost = cost;
+
+        List<Task> oldTasks = new ArrayList<Task>();
+        for (Task task : tasks)
+            oldTasks.add(task);
+        double oldCost = cost;
+
+        Random rand = new Random();
+        int size = tasks.size();
+        int ind1, ind2;
+       
+        while(t > 1){
+            do{
+                ind1 = rand.nextInt(size);
+                do{
+                    ind2 = rand.nextInt(size);
+                }while(ind1 == ind2);
+            }while(tooHeavy(ind1, ind2));
+
+            Task task1 = tasks.get(ind1);
+            Task task2 = tasks.get(ind2);
+
+            tasks.remove(ind2);
+            tasks.add(ind2, task1);
+            tasks.remove(ind1);
+            tasks.add(ind1, task2);
+            cost = computeCost();
+
+            if (acceptanceProbability(oldCost,cost,t) > rand.nextDouble()){
+                oldTasks.clear();
+                for (Task task : tasks)
+                    oldTasks.add(task);
+                oldCost = cost;
+            } else {
+                tasks.clear();
+                for (Task task : oldTasks)
+                    tasks.add(task);
+                cost = oldCost;
+            }
+
+            if (cost < bestCost){
+                bestTasks.clear();
+                for (Task task : tasks)
+                    bestTasks.add(task);
+                bestCost = cost;
+            }
+
+            t *= (1-p);
+        }
+        tasks.clear();
+        for (Task task : bestTasks)
+            tasks.add(task);
+    }
+
+    private double acceptanceProbability(double oldCost, double newCost, double t){
+            if (newCost < oldCost)
+                return 1.0;
+            else
+                return Math.exp((oldCost-newCost) / t);
+        }    
+    
     public City getCurrentCity(){
         return currentCity;
     }
