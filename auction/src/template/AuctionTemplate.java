@@ -149,16 +149,14 @@ public class AuctionTemplate implements AuctionBehavior {
             //= greed(2*oppMargin - ourMargin) - error
             //--> oppRealMargin = 1/2 * (2*oppMargin - error/greed)
             //oppRealMargin = oppMargin - error/(2*greed)
-            oppMargin = oppMargin - error/(2*greed);
+            oppMargin = oppMargin - error/(1+greed);
 
             double spread = ourMargin - oppMargin;
-            /*
-            if (spread < 0)
-                spread = 0;
-            */
 
-            bid = greed*(ourMargin + spread);
-            oppExpBid = (long) Math.round(greed*(oppMargin - spread)); 
+            bid = ourMargin - greed*spread;
+            if (bid < ourMargin)
+                bid = (long) Math.round(ourMargin);
+            oppExpBid = (long) Math.round(oppMargin + greed*spread); 
 
 	    return (long) Math.round(bid);
 	}

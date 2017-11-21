@@ -116,7 +116,7 @@ public class CentralizedTemplate implements CentralizedBehavior {
                 bestStates.add(state);
             double bestCost = computeCost(bestStates);
             double newCost;
-            for(int i = 0; i < 10000; i++){
+            for(int i = 0; i < 10000000; i++){
                 duration = System.currentTimeMillis() - time_start;
                 if (duration >= 0.9*timeout_plan)
                     break;
