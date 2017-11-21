@@ -88,6 +88,7 @@ public class AuctionTemplate implements AuctionBehavior {
                 oppCurrCost = 0;
                 oppTotBid = 0;
                 oppExpBid = 0;
+                oppMinBid = 0;
                 oppMinBid = Long.MAX_VALUE;
                 oppBids = new ArrayList<Long>();
                 oppTasks = new HashSet<Task>();
@@ -105,10 +106,14 @@ public class AuctionTemplate implements AuctionBehavior {
             oppTotBid += oBid;
             if (oppMinBid > oBid)
                 oppMinBid = oBid;
-            if (oppBids.isEmpty())
+            if (oppBids.isEmpty()){
+                oppMinBid = oBid;
                 error = oppExpBid - oBid;
-            else 
+            } else {
                 error = (error*oppBids.size() + oppExpBid - oBid)/(oppBids.size()+1);
+                if (oBid < oppMinBid)
+                    oppMinBid = oBid;
+            }
             
             if (winner == agent.id()) {
 	        ownedTasks.add(previous);
@@ -132,6 +137,7 @@ public class AuctionTemplate implements AuctionBehavior {
             for (Task task_ : ownedTasks)
                 newTasks.add(task_);
             newTasks.add(task);
+            newStates.clear();
             newStates = COP(agent.vehicles(), newTasks, t);
 
             newCost = computeCost(newStates);
@@ -147,20 +153,22 @@ public class AuctionTemplate implements AuctionBehavior {
             double ourMargin = newCost-currentCost;
             double oppMargin = oppNewCost - oppCurrCost;
 
-            //realBid = greed*(oppRealMargin - realSpread)
-            //= greed*(oppRealMargin - (ourMargin - oppRealMargin))
-            //= greed*(2*oppRealMargin - ourMargin)
-            //= greed(2*oppMargin - ourMargin) - error
-            //--> oppRealMargin = 1/2 * (2*oppMargin - error/greed)
-            //oppRealMargin = oppMargin - error/(2*greed)
-            oppMargin = oppMargin - error/(1+greed);
+            //realBid = greed*(oppRealMargin + realSpread)
+            //= (oppRealMargin + greed*(ourMargin - oppRealMargin))
+            //= ((1-greed)*oppRealMargin + ourMargin)
+            //= ((1-greed)*oppMargin + ourMargin) - error
+            //--> oppRealMargin = oppMargin - error/(1-greed)
+            oppMargin = oppMargin - error/(1-greed);
 
             double spread = ourMargin - oppMargin;
 
             bid = ourMargin - greed*spread;
+            if (bid < oppMinBid)
+                bid = oppMinBid-1;
             if (bid < ourMargin)
                 bid = (long) Math.round(ourMargin);
             oppExpBid = (long) Math.round(oppMargin + greed*spread); 
+
 
 	    return (long) Math.round(bid);
 	}
@@ -173,11 +181,7 @@ public class AuctionTemplate implements AuctionBehavior {
             List<State> states = COP(vehicles, tasks_, time_start);
             List<Plan> plans = new ArrayList<Plan>();
 
-            if (computeCost(states) > computeCost(currentStates)){
-                states.clear();
-                for (State state: currentStates)
-                    states.add(state);
-            }
+            
             for (State state : states)
                 plans.add(stateToPlan(state));
 
