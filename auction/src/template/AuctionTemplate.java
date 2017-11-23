@@ -44,6 +44,7 @@ public class AuctionTemplate implements AuctionBehavior {
         private List<State> newStates;
         private Set<Task> ownedTasks;
         private double greed;
+        private List<Long> ourBids;
         
         //We keep track of our oponents moves
         private List<Long> oppBids;
@@ -64,7 +65,7 @@ public class AuctionTemplate implements AuctionBehavior {
 		this.distribution = distribution;
 		this.agent = agent;
                 
-                temperature = agent.readProperty("temperature",Double.class,1000000.);
+                temperature = agent.readProperty("temperature",Double.class,3000.);
         	p = agent.readProperty("p",Double.class, 0.0001);
                 greed = agent.readProperty("greed",Double.class,0.5);
                 LogistSettings ls = null;
@@ -84,6 +85,7 @@ public class AuctionTemplate implements AuctionBehavior {
                 currentStates = new ArrayList<State>();
                 newStates = new ArrayList<State>();
                 ownedTasks = new HashSet<Task>();
+                ourBids = new ArrayList<Long>();
 
                 oppCurrCost = 0;
                 oppTotBid = 0;
@@ -103,17 +105,17 @@ public class AuctionTemplate implements AuctionBehavior {
 	public void auctionResult(Task previous, int winner, Long[] bids) {
 	    long oBid = bids[1-agent.id()];
             oppBids.add(oBid);
+            ourBids.add(bids[agent.id()]);
             oppTotBid += oBid;
             if (oppMinBid > oBid)
                 oppMinBid = oBid;
             if (oppBids.isEmpty()){
                 oppMinBid = oBid;
                 error = oppExpBid - oBid;
-            } else {
-                error = (error*oppBids.size() + oppExpBid - oBid)/(oppBids.size()+1);
-                if (oBid < oppMinBid)
+            } 
+            if (oBid < oppMinBid)
                     oppMinBid = oBid;
-            }
+            
             
             if (winner == agent.id()) {
 	        ownedTasks.add(previous);
@@ -124,6 +126,9 @@ public class AuctionTemplate implements AuctionBehavior {
 	    } else {
                 oppTasks.add(previous);
                 oppCurrCost = oppNewCost;
+                greed *= 0.1;
+                if (greed < 0.1)
+                    greed = 0.1;
             }
             newStates.clear();
 	}
@@ -142,34 +147,14 @@ public class AuctionTemplate implements AuctionBehavior {
 
             newCost = computeCost(newStates);
 
-            newTasks.clear();
-            for (Task task_ : oppTasks)
-                newTasks.add(task_);
-            newTasks.add(task);
-
-            t = System.currentTimeMillis();
-            oppNewCost = computeCost(COP(agent.vehicles(), newTasks,t));
             
             double ourMargin = newCost-currentCost;
-            double oppMargin = oppNewCost - oppCurrCost;
 
-            //realBid = greed*(oppRealMargin + realSpread)
-            //= (oppRealMargin + greed*(ourMargin - oppRealMargin))
-            //= ((1-greed)*oppRealMargin + ourMargin)
-            //= ((1-greed)*oppMargin + ourMargin) - error
-            //--> oppRealMargin = oppMargin - error/(1-greed)
-            oppMargin = oppMargin - error/(1-greed);
-
-            double spread = ourMargin - oppMargin;
-
-            bid = ourMargin - greed*spread;
+            bid = (1+greed)*ourMargin;
             if (bid < oppMinBid)
                 bid = oppMinBid-1;
-            if (bid < ourMargin)
-                bid = (long) Math.round(ourMargin);
-            oppExpBid = (long) Math.round(oppMargin + greed*spread); 
-
-
+            
+            bid = ourMargin;
 	    return (long) Math.round(bid);
 	}
 
@@ -177,8 +162,9 @@ public class AuctionTemplate implements AuctionBehavior {
         @Override
         public List<Plan> plan(List<Vehicle> vehicles, TaskSet tasks) {
             long time_start = System.currentTimeMillis();
+            long tc;
             Set<Task> tasks_ = tasksetToTasklist(tasks);
-            List<State> states = COP(vehicles, tasks_, time_start);
+            List<State> states = COP(vehicles,tasks_,time_start);
             List<Plan> plans = new ArrayList<Plan>();
 
             
@@ -188,9 +174,8 @@ public class AuctionTemplate implements AuctionBehavior {
             long time_end = System.currentTimeMillis();
             long duration = time_end - time_start;
             double cost=  computeCost(states);
-            System.out.println("The plan was generated in "+duration+" milliseconds.");
-            System.out.println("The cost is "+cost);
-
+            System.out.println("Our bids: " + ourBids.toString());
+            System.out.println("Their bids: " + oppBids.toString());
             
             return plans;
         }
@@ -238,7 +223,7 @@ public class AuctionTemplate implements AuctionBehavior {
             double bestCostOverall = bestCost;
 
             double newCost;
-            for (int i = 0; i<100; i++){
+            for (int i = 0; i<1000; i++){
                 while(temperature > 1){
                     duration = System.currentTimeMillis() - time_start;
                     if (duration >= 0.45*timeout_plan)
@@ -355,6 +340,7 @@ public class AuctionTemplate implements AuctionBehavior {
 
             return tasksList;
         }
+
 
         private Plan stateToPlan(State state) {
             Plan plan = new Plan(state.getCurrentCity());

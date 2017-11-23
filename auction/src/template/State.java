@@ -31,11 +31,17 @@ public class State {
         for(Task task : tasks) {
             //if the task is not already carried
             if (carriedTasks.add(task)){
-                cost += vehicle.costPerKm() * presentCity.distanceTo(task.pickupCity);
+                if (presentCity.equals(task.pickupCity))
+                    cost += 0;
+                else
+                    cost += vehicle.costPerKm() * presentCity.distanceTo(task.pickupCity);
                 presentCity = task.pickupCity;
             } else {
                 //delivers it
-                cost += vehicle.costPerKm() * presentCity.distanceTo(task.deliveryCity);
+                if (presentCity.equals(task.deliveryCity))
+                    cost += 0;
+                else
+                    cost += vehicle.costPerKm() * presentCity.distanceTo(task.deliveryCity);
                 presentCity = task.deliveryCity;
             }
         }
@@ -175,8 +181,8 @@ public class State {
     public void reOrderAnnealing(){
         //We initialize with the greedy algorithm
         reOrder();
-        double t = 100000.;
-        double p = 0.001;
+        double t = 100.;
+        double p = 0.0001;
 
         if (tasks.isEmpty() || tasks.size() < 4)
             return;
@@ -236,6 +242,8 @@ public class State {
         tasks.clear();
         for (Task task : bestTasks)
             tasks.add(task);
+
+        cost = computeCost();
     }
 
     private double acceptanceProbability(double oldCost, double newCost, double t){
