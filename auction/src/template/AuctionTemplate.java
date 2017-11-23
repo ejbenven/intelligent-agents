@@ -121,7 +121,7 @@ public class AuctionTemplate implements AuctionBehavior {
 	        ownedTasks.add(previous);
                 currentStates.clear();
                 for (State state : newStates)
-                    currentStates.add(state);
+                    currentStates.add(state.clone());
                 currentCost = computeCost(currentStates);
 	    } else {
                 oppTasks.add(previous);
@@ -143,14 +143,15 @@ public class AuctionTemplate implements AuctionBehavior {
                 newTasks.add(task_);
             newTasks.add(task);
             newStates.clear();
-            newStates = COP(agent.vehicles(), newTasks, t);
-
+            //newStates = COP(agent.vehicles(), newTasks, t);
+            newStates = greedy(agent.vehicles(), newTasks);
             newCost = computeCost(newStates);
 
             
             double ourMargin = newCost-currentCost;
-
+            
             bid = (1+greed)*ourMargin;
+            /*
             if (bid < oppMinBid)
                 bid = oppMinBid-1;
             if(oppBids.isEmpty())
@@ -167,6 +168,8 @@ public class AuctionTemplate implements AuctionBehavior {
                 default: bid = ourMargin;
                          break;
             }
+            */
+            
 	    return (long) Math.round(bid);
 	}
 
@@ -228,7 +231,7 @@ public class AuctionTemplate implements AuctionBehavior {
                 bestStates.add(id,bestState);
                 tmpStates.clear();
                 for (State state_ : bestStates)
-                    tmpStates.add(state_);
+                    tmpStates.add(state_.clone());
             }
 
             return bestStates;
@@ -239,18 +242,21 @@ public class AuctionTemplate implements AuctionBehavior {
             long duration;
             double t = temperature;
             List<State> states = new ArrayList<State>(); 
-            if (ts.isEmpty())
+            if (ts.isEmpty()){
+                for (Vehicle vehicle : vehicles)
+                    states.add(new State(vehicle.getCurrentCity(), new ArrayList<Task>(), vehicle));
                 return states;
+            }
             
             states = greedy(vehicles, ts);            
             
             List<State> bestStates = new ArrayList<State>();
             for (State state : states)
-                bestStates.add(state);
+                bestStates.add(state.clone());
             double bestCost = computeCost(bestStates);
             List<State> bestStatesOverall = new ArrayList<State>();
             for (State state : states)
-                bestStatesOverall.add(state);
+                bestStatesOverall.add(state.clone());
             double bestCostOverall = bestCost;
 
             double newCost;
@@ -266,7 +272,7 @@ public class AuctionTemplate implements AuctionBehavior {
                 if (newCost < bestCost){
                     bestStates.clear();
                     for (State state : states)
-                        bestStates.add(state);
+                        bestStates.add(state.clone());
                     bestCost = newCost;
                 }
                 duration = System.currentTimeMillis() - time_start;
@@ -279,13 +285,8 @@ public class AuctionTemplate implements AuctionBehavior {
                 bestCostOverall = bestCost;
                 bestStatesOverall.clear();
                 for (State state: bestStates)
-                    bestStatesOverall.add(state);
+                    bestStatesOverall.add(state.clone());
             }
-            
-            states.clear();
-            for (State state: bestStates)
-                states.add(state);
-
             
             temperature = t;
             return bestStatesOverall; 
