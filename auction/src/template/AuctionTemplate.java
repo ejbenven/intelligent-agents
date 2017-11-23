@@ -66,7 +66,7 @@ public class AuctionTemplate implements AuctionBehavior {
 		this.agent = agent;
                 
                 temperature = agent.readProperty("temperature",Double.class,3000.);
-        	p = agent.readProperty("p",Double.class, 0.0001);
+        	p = agent.readProperty("p",Double.class, 0.001);
                 greed = agent.readProperty("greed",Double.class,0.5);
                 LogistSettings ls = null;
                 try {
@@ -153,8 +153,20 @@ public class AuctionTemplate implements AuctionBehavior {
             bid = (1+greed)*ourMargin;
             if (bid < oppMinBid)
                 bid = oppMinBid-1;
-            
-            bid = ourMargin;
+            if(oppBids.isEmpty())
+                return (long) 2200;
+            switch(oppBids.size()){
+                case 1: bid = 2300;
+                        break;
+                case 2: bid = 0;
+                        break;
+                case 3: bid = 750;
+                        break;
+                case 4: bid = 0;
+                        break;
+                default: bid = ourMargin;
+                         break;
+            }
 	    return (long) Math.round(bid);
 	}
 
@@ -180,38 +192,57 @@ public class AuctionTemplate implements AuctionBehavior {
             return plans;
         }
 
+        private List<State> greedy (List<Vehicle> vehicles, Set<Task> ts){
+            double bCost = Double.POSITIVE_INFINITY;
+            double cost;
+            int id;
+            Vehicle best = vehicles.get(0);
+            
+            State state = new State(best.getCurrentCity(),new ArrayList<Task>(), best);
+            State bestState = new State(best.getCurrentCity(),new ArrayList<Task>(), best);
+            List<State> bestStates = new ArrayList<State>();
+            List<State> tmpStates = new ArrayList<State>();
+            
+            for (Vehicle vehicle : vehicles){
+                bestStates.add(new State(vehicle.getCurrentCity(),new ArrayList<Task>(), vehicle));
+                tmpStates.add(new State(vehicle.getCurrentCity(),new ArrayList<Task>(), vehicle));
+            }
+            
+            for (Task task : ts){
+                bCost = Double.POSITIVE_INFINITY;
+                for (Vehicle vehicle : vehicles){
+                    if (task.weight > vehicle.capacity())
+                        continue;
+                    id = vehicles.indexOf(vehicle);
+                    state = tmpStates.get(id).clone();
+                    state.addTask(task);
+                    state.reOrder();
+                    cost = state.getCost();
+                    if (cost < bCost){
+                        bCost = cost;
+                        bestState = state.clone();
+                    }
+                }
+                id = vehicles.indexOf(bestState.getVehicle());
+                bestStates.remove(id);
+                bestStates.add(id,bestState);
+                tmpStates.clear();
+                for (State state_ : bestStates)
+                    tmpStates.add(state_);
+            }
+
+            return bestStates;
+        }
+
         private List<State> COP (List<Vehicle> vehicles, Set<Task> ts, long time_start) {
             //Initialisation
             long duration;
-            List<State> states = new ArrayList<State>();  
-            if (ts.isEmpty()){
-                for (Vehicle vehicle : vehicles) {
-                    states.add(new State(vehicle.getCurrentCity(), new ArrayList<Task>(), vehicle));
-                }
+            double t = temperature;
+            List<State> states = new ArrayList<State>(); 
+            if (ts.isEmpty())
                 return states;
-            }
-            List<Task> tasks = new ArrayList<Task>();
-            for (Task task : ts) {
-                tasks.add(task);
-                tasks.add(task);
-            }
-            //Find biggest truck
-            int ind = 0;
-            int bestCapa = 0;
-            for (Vehicle vehicle : vehicles){
-                if (vehicle.capacity()>bestCapa){
-                    bestCapa = vehicle.capacity();
-                    ind = vehicles.indexOf(vehicle);
-                }
-            }
-
-            for (Vehicle vehicle : vehicles){
-                if(vehicles.indexOf(vehicle) != ind)
-                    states.add(new State(vehicle.getCurrentCity(), new ArrayList<Task>(), vehicle));
-                else
-                    states.add(new State(vehicle.getCurrentCity(), tasks, vehicle));
-            }
             
+            states = greedy(vehicles, ts);            
             
             List<State> bestStates = new ArrayList<State>();
             for (State state : states)
@@ -223,38 +254,40 @@ public class AuctionTemplate implements AuctionBehavior {
             double bestCostOverall = bestCost;
 
             double newCost;
-            for (int i = 0; i<1000; i++){
-                while(temperature > 1){
-                    duration = System.currentTimeMillis() - time_start;
-                    if (duration >= 0.45*timeout_plan)
-                        break;
+            
+            while(temperature > 1){
+                duration = System.currentTimeMillis() - time_start;
+                if (duration >= 0.45*timeout_plan)
+                    break;
 
-                    states = chooseNeighboors(states);
-                    temperature *= (1-p);
-                    newCost = computeCost(states);
-                    if (newCost < bestCost){
-                        bestStates.clear();
-                        for (State state : states)
-                            bestStates.add(state);
-                        bestCost = newCost;
-                    }
-                }
-                if (bestCost < bestCostOverall){
-                    bestCostOverall = bestCost;
-                    bestStatesOverall.clear();
-                    for (State state: bestStates)
-                        bestStatesOverall.add(state);
+                states = chooseNeighboors(states);
+                temperature *= (1-p);
+                newCost = computeCost(states);
+                if (newCost < bestCost){
+                    bestStates.clear();
+                    for (State state : states)
+                        bestStates.add(state);
+                    bestCost = newCost;
                 }
                 duration = System.currentTimeMillis() - time_start;
                 if (duration >= 0.45*timeout_plan)
                     break;
 
-                states.clear();
-                for (State state: bestStates)
-                    states.add(state);
-
+            
             }
+            if (bestCost < bestCostOverall){
+                bestCostOverall = bestCost;
+                bestStatesOverall.clear();
+                for (State state: bestStates)
+                    bestStatesOverall.add(state);
+            }
+            
+            states.clear();
+            for (State state: bestStates)
+                states.add(state);
 
+            
+            temperature = t;
             return bestStatesOverall; 
         }
 

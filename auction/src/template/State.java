@@ -181,8 +181,8 @@ public class State {
     public void reOrderAnnealing(){
         //We initialize with the greedy algorithm
         reOrder();
-        double t = 100.;
-        double p = 0.0001;
+        double t = 3000.;
+        double p = 0.001;
 
         if (tasks.isEmpty() || tasks.size() < 4)
             return;
@@ -200,7 +200,7 @@ public class State {
         Random rand = new Random();
         int size = tasks.size();
         int ind1, ind2;
-       
+      
         while(t > 1){
             do{
                 ind1 = rand.nextInt(size);
@@ -239,6 +239,7 @@ public class State {
 
             t *= (1-p);
         }
+        
         tasks.clear();
         for (Task task : bestTasks)
             tasks.add(task);
@@ -252,7 +253,11 @@ public class State {
             else
                 return Math.exp((oldCost-newCost) / t);
         }    
-    
+   
+    public Vehicle getVehicle(){
+        return vehicle;
+    }
+
     public City getCurrentCity(){
         return currentCity;
     }
