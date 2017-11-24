@@ -135,7 +135,7 @@ public class AuctionTemplate implements AuctionBehavior {
 	
 	@Override
 	public Long askPrice(Task task) {
-            double newCost, bid;
+            double newCost, bid, spread, oppMargin;
             long t = System.currentTimeMillis();
             Set<Task> newTasks = new HashSet<Task>();
 
@@ -149,26 +149,27 @@ public class AuctionTemplate implements AuctionBehavior {
 
             
             double ourMargin = newCost-currentCost;
-            
-            bid = (1+greed)*ourMargin;
-            /*
-            if (bid < oppMinBid)
-                bid = oppMinBid-1;
-            if(oppBids.isEmpty())
-                return (long) 2200;
-            switch(oppBids.size()){
-                case 1: bid = 2300;
-                        break;
-                case 2: bid = 0;
-                        break;
-                case 3: bid = 750;
-                        break;
-                case 4: bid = 0;
-                        break;
-                default: bid = ourMargin;
-                         break;
+           
+            if(oppBids.isEmpty() || oppBids.size()<4){
+                bid = 0.8*ourMargin;
+            } else {
+                newTasks.clear();
+                for (Task task_ : oppTasks)
+                    newTasks.add(task_);
+                newTasks.add(task);
+                oppNewCost = computeCost(greedy(agent.vehicles(), newTasks));
+                oppMargin = oppNewCost - oppCurrCost;
+                spread = ourMargin - oppMargin;
+
+                if (spread > 0)
+                    bid = ourMargin;
+                else
+                    bid = ourMargin + greed*spread;
+                //if(bid < oppMinBid)
+                //    bid = oppMinBid-1;
             }
-            */
+            
+            
             
 	    return (long) Math.round(bid);
 	}
