@@ -1,0 +1,113 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage[top=0.8in, bottom=0.8in, left=0.8in, right=0.8in]{geometry}
+% add other packages here
+
+% put your group number and names in the author field
+\title{\bf Exercise 5: An Auctioning Agent for the Pickup and Delivery Problem}
+\author{Group 24: Benvenuti, Bronner}
+
+\begin{document}
+\maketitle
+
+\section{Bidding strategy}
+% describe in details your bidding strategy. Also, focus on answering the following questions:
+% - do you consider the probability distribution of the tasks in defining your strategy? How do you speculate about the future tasks that might be auctions?
+% - how do you use the feedback from the previous auctions to derive information about the other competitors?
+% - how do you combine all the information from the probability distribution of the tasks, the history and the planner to compute bids?
+Our strategy is stricking by its simplicity. The goal is to take as many tasks as possible and then the price to move the tasks will decrease relativelly to the number of tasks, thanks to the optimal path finder (Strategy inspired by UBER Share). For this strategy to work we need to bid agressively at the begining to be sure to take the first tasks. Then if the concurence wins a bid, we dirrectly get cheaper for the next client.
+
+The value of the bid is in function of the following parameters
+\begin{itemize}
+  \item Distance: The distance between pickup and deliver cities.
+  \item CostKm: The cost per kilometer of the cheapest truck that can carry this task.
+  \item Greed: A parameter that will increase if last bid has been won, decrease otherwise. 
+\end{itemize}
+
+The asked prize for the bid is therfore: $Distance * CostKm * Greed$. 
+
+The prarameter $Greed$ has the following comportment.
+\begin{itemize}
+  \item If we won last bid: $Greed = Greed * 1.1$
+  \item If we lost the last bid : $Greed = Greed * 0.8$
+  \item Greed cannot be greater than 1 or smaller than 0.1.
+\end{itemize}
+The initialization of Greed tell how much we want to have the first tasks. 
+
+It has been decided that the agent will not try to infer information about the oppenant. There is no way to know its strategy in only two parties.
+
+\section{Results}
+% in this section, you describe several results from the experiments with your auctioning agent
+
+\subsection{Experiment 1: Comparisons with dummy agents}
+% in this experiment you observe how the results depends on the number of tasks auctioned. You compare with some dummy agents and potentially several versions of your agent (with different internal parameter values). 
+Two dummy agents were created, both will compute the additional cost of transporting the new task. This difference is calculated by computing the costs to transport the N-1 tasks and N task (computed with our centralized algorithm). The two agent will then make the following bids:
+\begin{itemize}
+  \item Honest: $bid = price + 10$
+  \item Random: $bid = price * unif(1,2)$
+\end{itemize}
+
+\subsubsection{Setting}
+% you describe how you perform the experiment, the environment and description of the agents you compare withe 
+The tests were all made in the England map, we test for different number of task randomly distributed 5, 10, 20 and 30. We also test whenever we have better, same or worst trucks. The best trucks cost 5 per km and can carry 30 compared to the worst trucks cost 7 and can carry 20. If both teams have the same truck their both have the best trucks. The results are given in Tables \ref{tab:1} and \ref{tab:2}.
+
+
+
+
+\subsubsection{Observations}
+% you describe the experimental results and the conclusions you inferred from these results
+\begin{table}
+  \begin{center}
+    \begin{tabular}{ | l | l | l | }
+    \hline
+    Nb tasks & Opponent & Result   \\ \hline
+    5 & random & Victory \\ \hline
+    5 & honest & Victory \\ \hline
+    10 & random & Victory \\ \hline
+    10 & honest & Victory \\ \hline
+    20 & random & Victory \\ \hline
+    20 & honest & Victory \\ \hline
+    30 & random & Victory \\ \hline
+    30 & honest & Victory \\ \hline
+
+    
+    \end{tabular}
+    \caption{Result of our algorithm over the dummies when using the same trucks.}
+    \label{tab:1}
+\end{center}
+\end{table}
+
+\begin{table}
+  \begin{center}
+    \begin{tabular}{ | l | l | l | }
+    \hline
+    Nb tasks & Opponent & Result   \\ \hline
+    5 & random & Victory \\ \hline
+    5 & honest & Victory \\ \hline
+    10 & random & Victory \\ \hline
+    10 & honest & Victory \\ \hline
+    20 & random & Victory \\ \hline
+    20 & honest & Victory \\ \hline
+    30 & random & Victory \\ \hline
+    30 & honest & Victory \\ \hline
+
+    
+    \end{tabular}
+    \caption{Result of our algorithm over the dummies when our agent used the bad trucks.}
+    \label{tab:1}
+\end{center}
+\end{table}
+
+Following the results of Table \ref{tab:1}, it doesn't seems necesaary to check when our agent has better trucks.
+%\vdots
+
+\subsection{Experiment n}
+% other experiments you would like to present (for example, varying the internal parameter values)
+
+\subsubsection{Setting}
+
+\subsubsection{Observations}
+
+\end{document}
