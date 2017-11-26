@@ -99,7 +99,7 @@ public class AuctionTemplate implements AuctionBehavior {
             int minCostPerKm= (int) Double.POSITIVE_INFINITY;
             
             for (Vehicle vehicle : agent.vehicles()){
-                if(vehicle.costPerKm()<minCostPerKm){
+                if(vehicle.costPerKm()<minCostPerKm && task.weight < vehicle.capacity()){
                     minCostPerKm = vehicle.costPerKm();
                 }
             }
