@@ -1,420 +1,174 @@
-10:38:37.605 FINE | Run command: java -Xmx1024m -classpath ../logist/logist.jar logist.LogistPlatform -o tournament/MyEvent/auction-Us-BestResponse.xml -a tournament/MyEvent/agents.xml config/auction.xml Us BestResponse
-10:38:37.675 CONFIG | Reading config/auction.xml
-10:38:37.706 CONFIG | Reading config/settings_auction.xml
-10:38:37.738 CONFIG | Reading config/topology/england.xml
-10:38:37.745 CONFIG | Reading tournament/MyEvent/agents.xml
-10:38:37.754 CONFIG | Reading config/settings_auction.xml
-10:38:37.765 CONFIG | Distance: 205200
-10:38:37.765 CONFIG | cost Distance: 5
-10:38:37.766 CONFIG | Distance: 327900
-10:38:37.766 CONFIG | cost Distance: 5
-10:38:37.767 CONFIG | Distance: 209900
-10:38:37.768 CONFIG | cost Distance: 5
-10:38:37.768 CONFIG | Distance: 283000
-10:38:37.768 CONFIG | cost Distance: 5
-10:38:37.768 CONFIG | Distance: 362600
-10:38:37.768 CONFIG | cost Distance: 5
-10:38:37.768 CONFIG | Distance: 115000
-10:38:37.768 CONFIG | cost Distance: 5
-10:38:37.768 CONFIG | Distance: 233000
-10:38:37.768 CONFIG | cost Distance: 5
-10:38:37.768 CONFIG | Distance: 212900
-10:38:37.769 CONFIG | cost Distance: 5
-10:38:37.770 CONFIG | Distance: 362800
-10:38:37.772 CONFIG | cost Distance: 5
-10:38:37.772 CONFIG | Distance: 170000
-10:38:37.772 CONFIG | cost Distance: 5
-10:38:37.774 CONFIG | Distance: 115000
-10:38:37.774 CONFIG | cost Distance: 5
-10:38:37.774 CONFIG | Distance: 283000
-10:38:37.774 CONFIG | cost Distance: 5
-10:38:37.774 CONFIG | Distance: 209900
-10:38:37.774 CONFIG | cost Distance: 5
-10:38:37.774 CONFIG | Distance: 205700
-10:38:37.774 CONFIG | cost Distance: 5
-10:38:37.774 CONFIG | Distance: 322400
-10:38:37.774 CONFIG | cost Distance: 5
-10:38:37.775 CONFIG | Distance: 113800
-10:38:37.775 CONFIG | cost Distance: 5
-10:38:37.775 CONFIG | Distance: 118000
-10:38:37.775 CONFIG | cost Distance: 5
-10:38:37.775 CONFIG | Distance: 189800
-10:38:37.775 CONFIG | cost Distance: 5
-10:38:37.775 CONFIG | Distance: 359800
-10:38:37.775 CONFIG | cost Distance: 5
-10:38:37.779 CONFIG | Distance: 246500
-10:38:37.780 CONFIG | cost Distance: 5
-10:38:37.781 CONFIG | Distance: 230000
-10:38:37.782 CONFIG | cost Distance: 5
-10:38:37.782 CONFIG | Distance: 230000
-10:38:37.782 CONFIG | cost Distance: 5
-10:38:37.782 CONFIG | Distance: 494300
-10:38:37.782 CONFIG | cost Distance: 5
-10:38:37.782 CONFIG | Distance: 115000
-10:38:37.782 CONFIG | cost Distance: 5
-10:38:37.782 CONFIG | Distance: 115000
-10:38:37.782 CONFIG | cost Distance: 5
-10:38:37.782 CONFIG | Distance: 494300
-10:38:37.782 CONFIG | cost Distance: 5
-10:38:37.782 CONFIG | Distance: 457700
-10:38:37.783 CONFIG | cost Distance: 5
-10:38:37.783 CONFIG | Distance: 212900
-10:38:37.783 CONFIG | cost Distance: 5
-10:38:37.783 CONFIG | Distance: 322400
-10:38:37.783 CONFIG | cost Distance: 5
-10:38:37.783 CONFIG | Distance: 453000
-10:38:37.783 CONFIG | cost Distance: 5
-10:38:37.816 WARNING | /usr/share/themes/Ambiance/gtk-2.0/apps/mate-panel.rc:30: error: invalid string constant "murrine-scrollbar", expected valid string constant
-10:39:00.165 CONFIG | Our bids: [821, 1443, 1016, 1507, 2124, 741, 1165, 1171, 1596, 823, 612, 1657, 983, 1060, 1329, 375, 311, 401, 835, 630, 646, 711, 1222, 313, 250, 860, 876, 448, 543, 840]
-10:39:00.165 CONFIG | Their bids: [2776, 3289, 2799, 3041, 3636, 585, 2340, 1074, 1824, 1710, 1059, 1477, 2109, 995, 648, 10, 10, 1160, 1809, 2292, 985, 10, 2298, 10, 10, 2298, 2298, 10, 1448, 2298]
-10:39:10.627 CONFIG | Wrote tournament/MyEvent/auction-Us-BestResponse.xml
-10:39:10.982 INFO | LogistPlatform finished successfully!
-10:39:10.984 FINE | Run command: java -Xmx1024m -classpath ../logist/logist.jar logist.LogistPlatform -o tournament/MyEvent/auction-Us-RiskSeeking.xml -a tournament/MyEvent/agents.xml config/auction.xml Us RiskSeeking
-10:39:11.029 CONFIG | Reading config/auction.xml
-10:39:11.060 CONFIG | Reading config/settings_auction.xml
-10:39:11.094 CONFIG | Reading config/topology/england.xml
-10:39:11.102 CONFIG | Reading tournament/MyEvent/agents.xml
-10:39:11.111 CONFIG | Reading config/settings_auction.xml
-10:39:11.123 CONFIG | Distance: 205200
-10:39:11.124 CONFIG | cost Distance: 5
-10:39:11.128 CONFIG | real cost:983
-10:39:11.129 CONFIG | Distance: 327900
-10:39:11.129 CONFIG | cost Distance: 5
-10:39:11.135 CONFIG | real cost:1163
-10:39:11.135 CONFIG | Distance: 209900
-10:39:11.135 CONFIG | cost Distance: 5
-10:39:11.136 CONFIG | real cost:623
-10:39:11.137 CONFIG | Distance: 283000
-10:39:11.137 CONFIG | cost Distance: 5
-10:39:11.140 CONFIG | real cost:749
-10:39:11.141 CONFIG | Distance: 362600
-10:39:11.141 CONFIG | cost Distance: 5
-10:39:11.142 CONFIG | real cost:513
-10:39:11.144 CONFIG | Distance: 115000
-10:39:11.144 CONFIG | cost Distance: 5
-10:39:11.144 CONFIG | real cost:443
-10:39:11.145 CONFIG | Distance: 233000
-10:39:11.145 CONFIG | cost Distance: 5
-10:39:11.145 CONFIG | real cost:412
-10:39:11.145 CONFIG | Distance: 212900
-10:39:11.147 CONFIG | cost Distance: 5
-10:39:11.147 CONFIG | real cost:141
-10:39:11.148 CONFIG | Distance: 362800
-10:39:11.148 CONFIG | cost Distance: 5
-10:39:11.148 CONFIG | real cost:1222
-10:39:11.150 CONFIG | Distance: 170000
-10:39:11.150 CONFIG | cost Distance: 5
-10:39:11.150 CONFIG | real cost:1210
-10:39:11.152 CONFIG | Distance: 115000
-10:39:11.152 CONFIG | cost Distance: 5
-10:39:11.152 CONFIG | real cost:220
-10:39:11.153 CONFIG | Distance: 283000
-10:39:11.153 CONFIG | cost Distance: 5
-10:39:11.155 CONFIG | real cost:869
-10:39:11.155 CONFIG | Distance: 209900
-10:39:11.155 CONFIG | cost Distance: 5
-10:39:11.155 CONFIG | real cost:128
-10:39:11.156 CONFIG | Distance: 205700
-10:39:11.156 CONFIG | cost Distance: 5
-10:39:11.157 CONFIG | real cost:1412
-10:39:11.157 CONFIG | Distance: 322400
-10:39:11.157 CONFIG | cost Distance: 5
-10:39:11.158 CONFIG | real cost:738
-10:39:11.163 CONFIG | Distance: 113800
-10:39:11.163 CONFIG | cost Distance: 5
-10:39:11.164 CONFIG | real cost:680
-10:39:11.164 CONFIG | Distance: 118000
-10:39:11.164 CONFIG | cost Distance: 5
-10:39:11.166 CONFIG | real cost:170
-10:39:11.166 CONFIG | Distance: 189800
-10:39:11.166 CONFIG | cost Distance: 5
-10:39:11.167 CONFIG | real cost:656
-10:39:11.168 CONFIG | Distance: 359800
-10:39:11.168 CONFIG | cost Distance: 5
-10:39:11.169 CONFIG | real cost:1595
-10:39:11.169 CONFIG | Distance: 246500
-10:39:11.169 CONFIG | cost Distance: 5
-10:39:11.170 CONFIG | real cost:692
-10:39:11.170 CONFIG | Distance: 230000
-10:39:11.170 CONFIG | cost Distance: 5
-10:39:11.172 CONFIG | real cost:1563
-10:39:11.172 CONFIG | Distance: 230000
-10:39:11.172 CONFIG | cost Distance: 5
-10:39:11.173 CONFIG | real cost:1547
-10:39:11.173 CONFIG | Distance: 494300
-10:39:11.173 CONFIG | cost Distance: 5
-10:39:11.176 CONFIG | real cost:2286
-10:39:11.176 CONFIG | Distance: 115000
-10:39:11.176 CONFIG | cost Distance: 5
-10:39:11.177 CONFIG | real cost:59
-10:39:11.177 CONFIG | Distance: 115000
-10:39:11.177 CONFIG | cost Distance: 5
-10:39:11.178 CONFIG | real cost:39
-10:39:11.178 CONFIG | Distance: 494300
-10:39:11.178 CONFIG | cost Distance: 5
-10:39:11.182 CONFIG | real cost:2384
-10:39:11.182 CONFIG | Distance: 457700
-10:39:11.182 CONFIG | cost Distance: 5
-10:39:11.182 CONFIG | real cost:1688
-10:39:11.183 CONFIG | Distance: 212900
-10:39:11.183 CONFIG | cost Distance: 5
-10:39:11.183 CONFIG | real cost:42
-10:39:11.184 CONFIG | Distance: 322400
-10:39:11.184 CONFIG | cost Distance: 5
-10:39:11.184 CONFIG | real cost:742
-10:39:11.185 CONFIG | Distance: 453000
-10:39:11.185 CONFIG | cost Distance: 5
-10:39:11.185 CONFIG | real cost:2320
-10:39:11.223 WARNING | /usr/share/themes/Ambiance/gtk-2.0/apps/mate-panel.rc:30: error: invalid string constant "murrine-scrollbar", expected valid string constant
-10:39:27.727 CONFIG | Our bids: [821, 1443, 739, 797, 1123, 285, 635, 464, 870, 449, 334, 657, 536, 420, 725, 281, 321, 413, 861, 649, 666, 733, 1732, 443, 355, 1219, 1242, 635, 770, 865]
-10:39:27.727 CONFIG | Their bids: [993, 1173, 731, 810, 899, 453, 422, 811, 1232, 1220, 230, 879, 138, 1422, 748, 690, 180, 1031, 1605, 702, 1573, 1557, 2296, 69, 49, 2394, 1698, 52, 752, 2330]
-10:39:35.663 CONFIG | Wrote tournament/MyEvent/auction-Us-RiskSeeking.xml
-10:39:36.020 INFO | LogistPlatform finished successfully!
-10:39:36.023 FINE | Run command: java -Xmx1024m -classpath ../logist/logist.jar logist.LogistPlatform -o tournament/MyEvent/auction-BestResponse-Us.xml -a tournament/MyEvent/agents.xml config/auction.xml BestResponse Us
-10:39:36.065 CONFIG | Reading config/auction.xml
-10:39:36.097 CONFIG | Reading config/settings_auction.xml
-10:39:36.129 CONFIG | Reading config/topology/england.xml
-10:39:36.139 CONFIG | Reading tournament/MyEvent/agents.xml
-10:39:36.150 CONFIG | Reading config/settings_auction.xml
-10:39:36.161 CONFIG | Distance: 205200
-10:39:36.162 CONFIG | cost Distance: 5
-10:39:36.162 CONFIG | Distance: 327900
-10:39:36.162 CONFIG | cost Distance: 5
-10:39:36.163 CONFIG | Distance: 209900
-10:39:36.163 CONFIG | cost Distance: 5
-10:39:36.164 CONFIG | Distance: 283000
-10:39:36.164 CONFIG | cost Distance: 5
-10:39:36.164 CONFIG | Distance: 362600
-10:39:36.164 CONFIG | cost Distance: 5
-10:39:36.165 CONFIG | Distance: 115000
-10:39:36.165 CONFIG | cost Distance: 5
-10:39:36.165 CONFIG | Distance: 233000
-10:39:36.165 CONFIG | cost Distance: 5
-10:39:36.166 CONFIG | Distance: 212900
-10:39:36.166 CONFIG | cost Distance: 5
-10:39:36.167 CONFIG | Distance: 362800
-10:39:36.167 CONFIG | cost Distance: 5
-10:39:36.167 CONFIG | Distance: 170000
-10:39:36.167 CONFIG | cost Distance: 5
-10:39:36.168 CONFIG | Distance: 115000
-10:39:36.168 CONFIG | cost Distance: 5
-10:39:36.169 CONFIG | Distance: 283000
-10:39:36.169 CONFIG | cost Distance: 5
-10:39:36.169 CONFIG | Distance: 209900
-10:39:36.169 CONFIG | cost Distance: 5
-10:39:36.170 CONFIG | Distance: 205700
-10:39:36.170 CONFIG | cost Distance: 5
-10:39:36.170 CONFIG | Distance: 322400
-10:39:36.170 CONFIG | cost Distance: 5
-10:39:36.175 CONFIG | Distance: 113800
-10:39:36.175 CONFIG | cost Distance: 5
-10:39:36.175 CONFIG | Distance: 118000
-10:39:36.175 CONFIG | cost Distance: 5
-10:39:36.178 CONFIG | Distance: 189800
-10:39:36.179 CONFIG | cost Distance: 5
-10:39:36.179 CONFIG | Distance: 359800
-10:39:36.180 CONFIG | cost Distance: 5
-10:39:36.182 CONFIG | Distance: 246500
-10:39:36.182 CONFIG | cost Distance: 5
-10:39:36.182 CONFIG | Distance: 230000
-10:39:36.182 CONFIG | cost Distance: 5
-10:39:36.182 CONFIG | Distance: 230000
-10:39:36.182 CONFIG | cost Distance: 5
-10:39:36.182 CONFIG | Distance: 494300
-10:39:36.182 CONFIG | cost Distance: 5
-10:39:36.182 CONFIG | Distance: 115000
-10:39:36.182 CONFIG | cost Distance: 5
-10:39:36.182 CONFIG | Distance: 115000
-10:39:36.182 CONFIG | cost Distance: 5
-10:39:36.182 CONFIG | Distance: 494300
-10:39:36.182 CONFIG | cost Distance: 5
-10:39:36.182 CONFIG | Distance: 457700
-10:39:36.182 CONFIG | cost Distance: 5
-10:39:36.182 CONFIG | Distance: 212900
-10:39:36.182 CONFIG | cost Distance: 5
-10:39:36.182 CONFIG | Distance: 322400
-10:39:36.182 CONFIG | cost Distance: 5
-10:39:36.182 CONFIG | Distance: 453000
-10:39:36.182 CONFIG | cost Distance: 5
-10:39:36.218 WARNING | /usr/share/themes/Ambiance/gtk-2.0/apps/mate-panel.rc:30: error: invalid string constant "murrine-scrollbar", expected valid string constant
-10:39:53.359 CONFIG | Our bids: [821, 1443, 1016, 1507, 2124, 741, 1651, 1660, 1814, 935, 696, 1883, 1050, 1131, 1419, 401, 332, 428, 892, 672, 690, 759, 1304, 334, 367, 1736, 1768, 905, 1096, 1694]
-10:39:53.359 CONFIG | Their bids: [2201, 2678, 2224, 2124, 2678, 1160, 2340, 1074, 4112, 2458, 1059, 1477, 2109, 995, 648, 10, 10, 1160, 2860, 2292, 985, 10, 2298, 1160, 1160, 2298, 2298, 10, 1448, 2716]
-10:40:03.681 CONFIG | Wrote tournament/MyEvent/auction-BestResponse-Us.xml
-10:40:04.038 INFO | LogistPlatform finished successfully!
-10:40:04.042 FINE | Run command: java -Xmx1024m -classpath ../logist/logist.jar logist.LogistPlatform -o tournament/MyEvent/auction-BestResponse-RiskSeeking.xml -a tournament/MyEvent/agents.xml config/auction.xml BestResponse RiskSeeking
-10:40:04.087 CONFIG | Reading config/auction.xml
-10:40:04.119 CONFIG | Reading config/settings_auction.xml
-10:40:04.152 CONFIG | Reading config/topology/england.xml
-10:40:04.159 CONFIG | Reading tournament/MyEvent/agents.xml
-10:40:04.186 CONFIG | real cost:858
-10:40:04.188 CONFIG | real cost:765
-10:40:04.190 CONFIG | real cost:409
-10:40:04.192 CONFIG | real cost:533
-10:40:04.194 CONFIG | real cost:373
-10:40:04.196 CONFIG | real cost:243
-10:40:04.198 CONFIG | real cost:337
-10:40:04.203 CONFIG | real cost:143
-10:40:04.204 CONFIG | real cost:1238
-10:40:04.204 CONFIG | real cost:1193
-10:40:04.205 CONFIG | real cost:219
-10:40:04.206 CONFIG | real cost:446
-10:40:04.215 CONFIG | real cost:150
-10:40:04.217 CONFIG | real cost:841
-10:40:04.218 CONFIG | real cost:511
-10:40:04.220 CONFIG | real cost:85
-10:40:04.222 CONFIG | real cost:68
-10:40:04.223 CONFIG | real cost:108
-10:40:04.224 CONFIG | real cost:1023
-10:40:04.225 CONFIG | real cost:14
-10:40:04.226 CONFIG | real cost:911
-10:40:04.226 CONFIG | real cost:20
-10:40:04.231 CONFIG | real cost:1548
-10:40:04.236 CONFIG | real cost:23
-10:40:04.239 CONFIG | real cost:34
-10:40:04.242 CONFIG | real cost:28
-10:40:04.243 CONFIG | real cost:37
-10:40:04.244 CONFIG | real cost:18
-10:40:04.245 CONFIG | real cost:36
-10:40:04.246 CONFIG | real cost:703
-10:40:04.291 WARNING | /usr/share/themes/Ambiance/gtk-2.0/apps/mate-panel.rc:30: error: invalid string constant "murrine-scrollbar", expected valid string constant
-10:40:10.781 CONFIG | Wrote tournament/MyEvent/auction-BestResponse-RiskSeeking.xml
-10:40:11.123 INFO | LogistPlatform finished successfully!
-10:40:11.127 FINE | Run command: java -Xmx1024m -classpath ../logist/logist.jar logist.LogistPlatform -o tournament/MyEvent/auction-RiskSeeking-Us.xml -a tournament/MyEvent/agents.xml config/auction.xml RiskSeeking Us
-10:40:11.182 CONFIG | Reading config/auction.xml
-10:40:11.213 CONFIG | Reading config/settings_auction.xml
-10:40:11.249 CONFIG | Reading config/topology/england.xml
-10:40:11.256 CONFIG | Reading tournament/MyEvent/agents.xml
-10:40:11.267 CONFIG | Reading config/settings_auction.xml
-10:40:11.281 CONFIG | real cost:1056
-10:40:11.281 CONFIG | Distance: 205200
-10:40:11.281 CONFIG | cost Distance: 5
-10:40:11.284 CONFIG | real cost:972
-10:40:11.284 CONFIG | Distance: 327900
-10:40:11.284 CONFIG | cost Distance: 5
-10:40:11.285 CONFIG | real cost:743
-10:40:11.285 CONFIG | Distance: 209900
-10:40:11.285 CONFIG | cost Distance: 5
-10:40:11.286 CONFIG | real cost:795
-10:40:11.287 CONFIG | Distance: 283000
-10:40:11.287 CONFIG | cost Distance: 5
-10:40:11.288 CONFIG | real cost:397
-10:40:11.288 CONFIG | Distance: 362600
-10:40:11.289 CONFIG | cost Distance: 5
-10:40:11.290 CONFIG | real cost:609
-10:40:11.290 CONFIG | Distance: 115000
-10:40:11.291 CONFIG | cost Distance: 5
-10:40:11.291 CONFIG | real cost:709
-10:40:11.292 CONFIG | Distance: 233000
-10:40:11.292 CONFIG | cost Distance: 5
-10:40:11.293 CONFIG | real cost:737
-10:40:11.293 CONFIG | Distance: 212900
-10:40:11.293 CONFIG | cost Distance: 5
-10:40:11.294 CONFIG | real cost:1758
-10:40:11.294 CONFIG | Distance: 362800
-10:40:11.294 CONFIG | cost Distance: 5
-10:40:11.294 CONFIG | real cost:976
-10:40:11.295 CONFIG | Distance: 170000
-10:40:11.295 CONFIG | cost Distance: 5
-10:40:11.296 CONFIG | real cost:951
-10:40:11.296 CONFIG | Distance: 115000
-10:40:11.296 CONFIG | cost Distance: 5
-10:40:11.297 CONFIG | real cost:1261
-10:40:11.297 CONFIG | Distance: 283000
-10:40:11.297 CONFIG | cost Distance: 5
-10:40:11.299 CONFIG | real cost:1632
-10:40:11.299 CONFIG | Distance: 209900
-10:40:11.299 CONFIG | cost Distance: 5
-10:40:11.300 CONFIG | real cost:112
-10:40:11.300 CONFIG | Distance: 205700
-10:40:11.300 CONFIG | cost Distance: 5
-10:40:11.301 CONFIG | real cost:1501
-10:40:11.301 CONFIG | Distance: 322400
-10:40:11.301 CONFIG | cost Distance: 5
-10:40:11.301 CONFIG | real cost:131
-10:40:11.302 CONFIG | Distance: 113800
-10:40:11.302 CONFIG | cost Distance: 5
-10:40:11.302 CONFIG | real cost:567
-10:40:11.303 CONFIG | Distance: 118000
-10:40:11.303 CONFIG | cost Distance: 5
-10:40:11.304 CONFIG | real cost:116
-10:40:11.304 CONFIG | Distance: 189800
-10:40:11.304 CONFIG | cost Distance: 5
-10:40:11.305 CONFIG | real cost:1508
-10:40:11.305 CONFIG | Distance: 359800
-10:40:11.305 CONFIG | cost Distance: 5
-10:40:11.309 CONFIG | real cost:2078
-10:40:11.311 CONFIG | Distance: 246500
-10:40:11.312 CONFIG | cost Distance: 5
-10:40:11.313 CONFIG | real cost:97
-10:40:11.318 CONFIG | Distance: 230000
-10:40:11.318 CONFIG | cost Distance: 5
-10:40:11.319 CONFIG | real cost:1578
-10:40:11.319 CONFIG | Distance: 230000
-10:40:11.319 CONFIG | cost Distance: 5
-10:40:11.320 CONFIG | real cost:51
-10:40:11.323 CONFIG | Distance: 494300
-10:40:11.323 CONFIG | cost Distance: 5
-10:40:11.324 CONFIG | real cost:543
-10:40:11.325 CONFIG | Distance: 115000
-10:40:11.325 CONFIG | cost Distance: 5
-10:40:11.327 CONFIG | real cost:569
-10:40:11.327 CONFIG | Distance: 115000
-10:40:11.327 CONFIG | cost Distance: 5
-10:40:11.329 CONFIG | real cost:51
-10:40:11.329 CONFIG | Distance: 494300
-10:40:11.329 CONFIG | cost Distance: 5
-10:40:11.332 CONFIG | real cost:40
-10:40:11.334 CONFIG | Distance: 457700
-10:40:11.334 CONFIG | cost Distance: 5
-10:40:11.335 CONFIG | real cost:1015
-10:40:11.335 CONFIG | Distance: 212900
-10:40:11.335 CONFIG | cost Distance: 5
-10:40:11.336 CONFIG | real cost:21
-10:40:11.336 CONFIG | Distance: 322400
-10:40:11.336 CONFIG | cost Distance: 5
-10:40:11.337 CONFIG | real cost:23
-10:40:11.337 CONFIG | Distance: 453000
-10:40:11.337 CONFIG | cost Distance: 5
-10:40:11.377 WARNING | /usr/share/themes/Ambiance/gtk-2.0/apps/mate-panel.rc:30: error: invalid string constant "murrine-scrollbar", expected valid string constant
-10:40:27.206 CONFIG | Our bids: [821, 1443, 739, 1096, 1123, 285, 635, 638, 1197, 617, 459, 1242, 1014, 1093, 1370, 532, 441, 781, 1628, 892, 916, 1007, 2382, 443, 488, 2305, 1708, 635, 1059, 1190]
-10:40:27.206 CONFIG | Their bids: [1066, 1021, 753, 930, 1002, 712, 899, 747, 1823, 986, 961, 1271, 1642, 850, 1511, 141, 577, 980, 1518, 2088, 1035, 1588, 61, 553, 579, 61, 50, 1025, 31, 33]
-10:40:35.758 CONFIG | Wrote tournament/MyEvent/auction-RiskSeeking-Us.xml
-10:40:36.116 INFO | LogistPlatform finished successfully!
-10:40:36.117 FINE | Run command: java -Xmx1024m -classpath ../logist/logist.jar logist.LogistPlatform -o tournament/MyEvent/auction-RiskSeeking-BestResponse.xml -a tournament/MyEvent/agents.xml config/auction.xml RiskSeeking BestResponse
-10:40:36.162 CONFIG | Reading config/auction.xml
-10:40:36.194 CONFIG | Reading config/settings_auction.xml
-10:40:36.227 CONFIG | Reading config/topology/england.xml
-10:40:36.236 CONFIG | Reading tournament/MyEvent/agents.xml
-10:40:36.259 CONFIG | real cost:810
-10:40:36.261 CONFIG | real cost:901
-10:40:36.262 CONFIG | real cost:503
-10:40:36.263 CONFIG | real cost:574
-10:40:36.264 CONFIG | real cost:264
-10:40:36.265 CONFIG | real cost:619
-10:40:36.266 CONFIG | real cost:402
-10:40:36.269 CONFIG | real cost:364
-10:40:36.270 CONFIG | real cost:1849
-10:40:36.271 CONFIG | real cost:1212
-10:40:36.273 CONFIG | real cost:182
-10:40:36.273 CONFIG | real cost:1224
-10:40:36.279 CONFIG | real cost:90
-10:40:36.280 CONFIG | real cost:902
-10:40:36.281 CONFIG | real cost:464
-10:40:36.283 CONFIG | real cost:144
-10:40:36.284 CONFIG | real cost:23
-10:40:36.285 CONFIG | real cost:16
-10:40:36.296 CONFIG | real cost:33
-10:40:36.300 CONFIG | real cost:74
-10:40:36.301 CONFIG | real cost:468
-10:40:36.302 CONFIG | real cost:766
-10:40:36.303 CONFIG | real cost:62
-10:40:36.304 CONFIG | real cost:52
-10:40:36.304 CONFIG | real cost:62
-10:40:36.307 CONFIG | real cost:41
-10:40:36.308 CONFIG | real cost:1699
-10:40:36.309 CONFIG | real cost:353
-10:40:36.310 CONFIG | real cost:25
-10:40:36.311 CONFIG | real cost:418
-10:40:36.350 WARNING | /usr/share/themes/Ambiance/gtk-2.0/apps/mate-panel.rc:30: error: invalid string constant "murrine-scrollbar", expected valid string constant
-10:40:44.284 CONFIG | Wrote tournament/MyEvent/auction-RiskSeeking-BestResponse.xml
-10:40:44.626 INFO | LogistPlatform finished successfully!
+02:15:21.751 FINE | Run command: java -Xmx1024m -classpath ../logist/logist.jar logist.LogistPlatform -o tournament/MyEvent/auction-Us-BestResponse.xml -a tournament/MyEvent/agents.xml config/auction.xml Us BestResponse
+02:15:21.887 CONFIG | Reading config/auction.xml
+02:15:21.951 CONFIG | Reading config/settings_auction.xml
+02:15:22.025 CONFIG | Reading config/topology/england.xml
+02:15:22.039 CONFIG | Reading tournament/MyEvent/agents.xml
+02:15:22.056 CONFIG | Reading config/settings_auction.xml
+02:15:53.306 CONFIG | Our bids: [821, 1443, 1016, 1507, 2124, 741, 1165, 1171, 1596, 823, 612, 1657, 983, 1060, 1329, 375, 311, 401, 835, 630, 646, 711, 1222, 313, 250, 860, 876, 448, 543, 840]
+02:15:53.306 CONFIG | Their bids: [2776, 3289, 2799, 3041, 3636, 585, 2340, 1074, 1824, 1710, 1059, 1477, 2109, 995, 648, 10, 10, 1160, 1809, 2292, 985, 10, 2298, 10, 10, 2298, 2298, 10, 1448, 2298]
+02:15:58.002 CONFIG | Wrote tournament/MyEvent/auction-Us-BestResponse.xml
+02:15:58.021 INFO | LogistPlatform finished successfully!
+02:15:58.030 FINE | Run command: java -Xmx1024m -classpath ../logist/logist.jar logist.LogistPlatform -o tournament/MyEvent/auction-Us-RiskSeeking.xml -a tournament/MyEvent/agents.xml config/auction.xml Us RiskSeeking
+02:15:58.112 CONFIG | Reading config/auction.xml
+02:15:58.182 CONFIG | Reading config/settings_auction.xml
+02:15:58.254 CONFIG | Reading config/topology/england.xml
+02:15:58.269 CONFIG | Reading tournament/MyEvent/agents.xml
+02:15:58.287 CONFIG | Reading config/settings_auction.xml
+02:15:58.321 CONFIG | real cost:863
+02:15:58.325 CONFIG | real cost:990
+02:15:58.328 CONFIG | real cost:792
+02:15:58.331 CONFIG | real cost:810
+02:15:58.334 CONFIG | real cost:143
+02:15:58.336 CONFIG | real cost:455
+02:15:58.337 CONFIG | real cost:688
+02:15:58.339 CONFIG | real cost:325
+02:15:58.341 CONFIG | real cost:1371
+02:15:58.343 CONFIG | real cost:1095
+02:15:58.344 CONFIG | real cost:912
+02:15:58.345 CONFIG | real cost:1282
+02:15:58.347 CONFIG | real cost:974
+02:15:58.349 CONFIG | real cost:794
+02:15:58.350 CONFIG | real cost:1478
+02:15:58.351 CONFIG | real cost:88
+02:15:58.353 CONFIG | real cost:95
+02:15:58.354 CONFIG | real cost:64
+02:15:58.356 CONFIG | real cost:1465
+02:15:58.358 CONFIG | real cost:1055
+02:15:58.359 CONFIG | real cost:909
+02:15:58.360 CONFIG | real cost:925
+02:15:58.362 CONFIG | real cost:1547
+02:15:58.363 CONFIG | real cost:34
+02:15:58.366 CONFIG | real cost:59
+02:15:58.369 CONFIG | real cost:31
+02:15:58.373 CONFIG | real cost:25
+02:15:58.375 CONFIG | real cost:28
+02:15:58.377 CONFIG | real cost:26
+02:15:58.378 CONFIG | real cost:38
+02:16:29.228 CONFIG | Our bids: [821, 1443, 739, 1096, 1123, 285, 635, 638, 870, 449, 334, 904, 737, 795, 1370, 532, 441, 568, 1184, 892, 916, 1007, 1732, 322, 258, 887, 657, 244, 296, 333]
+02:16:29.229 CONFIG | Their bids: [932, 1000, 802, 833, 864, 465, 794, 335, 1381, 1105, 922, 1292, 984, 814, 1488, 98, 105, 1007, 1475, 1065, 919, 935, 1557, 44, 69, 43, 35, 43, 36, 48]
+02:16:32.368 CONFIG | Wrote tournament/MyEvent/auction-Us-RiskSeeking.xml
+02:16:32.390 INFO | LogistPlatform finished successfully!
+02:16:32.392 FINE | Run command: java -Xmx1024m -classpath ../logist/logist.jar logist.LogistPlatform -o tournament/MyEvent/auction-BestResponse-Us.xml -a tournament/MyEvent/agents.xml config/auction.xml BestResponse Us
+02:16:32.476 CONFIG | Reading config/auction.xml
+02:16:32.543 CONFIG | Reading config/settings_auction.xml
+02:16:32.613 CONFIG | Reading config/topology/england.xml
+02:16:32.628 CONFIG | Reading tournament/MyEvent/agents.xml
+02:16:32.646 CONFIG | Reading config/settings_auction.xml
+02:17:03.273 CONFIG | Our bids: [821, 1443, 1016, 1507, 2124, 741, 1651, 1660, 1814, 935, 696, 1883, 1050, 1131, 1419, 401, 332, 428, 892, 672, 690, 759, 1304, 334, 367, 1736, 1768, 905, 1096, 1694]
+02:17:03.274 CONFIG | Their bids: [2201, 2678, 2224, 2124, 2678, 1160, 2340, 1074, 4112, 2458, 1059, 1477, 2109, 995, 648, 10, 10, 1160, 2860, 2292, 985, 10, 2298, 1160, 1160, 2298, 2298, 10, 1448, 2716]
+02:17:08.758 CONFIG | Wrote tournament/MyEvent/auction-BestResponse-Us.xml
+02:17:08.779 INFO | LogistPlatform finished successfully!
+02:17:08.782 FINE | Run command: java -Xmx1024m -classpath ../logist/logist.jar logist.LogistPlatform -o tournament/MyEvent/auction-BestResponse-RiskSeeking.xml -a tournament/MyEvent/agents.xml config/auction.xml BestResponse RiskSeeking
+02:17:08.864 CONFIG | Reading config/auction.xml
+02:17:08.932 CONFIG | Reading config/settings_auction.xml
+02:17:08.999 CONFIG | Reading config/topology/england.xml
+02:17:09.018 CONFIG | Reading tournament/MyEvent/agents.xml
+02:17:09.068 CONFIG | real cost:678
+02:17:09.073 CONFIG | real cost:872
+02:17:09.077 CONFIG | real cost:203
+02:17:09.080 CONFIG | real cost:657
+02:17:09.083 CONFIG | real cost:296
+02:17:09.085 CONFIG | real cost:232
+02:17:09.087 CONFIG | real cost:446
+02:17:09.088 CONFIG | real cost:133
+02:17:09.090 CONFIG | real cost:1119
+02:17:09.091 CONFIG | real cost:1231
+02:17:09.093 CONFIG | real cost:113
+02:17:09.094 CONFIG | real cost:498
+02:17:09.096 CONFIG | real cost:131
+02:17:09.097 CONFIG | real cost:774
+02:17:09.099 CONFIG | real cost:510
+02:17:09.101 CONFIG | real cost:74
+02:17:09.103 CONFIG | real cost:119
+02:17:09.105 CONFIG | real cost:121
+02:17:09.108 CONFIG | real cost:959
+02:17:09.110 CONFIG | real cost:42
+02:17:09.111 CONFIG | real cost:924
+02:17:09.113 CONFIG | real cost:56
+02:17:09.114 CONFIG | real cost:1573
+02:17:09.117 CONFIG | real cost:23
+02:17:09.120 CONFIG | real cost:35
+02:17:09.123 CONFIG | real cost:19
+02:17:09.125 CONFIG | real cost:29
+02:17:09.127 CONFIG | real cost:44
+02:17:09.129 CONFIG | real cost:20
+02:17:09.130 CONFIG | real cost:722
+02:17:17.895 CONFIG | Wrote tournament/MyEvent/auction-BestResponse-RiskSeeking.xml
+02:17:17.925 INFO | LogistPlatform finished successfully!
+02:17:17.926 FINE | Run command: java -Xmx1024m -classpath ../logist/logist.jar logist.LogistPlatform -o tournament/MyEvent/auction-RiskSeeking-Us.xml -a tournament/MyEvent/agents.xml config/auction.xml RiskSeeking Us
+02:17:18.014 CONFIG | Reading config/auction.xml
+02:17:18.082 CONFIG | Reading config/settings_auction.xml
+02:17:18.148 CONFIG | Reading config/topology/england.xml
+02:17:18.163 CONFIG | Reading tournament/MyEvent/agents.xml
+02:17:18.184 CONFIG | Reading config/settings_auction.xml
+02:17:18.217 CONFIG | real cost:620
+02:17:18.220 CONFIG | real cost:870
+02:17:18.223 CONFIG | real cost:517
+02:17:18.225 CONFIG | real cost:926
+02:17:18.228 CONFIG | real cost:860
+02:17:18.230 CONFIG | real cost:587
+02:17:18.231 CONFIG | real cost:302
+02:17:18.232 CONFIG | real cost:303
+02:17:18.234 CONFIG | real cost:1765
+02:17:18.235 CONFIG | real cost:1401
+02:17:18.237 CONFIG | real cost:139
+02:17:18.238 CONFIG | real cost:1183
+02:17:18.240 CONFIG | real cost:183
+02:17:18.241 CONFIG | real cost:898
+02:17:18.243 CONFIG | real cost:1473
+02:17:18.245 CONFIG | real cost:721
+02:17:18.247 CONFIG | real cost:123
+02:17:18.248 CONFIG | real cost:79
+02:17:18.250 CONFIG | real cost:1502
+02:17:18.252 CONFIG | real cost:41
+02:17:18.253 CONFIG | real cost:902
+02:17:18.254 CONFIG | real cost:939
+02:17:18.256 CONFIG | real cost:1579
+02:17:18.257 CONFIG | real cost:562
+02:17:18.260 CONFIG | real cost:569
+02:17:18.262 CONFIG | real cost:1593
+02:17:18.265 CONFIG | real cost:28
+02:17:18.266 CONFIG | real cost:21
+02:17:18.268 CONFIG | real cost:20
+02:17:18.270 CONFIG | real cost:14
+02:17:49.811 CONFIG | Our bids: [821, 1049, 739, 1096, 1123, 285, 635, 464, 870, 449, 334, 657, 536, 420, 725, 281, 321, 413, 861, 649, 484, 533, 1260, 322, 355, 1677, 1242, 462, 560, 629]
+02:17:49.811 CONFIG | Their bids: [780, 1146, 818, 936, 870, 597, 312, 814, 1913, 1411, 149, 1193, 204, 908, 1483, 731, 133, 679, 1512, 522, 912, 949, 1589, 572, 579, 1603, 38, 31, 30, 406]
+02:17:51.409 CONFIG | Wrote tournament/MyEvent/auction-RiskSeeking-Us.xml
+02:17:51.431 INFO | LogistPlatform finished successfully!
+02:17:51.433 FINE | Run command: java -Xmx1024m -classpath ../logist/logist.jar logist.LogistPlatform -o tournament/MyEvent/auction-RiskSeeking-BestResponse.xml -a tournament/MyEvent/agents.xml config/auction.xml RiskSeeking BestResponse
+02:17:51.514 CONFIG | Reading config/auction.xml
+02:17:51.580 CONFIG | Reading config/settings_auction.xml
+02:17:51.648 CONFIG | Reading config/topology/england.xml
+02:17:51.662 CONFIG | Reading tournament/MyEvent/agents.xml
+02:17:51.710 CONFIG | real cost:980
+02:17:51.714 CONFIG | real cost:768
+02:17:51.718 CONFIG | real cost:470
+02:17:51.720 CONFIG | real cost:503
+02:17:51.725 CONFIG | real cost:260
+02:17:51.727 CONFIG | real cost:538
+02:17:51.729 CONFIG | real cost:186
+02:17:51.730 CONFIG | real cost:287
+02:17:51.732 CONFIG | real cost:1698
+02:17:51.734 CONFIG | real cost:1249
+02:17:51.736 CONFIG | real cost:102
+02:17:51.737 CONFIG | real cost:1171
+02:17:51.739 CONFIG | real cost:66
+02:17:51.741 CONFIG | real cost:857
+02:17:51.743 CONFIG | real cost:467
+02:17:51.749 CONFIG | real cost:27
+02:17:51.753 CONFIG | real cost:17
+02:17:51.758 CONFIG | real cost:36
+02:17:51.760 CONFIG | real cost:36
+02:17:51.762 CONFIG | real cost:108
+02:17:51.764 CONFIG | real cost:455
+02:17:51.765 CONFIG | real cost:826
+02:17:51.766 CONFIG | real cost:34
+02:17:51.768 CONFIG | real cost:45
+02:17:51.769 CONFIG | real cost:39
+02:17:51.770 CONFIG | real cost:20
+02:17:51.771 CONFIG | real cost:1722
+02:17:51.773 CONFIG | real cost:353
+02:17:51.774 CONFIG | real cost:21
+02:17:51.776 CONFIG | real cost:416
+02:18:01.630 CONFIG | Wrote tournament/MyEvent/auction-RiskSeeking-BestResponse.xml
+02:18:01.652 INFO | LogistPlatform finished successfully!
