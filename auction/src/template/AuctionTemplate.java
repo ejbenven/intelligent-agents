@@ -67,8 +67,7 @@ public class AuctionTemplate implements AuctionBehavior {
                 
                 temperature = agent.readProperty("temperature",Double.class,3000.);
         	p = agent.readProperty("p",Double.class, 0.001);
-                greed = agent.readProperty("greed",Double.class,0.5);
-                careful = agent.readProperty("careful",Boolean.class,true);
+                greed = 0.8;//agent.readProperty("greed",Double.class,0.5);
                 LogistSettings ls = null;
                 try {
                     ls = Parsers.parseSettings("config/settings_auction.xml");
@@ -95,7 +94,6 @@ public class AuctionTemplate implements AuctionBehavior {
                 oppMinBid = Long.MAX_VALUE;
                 oppBids = new ArrayList<Long>();
                 oppTasks = new HashSet<Task>();
-
                 error = 0;
 
 		long seed = 123456;
@@ -124,56 +122,83 @@ public class AuctionTemplate implements AuctionBehavior {
                 for (State state : newStates)
                     currentStates.add(state.clone());
                 currentCost = computeCost(currentStates);
+                greed *= 1.1;
 	    } else {
                 oppTasks.add(previous);
                 oppCurrCost = oppNewCost;
-                greed *= 0.1;
+                greed *= 0.8;
                 if (greed < 0.1)
                     greed = 0.1;
+                if (greed > 1)
+                    greed = 1;
             }
             newStates.clear();
 	}
 	
-	@Override
-	public Long askPrice(Task task) {
-            double newCost, bid, spread, oppMargin;
-            long t = System.currentTimeMillis();
-            Set<Task> newTasks = new HashSet<Task>();
+	// @Override
+ //    public Long askPrice(Task task) {
+ //            double newCost, bid, spread, oppMargin;
+ //            long t = System.currentTimeMillis();
+ //            Set<Task> newTasks = new HashSet<Task>();
 
-            for (Task task_ : ownedTasks)
-                newTasks.add(task_);
-            newTasks.add(task);
-            newStates.clear();
-            //newStates = COP(agent.vehicles(), newTasks, t);
-            newStates = greedy(agent.vehicles(), newTasks);
-            newCost = computeCost(newStates);
+ //            for (Task task_ : ownedTasks)
+ //                newTasks.add(task_);
+ //            newTasks.add(task);
+ //            newStates.clear();
+ //            //newStates = COP(agent.vehicles(), newTasks, t);
+ //            newStates = greedy(agent.vehicles(), newTasks);
+ //            newCost = computeCost(newStates);
 
             
-            double ourMargin = newCost-currentCost;
+ //            double ourMargin = newCost-currentCost;
            
-            if(oppBids.isEmpty() || oppBids.size()<4){
-                bid = 0.8*ourMargin;
-            } else {
-                newTasks.clear();
-                for (Task task_ : oppTasks)
-                    newTasks.add(task_);
-                newTasks.add(task);
-                oppNewCost = computeCost(greedy(agent.vehicles(), newTasks));
-                oppMargin = oppNewCost - oppCurrCost;
-                spread = ourMargin - oppMargin;
+ //            if(oppBids.isEmpty() || oppBids.size()<4){
+ //                bid = 10;
+ //            } else {
+ //                newTasks.clear();
+ //                for (Task task_ : oppTasks)
+ //                    newTasks.add(task_);
+ //                newTasks.add(task);
+ //                oppNewCost = computeCost(greedy(agent.vehicles(), newTasks));
+ //                oppMargin = oppNewCost - oppCurrCost;
+ //                spread = ourMargin - oppMargin;
 
-                if (spread > 0)
-                    bid = ourMargin;
-                else
-                    bid = ourMargin + greed*spread;
-                //if(bid < oppMinBid)
-                //    bid = oppMinBid-1;
+ //                if (spread > 0)
+ //                    bid = ourMargin;
+ //                else
+ //                    bid = ourMargin + greed*spread;
+ //                //if(bid < oppMinBid)
+ //                //    bid = oppMinBid-1;
+ //            }
+            
+            
+            
+ //        return (long) Math.round(bid);
+ //    }
+    @Override
+    public Long askPrice(Task task) {
+            double newCost, bid, spread, oppMargin, marginalCost;
+            long distanceTask = task.pickupCity.distanceUnitsTo(task.deliveryCity);
+            System.out.println("Distance: " + distanceTask);
+            int minCostPerKm= (int) Double.POSITIVE_INFINITY;
+            for (Vehicle vehicle : agent.vehicles()){
+                if(vehicle.costPerKm()<minCostPerKm){
+                    minCostPerKm = vehicle.costPerKm();
+                }
             }
+            System.out.println("cost Distance: " + minCostPerKm);
+            marginalCost = Measures.unitsToKM(minCostPerKm * distanceTask);
+            if(oppBids.isEmpty() || oppBids.size()<4){
+                bid = greed * marginalCost;
+            }else{
+                bid = greed * marginalCost;
+            }
+                
             
             
-            
-	    return (long) Math.round(bid);
-	}
+        return (long) Math.round(bid);
+    }
+	
 
     
         @Override
