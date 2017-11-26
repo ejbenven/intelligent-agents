@@ -17,7 +17,7 @@
 % - do you consider the probability distribution of the tasks in defining your strategy? How do you speculate about the future tasks that might be auctions?
 % - how do you use the feedback from the previous auctions to derive information about the other competitors?
 % - how do you combine all the information from the probability distribution of the tasks, the history and the planner to compute bids?
-Our strategy is striking by its simplicity. The goal is to take as many tasks as possible and then the price to move the tasks will decrease relative to the number of tasks, thanks to the optimal path finder (Strategy inspired by UBERPOOL). For this strategy to work we need to bid aggressively at the beginning, to be sure to take the first tasks. Then, if the concurrence wins a bid, we directly get cheaper for the next client.
+Our strategy is very simple. The goal is to take as many tasks as possible, because the more task we have, the less each additional task will cost us, thanks to the optimal path finder (Strategy inspired by UBERPOOL). For this strategy to work we need to bid aggressively at the beginning, to be sure to take the first tasks. Then, if the concurrence wins a bid, we directly get cheaper for the next client.
 
 The value of the bid is in function of the following parameters
 \begin{itemize}
@@ -36,7 +36,9 @@ The parameter $Greed$ has the following comportment.
 \end{itemize}
 The initialization of Greed tells how much we want to have the first tasks. 
 
-It has been decided that the agent will not try to infer information about the oppenent. There is no way to know its strategy in only two parties. 
+We don't try to guess the opponents strategy because his bids heavily depend on how many vehicles he has and where they are located. Since there are a lot of different possible configurations and that different configurations might bid the same amount due to a different strategy, it seems complicated to quickly converge to a good guess.
+
+Moreso, the first bids of the game are the most important, since winning the first tasks will decrease your marginal cost for all the upcomming tasks. This means that, even if we manage to converge to a good estimate for the opponent's vehicle configuration and strategy, we won't be able to use this knowledge to change the course of the game.
 
 \section{Results}
 % in this section, you describe several results from the experiments with your auctioning agent
