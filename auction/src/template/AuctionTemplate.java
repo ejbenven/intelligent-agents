@@ -44,7 +44,7 @@ public class AuctionTemplate implements AuctionBehavior {
         private List<State> newStates;
         private Set<Task> ownedTasks;
         private double greed;
-        private boolean careful;
+        private List<Long> ourBids;
         
         //We keep track of our oponents moves
         private List<Long> oppBids;
@@ -65,8 +65,8 @@ public class AuctionTemplate implements AuctionBehavior {
 		this.distribution = distribution;
 		this.agent = agent;
                 
-                temperature = agent.readProperty("temperature",Double.class,1000000.);
-        	p = agent.readProperty("p",Double.class, 0.0001);
+                temperature = agent.readProperty("temperature",Double.class,3000.);
+        	p = agent.readProperty("p",Double.class, 0.001);
                 greed = agent.readProperty("greed",Double.class,0.5);
                 careful = agent.readProperty("careful",Boolean.class,true);
                 LogistSettings ls = null;
@@ -86,6 +86,7 @@ public class AuctionTemplate implements AuctionBehavior {
                 currentStates = new ArrayList<State>();
                 newStates = new ArrayList<State>();
                 ownedTasks = new HashSet<Task>();
+                ourBids = new ArrayList<Long>();
 
                 oppCurrCost = 0;
                 oppTotBid = 0;
@@ -105,34 +106,37 @@ public class AuctionTemplate implements AuctionBehavior {
 	public void auctionResult(Task previous, int winner, Long[] bids) {
 	    long oBid = bids[1-agent.id()];
             oppBids.add(oBid);
+            ourBids.add(bids[agent.id()]);
             oppTotBid += oBid;
             if (oppMinBid > oBid)
                 oppMinBid = oBid;
             if (oppBids.isEmpty()){
                 oppMinBid = oBid;
                 error = oppExpBid - oBid;
-            } else {
-                error = (error*oppBids.size() + oppExpBid - oBid)/(oppBids.size()+1);
-                if (oBid < oppMinBid)
+            } 
+            if (oBid < oppMinBid)
                     oppMinBid = oBid;
-            }
+            
             
             if (winner == agent.id()) {
 	        ownedTasks.add(previous);
                 currentStates.clear();
                 for (State state : newStates)
-                    currentStates.add(state);
+                    currentStates.add(state.clone());
                 currentCost = computeCost(currentStates);
 	    } else {
                 oppTasks.add(previous);
                 oppCurrCost = oppNewCost;
+                greed *= 0.1;
+                if (greed < 0.1)
+                    greed = 0.1;
             }
             newStates.clear();
 	}
 	
 	@Override
 	public Long askPrice(Task task) {
-            double newCost, bid;
+            double newCost, bid, spread, oppMargin;
             long t = System.currentTimeMillis();
             Set<Task> newTasks = new HashSet<Task>();
 
@@ -140,39 +144,34 @@ public class AuctionTemplate implements AuctionBehavior {
                 newTasks.add(task_);
             newTasks.add(task);
             newStates.clear();
-            newStates = COP(agent.vehicles(), newTasks, t);
-
+            //newStates = COP(agent.vehicles(), newTasks, t);
+            newStates = greedy(agent.vehicles(), newTasks);
             newCost = computeCost(newStates);
 
-            newTasks.clear();
-            for (Task task_ : oppTasks)
-                newTasks.add(task_);
-            newTasks.add(task);
-
-            t = System.currentTimeMillis();
-            oppNewCost = computeCost(COP(agent.vehicles(), newTasks,t));
             
             double ourMargin = newCost-currentCost;
-            double oppMargin = oppNewCost - oppCurrCost;
+           
+            if(oppBids.isEmpty() || oppBids.size()<4){
+                bid = 0.8*ourMargin;
+            } else {
+                newTasks.clear();
+                for (Task task_ : oppTasks)
+                    newTasks.add(task_);
+                newTasks.add(task);
+                oppNewCost = computeCost(greedy(agent.vehicles(), newTasks));
+                oppMargin = oppNewCost - oppCurrCost;
+                spread = ourMargin - oppMargin;
 
-
-            //realBid = greed*(oppRealMargin + realSpread)
-            //= (oppRealMargin + greed*(ourMargin - oppRealMargin))
-            //= ((1-greed)*oppRealMargin + ourMargin)
-            //= ((1-greed)*oppMargin + ourMargin) - error
-            //--> oppRealMargin = oppMargin - error/(1-greed)
-            oppMargin = oppMargin - error/(1-greed);
-
-            double spread = ourMargin - oppMargin;
-
-            bid = ourMargin - greed*spread;
-            if (bid < oppMinBid)
-                bid = oppMinBid-1;
-            if (bid < ourMargin)
-                bid = (long) Math.round(ourMargin);
-            oppExpBid = (long) Math.round(oppMargin + greed*spread); 
-
-
+                if (spread > 0)
+                    bid = ourMargin;
+                else
+                    bid = ourMargin + greed*spread;
+                //if(bid < oppMinBid)
+                //    bid = oppMinBid-1;
+            }
+            
+            
+            
 	    return (long) Math.round(bid);
 	}
 
@@ -180,8 +179,9 @@ public class AuctionTemplate implements AuctionBehavior {
         @Override
         public List<Plan> plan(List<Vehicle> vehicles, TaskSet tasks) {
             long time_start = System.currentTimeMillis();
+            long tc;
             Set<Task> tasks_ = tasksetToTasklist(tasks);
-            List<State> states = COP(vehicles, tasks_, time_start);
+            List<State> states = COP(vehicles,tasks_,time_start);
             List<Plan> plans = new ArrayList<Plan>();
 
             
@@ -191,88 +191,106 @@ public class AuctionTemplate implements AuctionBehavior {
             long time_end = System.currentTimeMillis();
             long duration = time_end - time_start;
             double cost=  computeCost(states);
-            System.out.println("The plan was generated in "+duration+" milliseconds.");
-            System.out.println("The cost is "+cost);
-
+            System.out.println("Our bids: " + ourBids.toString());
+            System.out.println("Their bids: " + oppBids.toString());
             
             return plans;
+        }
+
+        private List<State> greedy (List<Vehicle> vehicles, Set<Task> ts){
+            double bCost = Double.POSITIVE_INFINITY;
+            double cost;
+            int id;
+            Vehicle best = vehicles.get(0);
+            
+            State state = new State(best.getCurrentCity(),new ArrayList<Task>(), best);
+            State bestState = new State(best.getCurrentCity(),new ArrayList<Task>(), best);
+            List<State> bestStates = new ArrayList<State>();
+            List<State> tmpStates = new ArrayList<State>();
+            
+            for (Vehicle vehicle : vehicles){
+                bestStates.add(new State(vehicle.getCurrentCity(),new ArrayList<Task>(), vehicle));
+                tmpStates.add(new State(vehicle.getCurrentCity(),new ArrayList<Task>(), vehicle));
+            }
+            
+            for (Task task : ts){
+                bCost = Double.POSITIVE_INFINITY;
+                for (Vehicle vehicle : vehicles){
+                    if (task.weight > vehicle.capacity())
+                        continue;
+                    id = vehicles.indexOf(vehicle);
+                    state = tmpStates.get(id).clone();
+                    state.addTask(task);
+                    state.reOrder();
+                    cost = state.getCost();
+                    if (cost < bCost){
+                        bCost = cost;
+                        bestState = state.clone();
+                    }
+                }
+                id = vehicles.indexOf(bestState.getVehicle());
+                bestStates.remove(id);
+                bestStates.add(id,bestState);
+                tmpStates.clear();
+                for (State state_ : bestStates)
+                    tmpStates.add(state_.clone());
+            }
+
+            return bestStates;
         }
 
         private List<State> COP (List<Vehicle> vehicles, Set<Task> ts, long time_start) {
             //Initialisation
             long duration;
-            List<State> states = new ArrayList<State>();  
+            double t = temperature;
+            List<State> states = new ArrayList<State>(); 
             if (ts.isEmpty()){
-                for (Vehicle vehicle : vehicles) {
+                for (Vehicle vehicle : vehicles)
                     states.add(new State(vehicle.getCurrentCity(), new ArrayList<Task>(), vehicle));
-                }
                 return states;
             }
-            List<Task> tasks = new ArrayList<Task>();
-            for (Task task : ts) {
-                tasks.add(task);
-                tasks.add(task);
-            }
-            //Find biggest truck
-            int ind = 0;
-            int bestCapa = 0;
-            for (Vehicle vehicle : vehicles){
-                if (vehicle.capacity()>bestCapa){
-                    bestCapa = vehicle.capacity();
-                    ind = vehicles.indexOf(vehicle);
-                }
-            }
-
-            for (Vehicle vehicle : vehicles){
-                if(vehicles.indexOf(vehicle) != ind)
-                    states.add(new State(vehicle.getCurrentCity(), new ArrayList<Task>(), vehicle));
-                else
-                    states.add(new State(vehicle.getCurrentCity(), tasks, vehicle));
-            }
             
+            states = greedy(vehicles, ts);            
             
             List<State> bestStates = new ArrayList<State>();
             for (State state : states)
-                bestStates.add(state);
+                bestStates.add(state.clone());
             double bestCost = computeCost(bestStates);
             List<State> bestStatesOverall = new ArrayList<State>();
             for (State state : states)
-                bestStatesOverall.add(state);
+                bestStatesOverall.add(state.clone());
             double bestCostOverall = bestCost;
 
             double newCost;
-            for (int i = 0; i<100; i++){
-                while(temperature > 1){
-                    duration = System.currentTimeMillis() - time_start;
-                    if (duration >= 0.45*timeout_plan)
-                        break;
+            
+            while(temperature > 1){
+                duration = System.currentTimeMillis() - time_start;
+                if (duration >= 0.45*timeout_plan)
+                    break;
 
-                    states = chooseNeighboors(states);
-                    temperature *= (1-p);
-                    newCost = computeCost(states);
-                    if (newCost < bestCost){
-                        bestStates.clear();
-                        for (State state : states)
-                            bestStates.add(state);
-                        bestCost = newCost;
-                    }
-                }
-                if (bestCost < bestCostOverall){
-                    bestCostOverall = bestCost;
-                    bestStatesOverall.clear();
-                    for (State state: bestStates)
-                        bestStatesOverall.add(state);
+                states = chooseNeighboors(states);
+                temperature *= (1-p);
+                newCost = computeCost(states);
+                if (newCost < bestCost){
+                    bestStates.clear();
+                    for (State state : states)
+                        bestStates.add(state.clone());
+                    bestCost = newCost;
                 }
                 duration = System.currentTimeMillis() - time_start;
                 if (duration >= 0.45*timeout_plan)
                     break;
 
-                states.clear();
-                for (State state: bestStates)
-                    states.add(state);
-
+            
             }
-
+            if (bestCost < bestCostOverall){
+                bestCostOverall = bestCost;
+                bestStatesOverall.clear();
+                for (State state: bestStates)
+                    bestStatesOverall.add(state.clone());
+            }
+            
+            temperature = t;
             return bestStatesOverall; 
         }
 
@@ -358,6 +376,7 @@ public class AuctionTemplate implements AuctionBehavior {
 
             return tasksList;
         }
+
 
         private Plan stateToPlan(State state) {
             Plan plan = new Plan(state.getCurrentCity());
